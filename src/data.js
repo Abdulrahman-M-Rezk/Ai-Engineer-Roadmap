@@ -56,6 +56,10 @@ export const phases = [
       { id: "p1_s5", name: "StatQuest with Josh Starmer", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "Statistics & ML بأبسط شرح إنجليزي", url: "https://www.youtube.com/@statquest" },
       { id: "p1_s6", name: "Kaggle Learn — Pandas", lang: "🌍", type: "كورس تفاعلي", price: "مجاني", note: "أسرع طريقة للـ Pandas عملياً", url: "https://www.kaggle.com/learn/pandas" },
       { id: "p1_s7", name: "Mathematics for Machine Learning", lang: "🌍", type: "كتاب PDF", price: "مجاني", note: "المرجع الأعمق — للرجوع إليه", url: "https://mml-book.github.io" },
+      { id: "p1_s8", name: "Probability Bootcamp — Dr. Steve", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "أحدث كورس Probability عملي — Oct 2024", url: "https://www.youtube.com/playlist?list=PLMrJAkhIeNNR3sNYvfgiKgcStwuPSts9V" },
+      { id: "p1_s9", name: "Mathematics for ML — Andrew Ng", lang: "🌍", type: "Coursera", price: "مجاني (audit)", note: "الأشمل للـ Math المطلوب في ML", url: "https://www.coursera.org/specializations/mathematics-for-machine-learning-and-data-science" },
+      { id: "p1_s10", name: "Corey Schafer — Pandas", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "أفضل شرح عملي للـ Pandas", url: "https://www.youtube.com/watch?v=ZyhVh-qRZPA&list=PL-osiE80TeTsWmV9i9c58mdDCSskIFdDS" },
+      { id: "p1_s11", name: "NumPy Tutorial — Keith Galli", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "الأفضل للـ NumPy من الصفر", url: "https://www.youtube.com/watch?v=5-5CrLmf2vk&list=PLIA_seGogbkGDYq-dnVCsELEIq_7HK7Ca" },
     ],
   },
   {
@@ -94,6 +98,8 @@ export const phases = [
       { id: "p2_s5", name: "Hands-On ML — Aurélien Géron", lang: "🌍", type: "كتاب", price: "مدفوع", note: "الأعمق والأشمل — مرجع أساسي", url: "https://www.oreilly.com/library/view/hands-on-machine-learning/9781098125967/" },
       { id: "p2_s6", name: "Scikit-learn Official Docs", lang: "🌍", type: "Docs", price: "مجاني", note: "مرجع لكل Algorithm وكل Function", url: "https://scikit-learn.org/stable/user_guide.html" },
       { id: "p2_s7", name: "Hesham Asem — ML Arabic", lang: "🇪🇬", type: "يوتيوب", price: "مجاني", note: "Supplement عربي لو محتاج شرح إضافي", url: "https://www.youtube.com/@HeshamAsem" },
+      { id: "p2_s8", name: "ML From Scratch — Python Engineer", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "⭐ بناء الـ Algorithms من الصفر بـ Python", url: "https://www.youtube.com/watch?v=ngLyX54e1LU&list=PLqnslRFeH2Upcrywf-u2etjdxxkL8nl7E" },
+      { id: "p2_s9", name: "Hands-On ML — الكتاب (3 نسخ مجانية)", lang: "🌍", type: "كتاب PDF", price: "مجاني", note: "الأعمق والأشمل — مرجع أساسي", url: "https://drive.google.com/file/d/11VeqPJw8s9SC9Ru7IVeQhiTwV_9TliOE/view" },
     ],
   },
   {
@@ -130,6 +136,8 @@ export const phases = [
       { id: "p3_s5", name: "PyTorch Official Tutorials", lang: "🌍", type: "Docs", price: "مجاني", note: "لازم تقراه مع الكورس", url: "https://pytorch.org/tutorials" },
       { id: "p3_s6", name: "Deep Learning Book — Goodfellow et al.", lang: "🌍", type: "كتاب PDF", price: "مجاني", note: "المرجع النظري الأعمق في الـ DL", url: "https://www.deeplearningbook.org" },
       { id: "p3_s7", name: "d2l.ai — Dive into Deep Learning", lang: "🌍", type: "كتاب تفاعلي", price: "مجاني", note: "كود + نظرية + تمارين — ممتاز", url: "https://d2l.ai" },
+      { id: "p3_s8", name: "MIT — Intro to Deep Learning", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "⭐ محدّث سنوياً — الأفضل للـ DL foundations", url: "http://introtodeeplearning.com" },
+      { id: "p3_s9", name: "Deep Learning — UC Berkeley", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "شامل جداً مع exercises", url: "https://www.youtube.com/playlist?list=PLZSO_6-bSqHQHBCoGaObUljoXAyyqhpFW" },
     ],
   },
   {
@@ -167,6 +175,8 @@ export const phases = [
       { id: "p4_s6", name: "fast.ai — CV Part", lang: "🌍", type: "كورس", price: "مجاني", note: "تطبيقي رائع على الـ CV", url: "https://course.fast.ai" },
       { id: "p4_s7", name: "Programming Computer Vision — Jan Solem", lang: "🌍", type: "كتاب PDF", price: "مجاني", note: "كتاب كلاسيكي للـ CV الأساسيات", url: "http://programmingcomputervision.com" },
       { id: "p4_s8", name: "Practical Deep Learning for CV — O'Reilly", lang: "🌍", type: "كتاب", price: "مدفوع", note: "أشمل كتاب CV عملي حديث", url: "https://www.oreilly.com/library/view/practical-deep-learning/9781492034858/" },
+      { id: "p4_s9", name: "Deep Learning for CV — Michigan", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "⭐ الأفضل لـ CV بعمق — University of Michigan", url: "https://www.youtube.com/playlist?list=PL5-TkQAfAZFbzxjBHtzdVCWE0Zbhomg7r" },
+      { id: "p4_s10", name: "Modern CV — UC Berkeley CS198", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "أحدث تقنيات الـ CV — Fall 2022", url: "https://www.youtube.com/playlist?list=PLzWRmD0Vi2KVsrCqA4VnztE4t71KnTnP5" },
     ],
   },
   {
@@ -201,6 +211,8 @@ export const phases = [
       { id: "p5_s4", name: "Andrej Karpathy — YouTube Channel", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "⭐ أعمق فهم لـ LLMs وراء الـ API", url: "https://www.youtube.com/@AndrejKarpathy" },
       { id: "p5_s5", name: "LangChain Docs", lang: "🌍", type: "Docs", price: "مجاني", note: "للـ Chains + RAG + Multimodal Apps", url: "https://python.langchain.com/docs" },
       { id: "p5_s6", name: "roadmap.sh — AI Engineer", lang: "🌍", type: "موقع", price: "مجاني", note: "مرجع تفاعلي لكل المسار", url: "https://roadmap.sh/ai-engineer" },
+      { id: "p5_s7", name: "LLM Bootcamp — Full Stack Deep Learning", lang: "🌍", type: "كورس", price: "مجاني", note: "⭐ RAG + Agents + LLMOps كاملين", url: "https://fullstackdeeplearning.com/llm-bootcamp/spring-2023/" },
+      { id: "p5_s8", name: "Moataz Elmesmary — DS Roadmap Resources", lang: "🇪🇬", type: "GitHub", price: "مجاني", note: "مجموعة ضخمة من المصادر المنظمة", url: "https://github.com/Moataz-Elmesmary/Data-Science-Roadmap" },
     ],
   },
   {
