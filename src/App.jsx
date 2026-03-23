@@ -365,54 +365,156 @@ function ItemRow({ item, color, checked, toggle, notes, dates, onSaveNote, onSav
   );
 }
 
-/* ───────────── SOURCES LIST ───────────── */
-function SourcesList({ phase }) {
+/* ───────────── FEATURE 2: FILTERED SOURCES ───────────── */
+const SRC_FILTERS = [
+  { id:"all", label:"الكل" },
+  { id:"video", label:"📹 فيديو/كورس" },
+  { id:"book", label:"📕 كتاب/PDF" },
+  { id:"article", label:"📄 مقال/موقع" },
+  { id:"arabic", label:"🇪🇬 عربي" },
+];
+function srcCat(src) {
+  const t = src.type;
+  if (/يوتيوب|كورس|Coursera/i.test(t)) return "video";
+  if (/كتاب|PDF|pdf/i.test(t)) return "book";
+  return "article";
+}
+function SourceLink({ src, color }) {
   return (
-    <div style={{ display:"flex",flexDirection:"column",gap:8 }}>
-      {phase.sources.map(src=>(
-        <a key={src.id} href={src.url} target="_blank" rel="noopener noreferrer"
-          className="src-link"
-          style={{ "--phase-c":phase.color,display:"flex",alignItems:"center",gap:10,background:"rgba(0,0,0,0.3)",borderRadius:12,padding:"clamp(9px,2vw,12px) clamp(12px,2vw,14px)",textDecoration:"none",border:`1px solid ${phase.color}18`,transition:"all 0.2s" }}>
-          <div style={{ flex:1,minWidth:0 }}>
-            <div style={{ display:"flex",alignItems:"center",flexWrap:"wrap",gap:5,marginBottom:3 }}>
-              <span style={{ fontSize:"clamp(12px,2vw,13px)",fontWeight:700,color:"#E2E8F0" }}>{src.name}</span>
-              <LangBadge lang={src.lang}/>
-              <span style={{ fontSize:"clamp(9px,1.5vw,10px)",padding:"1px 5px",borderRadius:4,background:"rgba(255,255,255,0.05)",color:"#475569",whiteSpace:"nowrap" }}>{src.type}</span>
-            </div>
-            <div style={{ fontSize:"clamp(10px,1.8vw,11px)",color:"#475569" }}>{src.note}</div>
-          </div>
-          <div style={{ flexShrink:0,display:"flex",flexDirection:"column",alignItems:"flex-end",gap:5 }}>
-            <PriceBadge price={src.price}/>
-            <span style={{ fontSize:12,color:phase.color }}>↗</span>
-          </div>
-        </a>
-      ))}
+    <a href={src.url} target="_blank" rel="noopener noreferrer" className="src-link"
+      style={{ "--phase-c":color,display:"flex",alignItems:"center",gap:10,background:"rgba(0,0,0,0.3)",borderRadius:12,padding:"clamp(9px,2vw,12px) clamp(12px,2vw,14px)",textDecoration:"none",border:`1px solid ${color}18`,transition:"all 0.2s" }}>
+      <div style={{ flex:1,minWidth:0 }}>
+        <div style={{ display:"flex",alignItems:"center",flexWrap:"wrap",gap:5,marginBottom:3 }}>
+          <span style={{ fontSize:"clamp(12px,2vw,13px)",fontWeight:700,color:"#E2E8F0" }}>{src.name}</span>
+          <LangBadge lang={src.lang}/>
+          <span style={{ fontSize:"clamp(9px,1.5vw,10px)",padding:"1px 5px",borderRadius:4,background:"rgba(255,255,255,0.05)",color:"#475569",whiteSpace:"nowrap" }}>{src.type}</span>
+        </div>
+        <div style={{ fontSize:"clamp(10px,1.8vw,11px)",color:"#475569" }}>{src.note}</div>
+      </div>
+      <div style={{ flexShrink:0,display:"flex",flexDirection:"column",alignItems:"flex-end",gap:5 }}>
+        <PriceBadge price={src.price}/>
+        <span style={{ fontSize:12,color }}>↗</span>
+      </div>
+    </a>
+  );
+}
+function FilteredSources({ phase }) {
+  const [filter, setFilter] = useState("all");
+  const list = filter==="all" ? phase.sources
+    : filter==="arabic" ? phase.sources.filter(s=>s.lang==="🇪🇬")
+    : phase.sources.filter(s=>srcCat(s)===filter);
+  return (
+    <div>
+      <div style={{ display:"flex",gap:6,flexWrap:"wrap",marginBottom:14 }}>
+        {SRC_FILTERS.map(f=>(
+          <button key={f.id} onClick={()=>setFilter(f.id)}
+            style={{ background:filter===f.id?`${phase.color}20`:"rgba(255,255,255,0.03)",border:`1px solid ${filter===f.id?phase.color+"55":"#1E293B"}`,borderRadius:8,padding:"5px 12px",color:filter===f.id?phase.color:"#475569",fontSize:11,fontWeight:700,cursor:"pointer",transition:"all 0.2s" }}>
+            {f.label}
+          </button>
+        ))}
+      </div>
+      {list.length===0
+        ? <div style={{ color:"#334155",fontSize:13,textAlign:"center",padding:24 }}>مفيش مصادر في الفئة دي</div>
+        : <div style={{ display:"flex",flexDirection:"column",gap:8 }}>{list.map(src=><SourceLink key={src.id} src={src} color={phase.color}/>)}</div>}
     </div>
   );
 }
 
-/* ───────────── PHASE DETAIL ───────────── */
-function PhaseDetail({ phase, checked, toggle, notes, dates, onSaveNote, onSaveDate, onBack }) {
+/* ───────────── FEATURE 1: FLOW TOPICS ───────────── */
+function FlowTopics({ phase, checked, toggle, notes, dates, onSaveNote, onSaveDate }) {
+  return (
+    <div>
+      {phase.topics.map((g,i)=>{
+        const isLast = i===phase.topics.length-1;
+        const allDone = g.items.every(it=>checked[it.id]);
+        const doneCnt = g.items.filter(it=>checked[it.id]).length;
+        return (
+          <div key={g.id} style={{ display:"flex",gap:12 }}>
+            <div style={{ display:"flex",flexDirection:"column",alignItems:"center",width:22,flexShrink:0 }}>
+              <div style={{ width:14,height:14,borderRadius:"50%",marginTop:18,flexShrink:0,border:`2px solid ${allDone?phase.color:phase.color+"55"}`,background:allDone?phase.color:"transparent",boxShadow:allDone?`0 0 12px ${phase.color}88`:"none",transition:"all 0.4s" }}/>
+              {!isLast&&<div style={{ width:2,flex:1,minHeight:24,background:allDone?`linear-gradient(to bottom,${phase.color},${phase.color}44)`:"#1E293B",boxShadow:allDone?`0 0 8px ${phase.color}55`:"none",transition:"all 0.5s",margin:"4px 0" }}/>}
+            </div>
+            <div style={{ flex:1,marginBottom:isLast?0:16 }}>
+              <div style={{ background:"rgba(0,0,0,0.35)",borderRadius:12,padding:"14px 16px",borderRight:`3px solid ${allDone?phase.color:phase.color+"44"}`,boxShadow:allDone?`0 0 24px ${phase.color}18`:"none",transition:"all 0.4s" }}>
+                <div style={{ display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12 }}>
+                  <div style={{ fontSize:11,color:phase.color,fontWeight:800,letterSpacing:1 }}>{g.label}</div>
+                  <div style={{ fontSize:10,color:allDone?"#34D399":"#475569",fontWeight:700 }}>{doneCnt}/{g.items.length}{allDone?" ✅":""}</div>
+                </div>
+                <div style={{ display:"flex",flexDirection:"column",gap:2 }}>
+                  {g.items.map(item=>(
+                    <ItemRow key={item.id} item={item} color={phase.color} checked={checked} toggle={toggle} notes={notes} dates={dates} onSaveNote={onSaveNote} onSaveDate={onSaveDate}/>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ───────────── FEATURE 3: TASKS TAB ───────────── */
+const T_ICON={practice:"🔨",project:"🚀",reading:"📖"};
+const T_LABEL={practice:"تمرين",project:"مشروع",reading:"قراءة"};
+const T_COLOR={practice:"#FBBF24",project:"#F472B6",reading:"#93C5FD"};
+function TasksTab({ phase, tasks, toggleTask }) {
+  const pt = phase.tasks||[];
+  const done = pt.filter(t=>tasks[t.id]).length;
+  const pct = pt.length?Math.round(done/pt.length*100):0;
+  return (
+    <div>
+      <div style={{ background:"rgba(0,0,0,0.3)",borderRadius:10,padding:"12px 16px",marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center" }}>
+        <span style={{ fontSize:13,color:"#94A3B8",fontWeight:600 }}>التقدم</span>
+        <span style={{ fontSize:13,color:phase.color,fontWeight:700 }}>{done}/{pt.length} تكاليف خلصت{done===pt.length&&pt.length>0?" 🎉":""}</span>
+      </div>
+      <AnimatedBar pct={pct} color={phase.color} h={4}/>
+      <div style={{ marginTop:14,display:"flex",flexDirection:"column",gap:8 }}>
+        {pt.map(task=>{
+          const isDone=!!tasks[task.id]; const c=T_COLOR[task.type];
+          return (
+            <div key={task.id} style={{ background:isDone?"rgba(52,211,153,0.04)":"rgba(0,0,0,0.25)",border:`1px solid ${isDone?"#34D39933":"#1E293B"}`,borderRadius:10,padding:"12px 14px",display:"flex",gap:10,alignItems:"flex-start",transition:"all 0.2s" }}>
+              <div onClick={()=>toggleTask(task.id)} style={{ width:18,height:18,borderRadius:4,flexShrink:0,marginTop:1,cursor:"pointer",border:`2px solid ${isDone?"#34D399":"#334155"}`,background:isDone?"#34D399":"transparent",display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.18s",boxShadow:isDone?"0 0 8px rgba(52,211,153,0.5)":"none" }}>
+                {isDone&&<span style={{ color:"#060A12",fontSize:9,fontWeight:900 }}>✓</span>}
+              </div>
+              <div style={{ flex:1,minWidth:0 }}>
+                <div style={{ display:"flex",alignItems:"center",gap:6,marginBottom:4 }}>
+                  <span>{T_ICON[task.type]}</span>
+                  <span style={{ fontSize:10,background:`${c}20`,border:`1px solid ${c}44`,borderRadius:6,padding:"1px 7px",color:c,fontWeight:700 }}>{T_LABEL[task.type]}</span>
+                </div>
+                <div style={{ fontSize:13,color:isDone?"#475569":"#CBD5E1",lineHeight:1.5,textDecoration:isDone?"line-through":"none",transition:"all 0.2s" }}>{task.text}</div>
+              </div>
+              {task.url&&(
+                <a href={task.url} target="_blank" rel="noopener noreferrer" style={{ flexShrink:0,background:"rgba(255,255,255,0.05)",border:"1px solid #1E293B",borderRadius:7,padding:"4px 10px",color:"#94A3B8",fontSize:11,textDecoration:"none",whiteSpace:"nowrap",alignSelf:"center" }}>
+                  افتح ↗
+                </a>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ───────────── PHASE DETAIL (updated: 3 tabs + FlowTopics) ───────────── */
+function PhaseDetail({ phase, checked, toggle, notes, dates, tasks, onSaveNote, onSaveDate, toggleTask, onBack }) {
   const [tab, setTab] = useState("المحتوى");
   const allItems = phase.topics.flatMap(t=>t.items);
   const done = allItems.filter(i=>checked[i.id]).length;
   const pct = allItems.length ? Math.round((done/allItems.length)*100) : 0;
   const [confetti, setConfetti] = useState(false);
   const prevPct = useRef(pct);
-
   useEffect(()=>{
     if (pct===100 && prevPct.current<100) { setConfetti(true); setTimeout(()=>setConfetti(false),3500); }
     prevPct.current = pct;
   },[pct]);
-
   return (
-    <div className="detail-page" style={{ minHeight:"100vh",background:"#060A12",padding:"0 0 80px" }}>
+    <div className="detail-page" style={{ minHeight:"100vh",background:"#060A12",padding:"0 0 100px" }}>
       <Confetti active={confetti}/>
-      {/* Sticky header */}
       <div style={{ position:"sticky",top:0,zIndex:50,background:"rgba(6,10,18,0.92)",backdropFilter:"blur(16px)",borderBottom:"1px solid #0F1A2E",padding:"14px clamp(16px,4vw,32px)" }}>
         <div style={{ maxWidth:820,margin:"0 auto",display:"flex",alignItems:"center",gap:14,flexWrap:"wrap" }}>
-          <button onClick={onBack}
-            style={{ background:"rgba(255,255,255,0.05)",border:"1px solid #1E293B",borderRadius:10,padding:"6px 14px",color:"#94A3B8",fontSize:13,fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",gap:6,transition:"all 0.2s" }}
+          <button onClick={onBack} style={{ background:"rgba(255,255,255,0.05)",border:"1px solid #1E293B",borderRadius:10,padding:"6px 14px",color:"#94A3B8",fontSize:13,fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",gap:6,transition:"all 0.2s" }}
             onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,0.09)"}
             onMouseLeave={e=>e.currentTarget.style.background="rgba(255,255,255,0.05)"}>← رجوع</button>
           <div style={{ fontSize:24 }}>{phase.icon}</div>
@@ -420,7 +522,7 @@ function PhaseDetail({ phase, checked, toggle, notes, dates, onSaveNote, onSaveD
             <div style={{ display:"flex",alignItems:"center",gap:8,flexWrap:"wrap" }}>
               <span style={{ fontSize:"clamp(9px,1.5vw,10px)",color:phase.color,fontWeight:800,letterSpacing:3 }}>PHASE {phase.number}</span>
               <span style={{ fontSize:"clamp(15px,3vw,20px)",fontWeight:900,color:"#F1F5F9" }}>{phase.title}</span>
-              {pct===100 && <span style={{ fontSize:11,background:"#34D39920",border:"1px solid #34D39955",borderRadius:20,padding:"2px 10px",color:"#34D399",fontWeight:700 }}>🎉 مكتمل!</span>}
+              {pct===100&&<span style={{ fontSize:11,background:"#34D39920",border:"1px solid #34D39955",borderRadius:20,padding:"2px 10px",color:"#34D399",fontWeight:700 }}>🎉 مكتمل!</span>}
             </div>
             <div style={{ marginTop:6,display:"flex",alignItems:"center",gap:10 }}>
               <div style={{ flex:1,maxWidth:300 }}><AnimatedBar pct={pct} color={phase.color} h={4}/></div>
@@ -429,30 +531,15 @@ function PhaseDetail({ phase, checked, toggle, notes, dates, onSaveNote, onSaveD
           </div>
         </div>
       </div>
-
       <div style={{ maxWidth:820,margin:"0 auto",padding:"0 clamp(16px,4vw,32px)" }}>
         <div style={{ display:"flex",borderBottom:"1px solid #192035",marginTop:20,marginBottom:20 }}>
-          {["المحتوى","المصادر"].map(t=>(
-            <button key={t} onClick={()=>setTab(t)}
-              style={{ background:"none",border:"none",padding:"10px clamp(16px,3vw,24px)",fontSize:14,fontWeight:700,cursor:"pointer",color:tab===t?phase.color:"#334155",borderBottom:tab===t?`2px solid ${phase.color}`:"2px solid transparent",transition:"all 0.2s" }}>{t}</button>
+          {["المحتوى","المصادر","تكاليف 📝"].map(t=>(
+            <button key={t} onClick={()=>setTab(t)} style={{ background:"none",border:"none",padding:"10px clamp(10px,2vw,20px)",fontSize:13,fontWeight:700,cursor:"pointer",color:tab===t?phase.color:"#334155",borderBottom:tab===t?`2px solid ${phase.color}`:"2px solid transparent",transition:"all 0.2s" }}>{t}</button>
           ))}
         </div>
-        {tab==="المحتوى" ? (
-          <div style={{ display:"flex",flexDirection:"column",gap:20 }}>
-            {phase.topics.map(g=>(
-              <div key={g.id} style={{ background:"rgba(0,0,0,0.3)",borderRadius:12,padding:"14px 16px",borderRight:`3px solid ${phase.color}55` }}>
-                <div style={{ fontSize:"clamp(9px,1.5vw,11px)",color:phase.color,fontWeight:800,marginBottom:12,letterSpacing:1 }}>{g.label}</div>
-                <div style={{ display:"flex",flexDirection:"column",gap:2 }}>
-                  {g.items.map(item=>(
-                    <ItemRow key={item.id} item={item} color={phase.color}
-                      checked={checked} toggle={toggle} notes={notes} dates={dates}
-                      onSaveNote={onSaveNote} onSaveDate={onSaveDate}/>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : <SourcesList phase={phase}/>}
+        {tab==="المحتوى" && <FlowTopics phase={phase} checked={checked} toggle={toggle} notes={notes} dates={dates} onSaveNote={onSaveNote} onSaveDate={onSaveDate}/>}
+        {tab==="المصادر" && <FilteredSources phase={phase}/>}
+        {tab==="تكاليف 📝" && <TasksTab phase={phase} tasks={tasks} toggleTask={toggleTask}/>}
       </div>
     </div>
   );
@@ -517,17 +604,98 @@ function BottomNav({ phases, checked, onSelect }) {
   );
 }
 
+/* ───────────── FEATURE 4: AI SEARCH MODAL ───────────── */
+function AISearchModal({ onClose, onAdd }) {
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState("");
+  const KEY = import.meta.env.VITE_ANTHROPIC_API_KEY;
+  const search = async () => {
+    if (!query.trim()) return;
+    if (!KEY) { setError("أضف VITE_ANTHROPIC_API_KEY في .env"); return; }
+    setLoading(true); setError(""); setResult(null);
+    try {
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method:"POST",
+        headers:{"Content-Type":"application/json","x-api-key":KEY,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+        body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:`أنا بتعلم AI Engineering وعايز أتعلم "${query}". اديني بالظبط: 1.شرح مختصر (3 جمل) 2.أفضل فيديو(اسم+لينك) 3.أفضل كتاب PDF مجاني(اسم+لينك) 4.أفضل مقال/موقع(اسم+لينك) 5.تاسك عملي واحد. رد JSON فقط. Format:{"description":"","video":{"name":"","url":""},"book":{"name":"","url":""},"article":{"name":"","url":""},"task":""}`}]})
+      });
+      if (!res.ok) throw new Error(`API ${res.status}`);
+      const data = await res.json();
+      const m = data.content[0].text.match(/\{[\s\S]*\}/);
+      if (m) setResult(JSON.parse(m[0])); else throw new Error("Invalid JSON");
+    } catch(e) { setError(`خطأ: ${e.message}`); }
+    finally { setLoading(false); }
+  };
+  return (
+    <>
+      <div onClick={onClose} style={{ position:"fixed",inset:0,background:"rgba(0,0,0,0.8)",backdropFilter:"blur(8px)",zIndex:200 }}/>
+      <div style={{ position:"fixed",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:"min(540px,94vw)",maxHeight:"85vh",overflowY:"auto",background:"#0B1525",border:"1px solid rgba(0,212,255,0.2)",borderRadius:20,padding:28,zIndex:201,boxShadow:"0 40px 80px rgba(0,0,0,0.8)",animation:"fadeIn 0.25s ease" }}>
+        <div style={{ display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18 }}>
+          <h2 style={{ fontSize:17,fontWeight:800,color:"#F1F5F9",margin:0 }}>🔍 ابحث عن Topic</h2>
+          <button onClick={onClose} style={{ background:"rgba(255,255,255,0.05)",border:"1px solid #1E293B",borderRadius:8,width:30,height:30,cursor:"pointer",color:"#475569",fontSize:16 }}>✕</button>
+        </div>
+        <div style={{ display:"flex",gap:8,marginBottom:14 }}>
+          <input value={query} onChange={e=>setQuery(e.target.value)} onKeyDown={e=>e.key==="Enter"&&search()}
+            placeholder="اكتب الـ topic اللي عايز تتعلمه…"
+            style={{ flex:1,background:"rgba(255,255,255,0.04)",border:"1px solid #1E293B",borderRadius:10,padding:"10px 14px",color:"#E2E8F0",fontSize:13,direction:"rtl",outline:"none" }}/>
+          <button onClick={search} disabled={loading} className="btn-hover"
+            style={{ background:"rgba(0,212,255,0.15)",border:"1px solid rgba(0,212,255,0.3)",borderRadius:10,padding:"10px 16px",color:"#00D4FF",fontSize:13,fontWeight:700,cursor:loading?"not-allowed":"pointer",whiteSpace:"nowrap" }}>
+            {loading?"⏳":"بحث"}
+          </button>
+        </div>
+        {error&&<div style={{ color:"#F87171",fontSize:12,background:"rgba(248,113,113,0.1)",border:"1px solid rgba(248,113,113,0.2)",borderRadius:8,padding:"8px 12px",marginBottom:12 }}>{error}</div>}
+        {loading&&<div style={{ textAlign:"center",padding:28,color:"#475569" }}><div style={{ width:22,height:22,border:"2px solid #1E293B",borderTop:"2px solid #00D4FF",borderRadius:"50%",animation:"spin 0.8s linear infinite",margin:"0 auto 10px" }}/>كلود بيبحث…</div>}
+        {result&&(
+          <div style={{ display:"flex",flexDirection:"column",gap:10 }}>
+            <div style={{ background:"rgba(0,212,255,0.06)",border:"1px solid rgba(0,212,255,0.15)",borderRadius:12,padding:14 }}>
+              <div style={{ fontSize:10,color:"#00D4FF",fontWeight:700,letterSpacing:2,marginBottom:8 }}>DESCRIPTION</div>
+              <p style={{ fontSize:13,color:"#CBD5E1",lineHeight:1.7,margin:0 }}>{result.description}</p>
+            </div>
+            {[["📹 فيديو",result.video,"#F472B6"],["📕 كتاب",result.book,"#A78BFA"],["📄 مقال",result.article,"#34D399"]].map(([label,data,color])=>data&&(
+              <div key={label} style={{ background:"rgba(0,0,0,0.3)",border:`1px solid ${color}22`,borderRadius:10,padding:"10px 14px",display:"flex",justifyContent:"space-between",alignItems:"center",gap:8 }}>
+                <div style={{ flex:1,minWidth:0 }}>
+                  <div style={{ fontSize:10,color,fontWeight:700,marginBottom:3 }}>{label}</div>
+                  <div style={{ fontSize:13,color:"#CBD5E1",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" }}>{data.name}</div>
+                </div>
+                {data.url&&<a href={data.url} target="_blank" rel="noopener noreferrer" style={{ background:`${color}18`,border:`1px solid ${color}44`,borderRadius:7,padding:"4px 10px",color,fontSize:11,textDecoration:"none",whiteSpace:"nowrap" }}>↗ افتح</a>}
+              </div>
+            ))}
+            {result.task&&<div style={{ background:"rgba(251,191,36,0.08)",border:"1px solid rgba(251,191,36,0.2)",borderRadius:10,padding:"12px 14px" }}>
+              <div style={{ fontSize:10,color:"#FBBF24",fontWeight:700,marginBottom:6 }}>🔨 التاسك العملي</div>
+              <div style={{ fontSize:13,color:"#CBD5E1",lineHeight:1.6 }}>{result.task}</div>
+            </div>}
+            <button onClick={()=>{onAdd({topic:query,result});onClose();}} className="btn-hover"
+              style={{ width:"100%",padding:10,background:"rgba(167,139,250,0.12)",border:"1px solid rgba(167,139,250,0.3)",borderRadius:10,color:"#A78BFA",fontSize:13,fontWeight:700,cursor:"pointer" }}>
+              ➕ أضف للـ Roadmap
+            </button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
 /* ───────────── APP ───────────── */
 export default function App() {
   const [pin, setPin] = useState(()=>localStorage.getItem("roadmap-pin")||null);
   const [checked, setChecked] = useState({});
   const [notes, setNotes]   = useState({});
   const [dates, setDates]   = useState({});
+  const [tasks, setTasks]   = useState({});
   const [syncStatus, setSyncStatus] = useState("synced");
   const [detailPhase, setDetailPhase] = useState(null);
-
+  const [showAI, setShowAI] = useState(false);
+  const [finds, setFinds] = useState([]);
   const saveTimer = useRef(null);
   const unsubRef  = useRef(null);
+  // Refs for latest values to avoid stale closures in save
+  const rC=useRef({}),rN=useRef({}),rD=useRef({}),rT=useRef({});
+  useEffect(()=>{rC.current=checked;},[checked]);
+  useEffect(()=>{rN.current=notes;},[notes]);
+  useEffect(()=>{rD.current=dates;},[dates]);
+  useEffect(()=>{rT.current=tasks;},[tasks]);
 
   /* ─ Firestore listener ─ */
   useEffect(()=>{
@@ -535,35 +703,32 @@ export default function App() {
     if (unsubRef.current) { unsubRef.current(); unsubRef.current=null; }
     const ref = doc(db,"progress",pin);
     unsubRef.current = onSnapshot(ref,
-      snap=>{ if(snap.exists()){const d=snap.data();setChecked(d.checked||{});setNotes(d.notes||{});setDates(d.dates||{});} setSyncStatus("synced"); },
+      snap=>{ if(snap.exists()){const d=snap.data();setChecked(d.checked||{});setNotes(d.notes||{});setDates(d.dates||{});setTasks(d.tasks||{});} setSyncStatus("synced"); },
       ()=>setSyncStatus("error")
     );
     return ()=>unsubRef.current?.();
   },[pin]);
 
-  /* ─ Save ─ */
-  const save = useCallback((c,n,d)=>{
+  const save = useCallback(()=>{
     if (!pin) return;
     clearTimeout(saveTimer.current); setSyncStatus("syncing");
     saveTimer.current = setTimeout(async()=>{
-      try { await setDoc(doc(db,"progress",pin),{checked:c,notes:n,dates:d,updatedAt:Date.now()},{merge:true}); setSyncStatus("synced"); }
+      try { await setDoc(doc(db,"progress",pin),{checked:rC.current,notes:rN.current,dates:rD.current,tasks:rT.current,updatedAt:Date.now()},{merge:true}); setSyncStatus("synced"); }
       catch { setSyncStatus("error"); }
     },700);
   },[pin]);
 
   const toggle = useCallback((id)=>{
-    setChecked(prev=>{ const next={...prev,[id]:!prev[id]};
-      setNotes(n=>{ setDates(d=>{ save(next,n,d); return d; }); return n; }); return next; });
+    setChecked(prev=>{ const next={...prev,[id]:!prev[id]}; rC.current=next; save(); return next; });
   },[save]);
-
   const onSaveNote = useCallback((id,text)=>{
-    setNotes(prev=>{ const next={...prev,[id]:text};
-      setChecked(c=>{ setDates(d=>{ save(c,next,d); return d; }); return c; }); return next; });
+    setNotes(prev=>{ const next={...prev,[id]:text}; rN.current=next; save(); return next; });
   },[save]);
-
   const onSaveDate = useCallback((id,val)=>{
-    setDates(prev=>{ const next={...prev,[id]:val};
-      setChecked(c=>{ setNotes(n=>{ save(c,n,next); return n; }); return c; }); return next; });
+    setDates(prev=>{ const next={...prev,[id]:val}; rD.current=next; save(); return next; });
+  },[save]);
+  const toggleTask = useCallback((id)=>{
+    setTasks(prev=>{ const next={...prev,[id]:!prev[id]}; rT.current=next; save(); return next; });
   },[save]);
 
   /* ─ PIN entered ─ */
@@ -576,18 +741,19 @@ export default function App() {
   const totalDone = allItems.filter(i=>checked[i.id]).length;
   const totalPct  = allItems.length ? Math.round((totalDone/allItems.length)*100) : 0;
 
-  /* ─ Show PIN screen ─ */
-  if (!pin) return <PINScreen onEnter={handleEnterPIN}/>;
+  if (!pin) return <PINScreen onEnter={(p)=>setPin(p)}/>;
 
-  /* ─ Phase detail ─ */
   if (detailPhase !== null) {
     const phase = phases.find(p=>p.id===detailPhase);
     return (
       <>
         <style>{GLOBAL_CSS}</style>
         <PhaseDetail phase={phase} checked={checked} toggle={toggle}
-          notes={notes} dates={dates} onSaveNote={onSaveNote} onSaveDate={onSaveDate}
+          notes={notes} dates={dates} tasks={tasks}
+          onSaveNote={onSaveNote} onSaveDate={onSaveDate} toggleTask={toggleTask}
           onBack={()=>setDetailPhase(null)}/>
+        <button onClick={()=>setShowAI(true)} style={{ position:"fixed",bottom:24,right:16,zIndex:70,width:50,height:50,borderRadius:"50%",background:"linear-gradient(135deg,#00D4FF,#A78BFA)",border:"none",cursor:"pointer",boxShadow:"0 4px 20px rgba(0,212,255,0.4)",fontSize:20 }}>🔍</button>
+        {showAI&&<AISearchModal onClose={()=>setShowAI(false)} onAdd={(f)=>setFinds(prev=>[...prev,{...f,id:Date.now()}])}/>}
       </>
     );
   }
@@ -668,14 +834,31 @@ export default function App() {
       <div style={{ textAlign:"center",marginTop:32,color:"#1E293B",fontSize:"clamp(10px,1.8vw,11px)",display:"flex",alignItems:"center",justifyContent:"center",gap:14,flexWrap:"wrap" }}>
         <span>AI Engineer Roadmap © 2026 · التقدم محفوظ على السحابة ☁️</span>
         <span style={{ color:"#334155" }}>🔑 PIN: <code style={{ color:"#00D4FF88",letterSpacing:2 }}>{pin}</code></span>
-        <button onClick={handleChangePIN}
+        <button onClick={()=>{ localStorage.removeItem("roadmap-pin"); window.location.reload(); }}
           style={{ background:"none",border:"none",color:"#334155",fontSize:"clamp(10px,1.8vw,11px)",cursor:"pointer",textDecoration:"underline dotted",padding:0 }}>
           تغيير PIN
         </button>
       </div>
 
+      {/* AI Search finds */}
+      {finds.length>0&&(
+        <div style={{ maxWidth:860,margin:"20px auto 0",display:"flex",flexDirection:"column",gap:8 }}>
+          <div style={{ fontSize:11,color:"#334155",letterSpacing:3,marginBottom:4 }}>🔍 اكتشافاتك</div>
+          {finds.map(f=>(
+            <div key={f.id} style={{ background:"rgba(167,139,250,0.06)",border:"1px solid rgba(167,139,250,0.2)",borderRadius:12,padding:"12px 16px",display:"flex",justifyContent:"space-between",alignItems:"center" }}>
+              <div><div style={{ fontSize:13,fontWeight:700,color:"#A78BFA",marginBottom:3 }}>{f.topic}</div><div style={{ fontSize:11,color:"#475569" }}>{f.result.description?.slice(0,80)}…</div></div>
+              <button onClick={()=>setFinds(p=>p.filter(x=>x.id!==f.id))} style={{ background:"none",border:"none",color:"#334155",cursor:"pointer",fontSize:16 }}>✕</button>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Mobile bottom nav */}
       <BottomNav phases={phases} checked={checked} onSelect={(id)=>setDetailPhase(id)}/>
+
+      {/* AI Search floating button */}
+      <button onClick={()=>setShowAI(true)} style={{ position:"fixed",bottom:72,right:16,zIndex:70,width:50,height:50,borderRadius:"50%",background:"linear-gradient(135deg,#00D4FF,#A78BFA)",border:"none",cursor:"pointer",boxShadow:"0 4px 20px rgba(0,212,255,0.4)",fontSize:22,display:"flex",alignItems:"center",justifyContent:"center" }}>🔍</button>
+      {showAI&&<AISearchModal onClose={()=>setShowAI(false)} onAdd={(f)=>setFinds(prev=>[...prev,{...f,id:Date.now()}])}/>}
     </div>
   );
 }
