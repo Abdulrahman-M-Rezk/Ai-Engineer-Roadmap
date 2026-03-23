@@ -26,6 +26,12 @@ export const phases = [
       { id: "p0_s5", name: "Git & GitHub — FreeCodeCamp", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "مهم جداً للـ Portfolio", url: "https://www.youtube.com/watch?v=RGOj5yH7evk" },
       { id: "p0_s6", name: "Python Crash Course — Eric Matthes", lang: "🌍", type: "كتاب", price: "مدفوع", note: "شامل وعملي للمبتدئين", url: "https://nostarch.com/python-crash-course-3rd-edition" },
     ],
+    tasks: [
+      { id: "p0_task1", text: "حل 20 تمرين Python على HackerRank", type: "practice", url: "https://www.hackerrank.com/domains/python" },
+      { id: "p0_task2", text: "اعمل repo على GitHub وارفع عليه كود Python بتاعك", type: "project", url: "https://github.com" },
+      { id: "p0_task3", text: "اكتب script بيعمل File organizer بـ OOP", type: "project", url: "" },
+      { id: "p0_task4", text: "اقرأ Clean Code Chapter 1-3", type: "reading", url: "" },
+    ],
   },
   {
     id: 1, number: "01", title: "Math & Data Essentials", duration: "3–4 أسابيع",
@@ -60,6 +66,12 @@ export const phases = [
       { id: "p1_s9", name: "Mathematics for ML — Andrew Ng", lang: "🌍", type: "Coursera", price: "مجاني (audit)", note: "الأشمل للـ Math المطلوب في ML", url: "https://www.coursera.org/specializations/mathematics-for-machine-learning-and-data-science" },
       { id: "p1_s10", name: "Corey Schafer — Pandas", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "أفضل شرح عملي للـ Pandas", url: "https://www.youtube.com/watch?v=ZyhVh-qRZPA&list=PL-osiE80TeTsWmV9i9c58mdDCSskIFdDS" },
       { id: "p1_s11", name: "NumPy Tutorial — Keith Galli", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "الأفضل للـ NumPy من الصفر", url: "https://www.youtube.com/watch?v=5-5CrLmf2vk&list=PLIA_seGogbkGDYq-dnVCsELEIq_7HK7Ca" },
+    ],
+    tasks: [
+      { id: "p1_task1", text: "حل Linear Algebra exercises على Khan Academy", type: "practice", url: "https://www.khanacademy.org/math/linear-algebra" },
+      { id: "p1_task2", text: "حلل Dataset بـ Pandas وطلع 5 insights", type: "project", url: "https://www.kaggle.com/datasets" },
+      { id: "p1_task3", text: "ارسم 10 أنواع مختلفة من الـ Charts بـ Matplotlib", type: "practice", url: "" },
+      { id: "p1_task4", text: "حل Pandas exercises على Kaggle Learn", type: "practice", url: "https://www.kaggle.com/learn/pandas" },
     ],
   },
   {
@@ -101,6 +113,13 @@ export const phases = [
       { id: "p2_s8", name: "ML From Scratch — Python Engineer", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "⭐ بناء الـ Algorithms من الصفر بـ Python", url: "https://www.youtube.com/watch?v=ngLyX54e1LU&list=PLqnslRFeH2Upcrywf-u2etjdxxkL8nl7E" },
       { id: "p2_s9", name: "Hands-On ML — الكتاب (3 نسخ مجانية)", lang: "🌍", type: "كتاب PDF", price: "مجاني", note: "الأعمق والأشمل — مرجع أساسي", url: "https://drive.google.com/file/d/11VeqPJw8s9SC9Ru7IVeQhiTwV_9TliOE/view" },
     ],
+    tasks: [
+      { id: "p2_task1", text: "طبّق Linear Regression من الصفر بـ NumPy", type: "project", url: "" },
+      { id: "p2_task2", text: "شارك في Kaggle Titanic Competition", type: "project", url: "https://www.kaggle.com/c/titanic" },
+      { id: "p2_task3", text: "قارن 3 Models مختلفة على نفس الـ Dataset", type: "practice", url: "" },
+      { id: "p2_task4", text: "اعمل Notebook كامل بـ EDA + Model + Evaluation", type: "project", url: "" },
+      { id: "p2_task5", text: "حل 10 مسائل ML على LeetCode", type: "practice", url: "https://leetcode.com" },
+    ],
   },
   {
     id: 3, number: "03", title: "Deep Learning Core", duration: "6–8 أسابيع",
@@ -138,6 +157,12 @@ export const phases = [
       { id: "p3_s7", name: "d2l.ai — Dive into Deep Learning", lang: "🌍", type: "كتاب تفاعلي", price: "مجاني", note: "كود + نظرية + تمارين — ممتاز", url: "https://d2l.ai" },
       { id: "p3_s8", name: "MIT — Intro to Deep Learning", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "⭐ محدّث سنوياً — الأفضل للـ DL foundations", url: "http://introtodeeplearning.com" },
       { id: "p3_s9", name: "Deep Learning — UC Berkeley", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "شامل جداً مع exercises", url: "https://www.youtube.com/playlist?list=PLZSO_6-bSqHQHBCoGaObUljoXAyyqhpFW" },
+    ],
+    tasks: [
+      { id: "p3_task1", text: "ابني Neural Network من الصفر بـ NumPy (بدون PyTorch)", type: "project", url: "" },
+      { id: "p3_task2", text: "صنّف MNIST Dataset بـ PyTorch ووصل لـ 99% accuracy", type: "project", url: "http://yann.lecun.com/exdb/mnist/" },
+      { id: "p3_task3", text: "جرّب 5 Activation Functions وقارن نتايجهم", type: "practice", url: "" },
+      { id: "p3_task4", text: "Fine-tune ResNet على Custom Dataset", type: "project", url: "" },
     ],
   },
   {
@@ -178,6 +203,13 @@ export const phases = [
       { id: "p4_s9", name: "Deep Learning for CV — Michigan", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "⭐ الأفضل لـ CV بعمق — University of Michigan", url: "https://www.youtube.com/playlist?list=PL5-TkQAfAZFbzxjBHtzdVCWE0Zbhomg7r" },
       { id: "p4_s10", name: "Modern CV — UC Berkeley CS198", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "أحدث تقنيات الـ CV — Fall 2022", url: "https://www.youtube.com/playlist?list=PLzWRmD0Vi2KVsrCqA4VnztE4t71KnTnP5" },
     ],
+    tasks: [
+      { id: "p4_task1", text: "اعمل Real-time Face Detection بـ OpenCV", type: "project", url: "" },
+      { id: "p4_task2", text: "شغّل YOLO على فيديو من اختيارك", type: "project", url: "https://docs.ultralytics.com" },
+      { id: "p4_task3", text: "ابني Image Classifier بـ CLIP", type: "project", url: "" },
+      { id: "p4_task4", text: "اعمل Style Transfer app بـ Stable Diffusion", type: "project", url: "" },
+      { id: "p4_task5", text: "شارك في Kaggle CV Competition", type: "project", url: "https://www.kaggle.com/competitions" },
+    ],
   },
   {
     id: 5, number: "05", title: "AI Engineer Layer", duration: "4–6 أسابيع",
@@ -214,6 +246,12 @@ export const phases = [
       { id: "p5_s7", name: "LLM Bootcamp — Full Stack Deep Learning", lang: "🌍", type: "كورس", price: "مجاني", note: "⭐ RAG + Agents + LLMOps كاملين", url: "https://fullstackdeeplearning.com/llm-bootcamp/spring-2023/" },
       { id: "p5_s8", name: "Moataz Elmesmary — DS Roadmap Resources", lang: "🇪🇬", type: "GitHub", price: "مجاني", note: "مجموعة ضخمة من المصادر المنظمة", url: "https://github.com/Moataz-Elmesmary/Data-Science-Roadmap" },
     ],
+    tasks: [
+      { id: "p5_task1", text: "ابني Image Search Engine بـ CLIP + FAISS", type: "project", url: "" },
+      { id: "p5_task2", text: "اعمل Multimodal Chatbot بـ GPT-4V API", type: "project", url: "" },
+      { id: "p5_task3", text: "Fine-tune HuggingFace model على Custom Data", type: "project", url: "" },
+      { id: "p5_task4", text: "انشر Model على HuggingFace Spaces", type: "project", url: "https://huggingface.co/spaces" },
+    ],
   },
   {
     id: 6, number: "06", title: "Build & Deploy", duration: "4 أسابيع",
@@ -248,6 +286,12 @@ export const phases = [
       { id: "p6_s5", name: "TechWithTim — FastAPI + Docker", lang: "🌍", type: "يوتيوب", price: "مجاني", note: "Docker + FastAPI عملي خطوة بخطوة", url: "https://www.youtube.com/@TechWithTim" },
       { id: "p6_s6", name: "Docker Official Docs — Get Started", lang: "🌍", type: "Docs", price: "مجاني", note: "لازم تفهم Docker من المصدر", url: "https://docs.docker.com/get-started/" },
       { id: "p6_s7", name: "MLflow Docs", lang: "🌍", type: "Docs", price: "مجاني", note: "Experiment Tracking للـ Models", url: "https://mlflow.org/docs/latest/index.html" },
+    ],
+    tasks: [
+      { id: "p6_task1", text: "ابني AI App كاملة بـ Gradio وانشرها", type: "project", url: "https://www.gradio.app" },
+      { id: "p6_task2", text: "اعمل REST API بـ FastAPI لـ ML Model", type: "project", url: "" },
+      { id: "p6_task3", text: "عمل Docker image للـ App بتاعتك", type: "project", url: "" },
+      { id: "p6_task4", text: "اكتب README احترافي لكل Project", type: "reading", url: "" },
     ],
   },
 ];
