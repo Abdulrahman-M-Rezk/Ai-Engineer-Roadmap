@@ -17,44 +17,6 @@ function Checkbox({ on, color }) {
 function Bar({ pct, color, h=4 }) {
   return <div style={{ width:"100%",height:h,background:"#0F1A2E",borderRadius:99,overflow:"hidden" }}><div style={{ width:`${pct}%`,height:"100%",background:color,borderRadius:99,transition:"width 0.4s ease" }} /></div>;
 }
-function SyncDot({ status }) {
-  const map={synced:["#34D399","محفوظ ☁️"],syncing:["#FBBF24","جاري الحفظ…"],error:["#F87171","خطأ"]};
-  const [c,l]=map[status]||["#475569",""];
-  return l?<div style={{ display:"flex",alignItems:"center",gap:4,fontSize:11,color:c }}><div style={{ width:6,height:6,borderRadius:"50%",background:c }} />{l}</div>:null;
-}
-
-
-
-function UserMenu({ user, onSignOut, syncStatus }) {
-  const [open,setOpen]=useState(false);
-  const ref=useRef();
-  useEffect(()=>{
-    const h=(e)=>{if(ref.current&&!ref.current.contains(e.target))setOpen(false)};
-    document.addEventListener("mousedown",h);return()=>document.removeEventListener("mousedown",h);
-  },[]);
-  return (
-    <div ref={ref} style={{ position:"relative" }}>
-      <button onClick={()=>setOpen(p=>!p)} style={{ background:"rgba(255,255,255,0.05)",border:"1px solid #1E293B",borderRadius:10,padding:"6px 10px",display:"flex",alignItems:"center",gap:8,cursor:"pointer" }}>
-        <img src={user.photoURL} alt="" width={28} height={28} style={{ borderRadius:"50%",border:"2px solid #1E293B" }} onError={e=>e.target.style.display="none"} />
-        <span style={{ fontSize:12,color:"#94A3B8",maxWidth:100,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" }}>{user.displayName?.split(" ")[0]}</span>
-        <SyncDot status={syncStatus} />
-        <span style={{ color:"#334155",fontSize:10 }}>{open?"▲":"▼"}</span>
-      </button>
-      {open&&(
-        <div style={{ position:"absolute",top:"calc(100% + 8px)",left:"50%",transform:"translateX(-50%)",width:"min(240px,88vw)",background:"#0D1525",border:"1px solid #1E293B",borderRadius:12,padding:16,zIndex:999,boxShadow:"0 20px 40px rgba(0,0,0,0.7)" }}>
-          <div style={{ display:"flex",alignItems:"center",gap:10,marginBottom:14,paddingBottom:14,borderBottom:"1px solid #1A2540" }}>
-            <img src={user.photoURL} alt="" width={36} height={36} style={{ borderRadius:"50%" }} onError={e=>e.target.style.display="none"} />
-            <div><div style={{ fontSize:13,fontWeight:700,color:"#F1F5F9" }}>{user.displayName}</div><div style={{ fontSize:11,color:"#475569",marginTop:2 }}>{user.email}</div></div>
-          </div>
-          <div style={{ display:"flex",alignItems:"center",gap:6,marginBottom:14,padding:"8px 10px",background:"rgba(52,211,153,0.06)",border:"1px solid #34D39922",borderRadius:8 }}>
-            <span style={{ fontSize:12 }}>☁️</span><span style={{ fontSize:11,color:"#34D399",lineHeight:1.5 }}>التقدم يتزامن تلقائياً على كل أجهزتك</span>
-          </div>
-          <button onClick={onSignOut} style={{ width:"100%",background:"rgba(248,113,113,0.1)",border:"1px solid rgba(248,113,113,0.3)",borderRadius:8,padding:"8px 0",color:"#F87171",fontSize:13,fontWeight:700,cursor:"pointer" }}>تسجيل الخروج</button>
-        </div>
-      )}
-    </div>
-  );
-}
 
 function ContentTab({ phase, checked, toggle }) {
   return (
@@ -144,9 +106,9 @@ function PhaseCard({ phase, idx, isActive, onToggleOpen, checked, toggle }) {
   );
 }
 
+const ANON_UID = "anonymous";
+
 export default function App() {
-  const [user,setUser]=useState(undefined);
-  const [loginLoading,setLoginLoading]=useState(false);
   const [active,setActive]=useState(null);
   const [checked,setChecked]=useState({});
   const [syncStatus,setSyncStatus]=useState("synced");
@@ -154,65 +116,39 @@ export default function App() {
   const unsubRef=useRef(null);
 
   useEffect(()=>{
-    const unsub=onAuthStateChanged(auth,(u)=>setUser(u));
-    return unsub;
-  },[]);
-
-  useEffect(()=>{
-    if(unsubRef.current){unsubRef.current();unsubRef.current=null;}
-    if(!user){setChecked({});return;}
-    const ref=doc(db,"progress",user.uid);
+    const ref=doc(db,"progress",ANON_UID);
     unsubRef.current=onSnapshot(ref,
       snap=>{if(snap.exists())setChecked(snap.data().checked||{});setSyncStatus("synced");},
       ()=>setSyncStatus("error")
     );
     return()=>unsubRef.current?.();
-  },[user]);
+  },[]);
 
-  const save=useCallback((uid,data)=>{
+  const save=useCallback((data)=>{
     clearTimeout(saveTimer.current);setSyncStatus("syncing");
     saveTimer.current=setTimeout(async()=>{
-      try{await setDoc(doc(db,"progress",uid),{checked:data,updatedAt:Date.now()},{merge:true});setSyncStatus("synced");}
+      try{await setDoc(doc(db,"progress",ANON_UID),{checked:data,updatedAt:Date.now()},{merge:true});setSyncStatus("synced");}
       catch{setSyncStatus("error");}
     },700);
   },[]);
 
   const toggle=useCallback((id)=>{
-    if(!user)return;
-    setChecked(prev=>{const next={...prev,[id]:!prev[id]};save(user.uid,next);return next;});
-  },[user,save]);
-
-  const handleLogin=async()=>{
-    setLoginLoading(true);
-    try{await signInWithPopup(auth,provider);}
-    catch(e){if(e.code!=="auth/popup-closed-by-user")console.error(e);}
-    finally{setLoginLoading(false);}
-  };
-  const handleSignOut=async()=>{
-    if(unsubRef.current)unsubRef.current();
-    await signOut(auth);
-  };
+    setChecked(prev=>{const next={...prev,[id]:!prev[id]};save(next);return next;});
+  },[save]);
 
   const allItems=phases.flatMap(p=>p.topics.flatMap(t=>t.items));
   const totalDone=allItems.filter(i=>checked[i.id]).length;
   const totalPct=allItems.length?Math.round((totalDone/allItems.length)*100):0;
 
-  if(user===undefined)return(
-    <div style={{ background:"#060A12",minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:16 }}>
-      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
-      <div style={{ width:40,height:40,border:"3px solid #1E293B",borderTop:"3px solid #00D4FF",borderRadius:"50%",animation:"spin 0.8s linear infinite" }} />
-      <p style={{ color:"#475569",fontSize:13 }}>جاري التحميل…</p>
-    </div>
-  );
-
-  if(!user)return <LoginScreen onLogin={handleLogin} loading={loginLoading}/>;
+  const syncDotColor=syncStatus==="synced"?"#34D399":syncStatus==="syncing"?"#FBBF24":"#F87171";
+  const syncDotLabel=syncStatus==="synced"?"محفوظ ☁️":syncStatus==="syncing"?"جاري الحفظ…":"خطأ";
 
   return (
     <div style={{ background:"#060A12",minHeight:"100vh",fontFamily:"'Segoe UI',Tahoma,Arial,sans-serif",color:"#E2E8F0",padding:"clamp(20px,4vw,44px) clamp(12px,3vw,24px) 60px",direction:"rtl",boxSizing:"border-box" }}>
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
 
-      <div style={{ position:"fixed",top:12,left:12,zIndex:100 }}>
-        <UserMenu user={user} onSignOut={handleSignOut} syncStatus={syncStatus}/>
+      <div style={{ position:"fixed",top:12,left:12,zIndex:100,display:"flex",alignItems:"center",gap:6,fontSize:11,color:syncDotColor }}>
+        <div style={{ width:6,height:6,borderRadius:"50%",background:syncDotColor }} />{syncDotLabel}
       </div>
 
       <div style={{ textAlign:"center",marginBottom:"clamp(28px,5vw,52px)" }}>
@@ -274,7 +210,7 @@ export default function App() {
       </div>
 
       <div style={{ textAlign:"center",marginTop:32,color:"#1E293B",fontSize:"clamp(10px,1.8vw,11px)" }}>
-        مرحباً {user.displayName?.split(" ")[0]} 👋 · التقدم محفوظ على السحابة · AI Engineer Roadmap © 2026
+        AI Engineer Roadmap © 2026 · التقدم محفوظ على السحابة ☁️
       </div>
     </div>
   );

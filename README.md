@@ -1,46 +1,58 @@
-# AI Engineer Roadmap 🤖
+# 🤖 AI Engineer Roadmap
 
-Personal AI Engineer Roadmap — Computer Vision Specialized
+Personalized AI Engineer Roadmap مع تزامن تلقائي بين الأجهزة
 
-## Deploy to Vercel (5 دقايق)
+---
 
-### الطريقة 1: بدون كود (الأسهل)
+## الخطوة 1 — إنشاء Firebase (3 دقايق مجاناً)
 
-1. روح على [github.com](https://github.com) وعمل account لو مش عندك
-2. New Repository → اسمه `ai-roadmap` → Public → Create
-3. اضغط "uploading an existing file" → ارفع **كل** الملفات دي
-4. روح [vercel.com](https://vercel.com) → Sign up with GitHub
-5. New Project → Import الـ repo بتاعك
-6. كل الـ settings هتبقى automatic → اضغط **Deploy**
-7. بعد دقيقة هيديك لينك مثل: `ai-roadmap.vercel.app` 🎉
+1. روح على **console.firebase.google.com**
+2. **Create a project** → اسمه `ai-roadmap` → Continue
+3. Disable Google Analytics → Create project
+4. من القايمة: **Build → Realtime Database → Create Database**
+5. اختار أقرب region → **Start in test mode** → Enable
+6. انسخ الرابط اللي هيظهر:
+   `https://ai-roadmap-xxxxx-default-rtdb.firebaseio.com`
 
-### الطريقة 2: عن طريق CLI
+---
 
-\`\`\`bash
-npm install
-npm run dev          # للتجربة على الجهاز
-npm run build        # بناء الـ production
-npx vercel           # deploy مباشرة
-\`\`\`
+## الخطوة 2 — ضع الرابط في الكود
 
-## ملاحظة مهمة عن التقدم
+افتح `src/firebase-config.js` وبدّل:
+```js
+const FIREBASE_DB_URL = "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com";
+```
+بالرابط بتاعك.
 
-- التقدم بيتحفظ في **localStorage** على نفس الجهاز والمتصفح
-- لو فتحته على موبايل وعلى لاب، التقدم هيبقى منفصل
-- لو حبيت تزامن بين الأجهزة، قولي وهنضيف Firebase مجاناً
+---
 
-## Project Structure
+## الخطوة 3 — رفع على GitHub
 
-\`\`\`
-ai-roadmap/
-├── src/
-│   ├── App.jsx       ← المكون الرئيسي
-│   ├── data.js       ← كل بيانات الـ Roadmap
-│   ├── main.jsx      ← Entry point
-│   └── index.css     ← Global styles
-├── index.html
-├── package.json
-├── vite.config.js
-└── vercel.json
-\`\`\`
-# Ai-Engineer-Roadmap
+1. روح **github.com/new** → اسمه `ai-roadmap` → Public → Create
+2. اضغط **"uploading an existing file"**
+3. ارفع كل محتوى الفولدر (src/, index.html, package.json, package-lock.json, vite.config.js, vercel.json, README.md)
+4. Commit changes ✅
+
+---
+
+## الخطوة 4 — Deploy على Vercel
+
+1. روح **vercel.com** → Sign up with GitHub
+2. **Add New Project** → Import الـ repo
+3. Framework: **Vite** (تلقائي) → **Deploy** ✅
+4. بعد دقيقة: `ai-roadmap.vercel.app` 🎉
+
+---
+
+## إزاي بيشتغل التزامن؟
+
+- أول مرة: بيتولد Sync ID تلقائي
+- كل تغيير بيتحفظ على Firebase تلقائياً
+- على جهاز تاني: اضغط "تغيير ID" وادخل الـ ID بتاعك
+
+---
+
+## تشغيل محلي
+```bash
+npm install && npm run dev
+```

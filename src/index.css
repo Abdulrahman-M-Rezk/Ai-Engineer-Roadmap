@@ -1,22 +1,7 @@
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html, body, #root {
-  min-height: 100%;
-  background: #060A12;
-}
-
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { min-height: 100%; background: #060A12; }
+body { -webkit-font-smoothing: antialiased; }
 a { text-decoration: none; }
-
-::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: #0B1420; }
 ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 99px; }
-::-webkit-scrollbar-thumb:hover { background: #334155; }
