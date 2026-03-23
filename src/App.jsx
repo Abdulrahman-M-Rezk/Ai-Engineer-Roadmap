@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
 import { doc, setDoc, onSnapshot } from "firebase/firestore";
-import { auth, db, provider } from "./firebase.js";
+import { db } from "./firebase.js";
 import { phases, transferable } from "./data.js";
 
 function LangBadge({ lang }) {
@@ -24,31 +23,7 @@ function SyncDot({ status }) {
   return l?<div style={{ display:"flex",alignItems:"center",gap:4,fontSize:11,color:c }}><div style={{ width:6,height:6,borderRadius:"50%",background:c }} />{l}</div>:null;
 }
 
-function LoginScreen({ onLogin, loading }) {
-  return (
-    <div style={{ background:"#060A12",minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px",direction:"rtl" }}>
-      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
-      <div style={{ maxWidth:420,width:"100%",textAlign:"center" }}>
-        <div style={{ fontSize:52,marginBottom:16 }}>🤖</div>
-        <h1 style={{ fontSize:"clamp(26px,5vw,40px)",fontWeight:900,margin:"0 0 10px",background:"linear-gradient(135deg,#00D4FF 0%,#A78BFA 45%,#F472B6 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent" }}>AI Engineer Roadmap</h1>
-        <p style={{ color:"#475569",fontSize:14,marginBottom:36,lineHeight:1.7 }}>~8–9 أشهر · 7 مراحل · CV Specialized<br/><span style={{ color:"#334155",fontSize:12 }}>سجّل دخولك وتقدمك يتزامن تلقائياً على كل أجهزتك</span></p>
-        <button onClick={onLogin} disabled={loading} style={{ width:"100%",padding:"14px 24px",borderRadius:12,border:"1px solid #1E293B",background:loading?"#0D1525":"rgba(255,255,255,0.04)",color:"#F1F5F9",fontSize:15,fontWeight:700,cursor:loading?"not-allowed":"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:12,transition:"all 0.2s",marginBottom:16 }} onMouseEnter={e=>{if(!loading)e.currentTarget.style.background="rgba(255,255,255,0.08)"}} onMouseLeave={e=>{if(!loading)e.currentTarget.style.background="rgba(255,255,255,0.04)"}}>
-          {loading?(<><div style={{ width:20,height:20,border:"2px solid #334155",borderTop:"2px solid #00D4FF",borderRadius:"50%",animation:"spin 0.8s linear infinite" }} />جاري تسجيل الدخول…</>):(<><svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20H24v8h11.3C33.7 33.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 6.5 29.3 4.5 24 4.5 13.2 4.5 4.5 13.2 4.5 24S13.2 43.5 24 43.5c10.6 0 19.1-7.7 19.5-18l.1-5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.1 18.9 12 24 12c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 6.5 29.3 4.5 24 4.5c-7.6 0-14.2 4.3-17.7 10.2z"/><path fill="#4CAF50" d="M24 43.5c5.2 0 9.9-1.9 13.5-5L31.3 33c-2 1.4-4.5 2.1-7.3 2.1-5.2 0-9.6-3.3-11.2-8l-6.5 5C9.8 39.1 16.4 43.5 24 43.5z"/><path fill="#1976D2" d="M43.6 20H24v8h11.3c-.8 2.3-2.3 4.2-4.2 5.5l6.2 5.1C37.9 35.3 40 30 40 24.5c0-.7 0-2-.1-4l-.3-.5z"/></svg>تسجيل الدخول بـ Google</>)}
-        </button>
-        <p style={{ color:"#1E293B",fontSize:11,lineHeight:1.6 }}>بنستخدم Google فقط للتعرف عليك — مش بنشوف أو بنحفظ أي بيانات تانية</p>
-        <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:28 }}>
-          {[["☁️","تزامن تلقائي","على كل الأجهزة"],["✅","تتبع التقدم","لكل جزئية"],["🔗","مصادر مباشرة","كتب + كورسات + Docs"],["🎯","Roadmap مخصصة","CV Specialized"]].map(([icon,title,sub])=>(
-            <div key={title} style={{ background:"rgba(255,255,255,0.02)",border:"1px solid #0F1A2E",borderRadius:10,padding:"12px 14px",textAlign:"right" }}>
-              <div style={{ fontSize:20,marginBottom:4 }}>{icon}</div>
-              <div style={{ fontSize:12,fontWeight:700,color:"#94A3B8" }}>{title}</div>
-              <div style={{ fontSize:11,color:"#334155",marginTop:2 }}>{sub}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
+
 
 function UserMenu({ user, onSignOut, syncStatus }) {
   const [open,setOpen]=useState(false);
