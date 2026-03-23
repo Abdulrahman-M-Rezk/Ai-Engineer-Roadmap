@@ -481,6 +481,7 @@ function TasksTab({ phase, tasks, toggleTask }) {
                 <div style={{ display:"flex",alignItems:"center",gap:6,marginBottom:4 }}>
                   <span>{T_ICON[task.type]}</span>
                   <span style={{ fontSize:10,background:`${c}20`,border:`1px solid ${c}44`,borderRadius:6,padding:"1px 7px",color:c,fontWeight:700 }}>{T_LABEL[task.type]}</span>
+                  {task.topic&&<span style={{ fontSize:10,background:`${phase.color}18`,border:`1px solid ${phase.color}33`,borderRadius:6,padding:"1px 8px",color:phase.color,fontWeight:600 }}>{task.topic}</span>}
                 </div>
                 <div style={{ fontSize:13,color:isDone?"#475569":"#CBD5E1",lineHeight:1.5,textDecoration:isDone?"line-through":"none",transition:"all 0.2s" }}>{task.text}</div>
               </div>
