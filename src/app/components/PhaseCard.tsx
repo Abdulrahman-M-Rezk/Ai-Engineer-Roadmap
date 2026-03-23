@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import confetti from 'canvas-confetti';
 import { Phase } from '../data/roadmapData';
-import { useApp } from '../context/AppContext';
+import { useApp, CustomResource } from '../context/AppContext';
 
 interface PhaseCardProps {
   phase: Phase;
@@ -37,9 +37,22 @@ const PULSE_CLASS: Record<string, string> = {
 };
 
 export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
-  const { checkedTopics, checkedTasks, toggleTopic, toggleTask, activePhase, setActivePhase } = useApp();
+  const { checkedTopics, checkedTasks, toggleTopic, toggleTask, activePhase, setActivePhase, customResources, addCustomResource, removeCustomResource } = useApp();
   const [activeTab, setActiveTab] = useState<TabType>('content');
   const [resourceFilter, setResourceFilter] = useState('all');
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newResName, setNewResName] = useState('');
+  const [newResUrl, setNewResUrl] = useState('');
+  const [newResNote, setNewResNote] = useState('');
+
+  const myResources: CustomResource[] = customResources[phase.id] || [];
+
+  const handleAddResource = () => {
+    if (!newResName.trim()) return;
+    addCustomResource(phase.id, { name: newResName.trim(), url: newResUrl.trim(), note: newResNote.trim() });
+    setNewResName(''); setNewResUrl(''); setNewResNote('');
+    setShowAddForm(false);
+  };
 
   const totalTopics = phase.topicGroups.reduce((a, g) => a + g.topics.length, 0);
   const doneTopics = phase.topicGroups.reduce(
@@ -420,8 +433,11 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                   {/* Resource cards */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                     {filteredResources.map(r => (
-                      <div
+                      <a
                         key={r.id}
+                        href={r.url || '#'}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         style={{
                           padding: '14px 16px',
                           borderRadius: 12,
@@ -432,6 +448,7 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                           gap: 12,
                           cursor: 'pointer',
                           transition: 'all 0.2s',
+                          textDecoration: 'none',
                         }}
                         onMouseEnter={e => {
                           (e.currentTarget as HTMLElement).style.borderColor = `rgba(${rgb}, 0.3)`;
@@ -465,14 +482,108 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                             }}>{r.price === 'free' ? 'مجاني ✓' : 'مدفوع 💳'}</span>
                           </div>
                         </div>
-                        <span style={{ color: '#475569', fontSize: 16 }}>←</span>
-                      </div>
+                        <span style={{ color: color, fontSize: 16, opacity: 0.7 }}>↗</span>
+                      </a>
                     ))}
                     {filteredResources.length === 0 && (
                       <p style={{ color: '#475569', textAlign: 'center', padding: 20, fontSize: 13 }}>
                         ما فيش نتائج للفلتر ده
                       </p>
                     )}
+                  </div>
+
+                  {/* ── Custom / Personal Resources ── */}
+                  <div style={{ marginTop: 24 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                      <p style={{ color: '#64748B', fontSize: 12, fontWeight: 700, letterSpacing: 1 }}>📌 مصادرك الشخصية</p>
+                      <button
+                        onClick={() => setShowAddForm(!showAddForm)}
+                        style={{
+                          padding: '5px 12px', borderRadius: 8,
+                          border: `1px solid rgba(${rgb}, 0.3)`,
+                          background: showAddForm ? `rgba(${rgb}, 0.15)` : 'rgba(255,255,255,0.03)',
+                          color: color, fontSize: 12, fontWeight: 700,
+                          fontFamily: "'Cairo', sans-serif", cursor: 'pointer', transition: 'all 0.2s',
+                        }}
+                      >
+                        {showAddForm ? '✕ إلغاء' : '➕ أضف مصدر'}
+                      </button>
+                    </div>
+
+                    {/* Add form */}
+                    {showAddForm && (
+                      <div className="animate-slide-down" style={{
+                        padding: '16px', borderRadius: 12,
+                        border: `1px solid rgba(${rgb}, 0.25)`,
+                        background: `rgba(${rgb}, 0.04)`,
+                        marginBottom: 12, display: 'flex', flexDirection: 'column', gap: 10,
+                      }}>
+                        {[{ val: newResName, set: setNewResName, ph: 'اسم المصدر *', required: true },
+                          { val: newResUrl,  set: setNewResUrl,  ph: 'رابط URL (اختياري)', required: false },
+                          { val: newResNote, set: setNewResNote, ph: 'ملاحظة (اختياري)', required: false },
+                        ].map(({ val, set, ph }) => (
+                          <input key={ph} type="text" value={val} placeholder={ph}
+                            onChange={e => set(e.target.value)}
+                            style={{
+                              width: '100%', padding: '10px 12px', borderRadius: 8,
+                              border: `1px solid rgba(${rgb}, 0.25)`,
+                              background: 'rgba(255,255,255,0.04)',
+                              color: '#F1F5F9', fontSize: 13,
+                              fontFamily: "'Cairo', sans-serif", outline: 'none',
+                              boxSizing: 'border-box',
+                            }}
+                          />
+                        ))}
+                        <button
+                          onClick={handleAddResource}
+                          disabled={!newResName.trim()}
+                          style={{
+                            padding: '10px', borderRadius: 8, border: 'none',
+                            background: newResName.trim() ? `linear-gradient(135deg, ${color}, ${color}99)` : 'rgba(255,255,255,0.06)',
+                            color: newResName.trim() ? '#000' : '#475569',
+                            fontWeight: 700, fontFamily: "'Cairo', sans-serif",
+                            cursor: newResName.trim() ? 'pointer' : 'not-allowed', fontSize: 13,
+                          }}
+                        >
+                          حفظ المصدر
+                        </button>
+                      </div>
+                    )}
+
+                    {/* My resources list */}
+                    {myResources.length === 0 && !showAddForm && (
+                      <p style={{ color: '#1E293B', fontSize: 12, textAlign: 'center', padding: '8px 0' }}>لا يوجد مصادر شخصية بعد</p>
+                    )}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {myResources.map(r => (
+                        <div key={r.id} style={{
+                          padding: '10px 14px', borderRadius: 10,
+                          border: `1px solid rgba(${rgb}, 0.2)`,
+                          background: `rgba(${rgb}, 0.04)`,
+                          display: 'flex', alignItems: 'center', gap: 10,
+                        }}>
+                          <div style={{ flex: 1 }}>
+                            {r.url
+                              ? <a href={r.url} target="_blank" rel="noopener noreferrer"
+                                  style={{ color: color, fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>
+                                  📌 {r.name} ↗
+                                </a>
+                              : <span style={{ color: '#CBD5E1', fontSize: 13, fontWeight: 600 }}>📌 {r.name}</span>
+                            }
+                            {r.note && <p style={{ color: '#475569', fontSize: 11, marginTop: 3 }}>{r.note}</p>}
+                          </div>
+                          <button
+                            onClick={() => removeCustomResource(phase.id, r.id)}
+                            style={{
+                              background: 'none', border: 'none', color: '#475569',
+                              cursor: 'pointer', fontSize: 16, padding: '0 4px',
+                              lineHeight: 1, flexShrink: 0,
+                            }}
+                            title="حذف"
+                          >🗑️</button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
