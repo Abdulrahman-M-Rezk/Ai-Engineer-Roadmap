@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
-import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, setDoc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { DEFAULT_CHECKED } from '../data/roadmapData';
 
@@ -27,8 +27,12 @@ interface AppContextType {
   activePhase: string | null;
   setActivePhase: (phase: string | null) => void;
   customResources: Record<string, CustomResource[]>;
+  resourceOrder: Record<string, string[]>;
   addCustomResource: (phaseId: string, resource: { name: string; url: string; note: string }) => void;
   removeCustomResource: (phaseId: string, resourceId: string) => void;
+  updateResourceOrder: (phaseId: string, newOrder: string[]) => void;
+  resetResourceOrder: (phaseId: string) => void;
+  setNewPin: (newPin: string) => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -37,22 +41,25 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated]   = useState(false);
   const [username, setUsername]                  = useState<string>(() => localStorage.getItem('ai-roadmap-username') || '');
   const [pin, setPinState]                       = useState<string>(() => localStorage.getItem('ai-roadmap-pin') || '');
-  const [checkedTopics, setCheckedTopics]        = useState<Record<string, boolean>>(DEFAULT_CHECKED);
+  const [checkedTopics, setCheckedTopics]        = useState<Record<string, boolean>>({});
   const [checkedTasks, setCheckedTasks]          = useState<Record<string, boolean>>({});
   const [customResources, setCustomResources]    = useState<Record<string, CustomResource[]>>({});
+  const [resourceOrder, setResourceOrder]        = useState<Record<string, string[]>>({});
   const [syncStatus, setSyncStatus]              = useState<'synced' | 'syncing' | 'error'>('synced');
   const [isSearchOpen, setIsSearchOpen]          = useState(false);
   const [activePhase, setActivePhase]            = useState<string | null>('phase-1');
 
   const unsubRef     = useRef<(() => void) | null>(null);
   const saveTimer    = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const rTopics      = useRef<Record<string, boolean>>(DEFAULT_CHECKED);
+  const rTopics      = useRef<Record<string, boolean>>({});
   const rTasks       = useRef<Record<string, boolean>>({});
   const rCustom      = useRef<Record<string, CustomResource[]>>({});
+  const rOrder       = useRef<Record<string, string[]>>({});
 
   useEffect(() => { rTopics.current = checkedTopics; }, [checkedTopics]);
   useEffect(() => { rTasks.current  = checkedTasks;  }, [checkedTasks]);
   useEffect(() => { rCustom.current = customResources; }, [customResources]);
+  useEffect(() => { rOrder.current = resourceOrder; }, [resourceOrder]);
 
   /* ── Firestore listener ── */
   const attachListener = useCallback((pUsername: string) => {
@@ -63,9 +70,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       snap => {
         if (snap.exists()) {
           const d = snap.data() as any;
-          setCheckedTopics(d.checked         || DEFAULT_CHECKED);
+          setCheckedTopics(d.checked         || {});
           setCheckedTasks(d.tasks            || {});
           setCustomResources(d.customResources || {});
+          setResourceOrder(d.resourceOrder || {});
         }
         setSyncStatus('synced');
       },
@@ -86,6 +94,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             checked: rTopics.current,
             tasks: rTasks.current,
             customResources: rCustom.current,
+            resourceOrder: rOrder.current,
             updatedAt: Date.now(),
           },
           { merge: true }
@@ -109,9 +118,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       if (d.pin !== enteredPin) {
         return { success: false, error: 'الرقم السري خاطئ' };
       }
-      setCheckedTopics(d.checked || DEFAULT_CHECKED);
+      setCheckedTopics(d.checked || {});
       setCheckedTasks(d.tasks || {});
       setCustomResources(d.customResources || {});
+      setResourceOrder(d.resourceOrder || {});
       
       localStorage.setItem('ai-roadmap-username', enteredUsername);
       localStorage.setItem('ai-roadmap-pin', enteredPin);
@@ -144,9 +154,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       await setDoc(ref, { 
         pin: enteredPin,
         recoveryCode,
-        checked: DEFAULT_CHECKED, 
+        checked: {}, 
         tasks: {}, 
         customResources: {}, 
+        resourceOrder: {},
         createdAt: Date.now() 
       });
 
@@ -175,6 +186,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       return { success: false, error: 'حدث خطأ في الاتصال' };
     }
   }, []);
+
+  /* ── Change PIN ── */
+  const setNewPin = useCallback(async (newPin: string) => {
+    try {
+      if (!username) return;
+      await updateDoc(doc(db, 'progress', username), { pin: newPin });
+      localStorage.setItem('ai-roadmap-pin', newPin);
+      setPinState(newPin);
+    } catch (error) {
+      console.error('Change PIN error:', error);
+    }
+  }, [username]);
 
   /* ── Auto-login ── */
   useEffect(() => {
@@ -229,13 +252,35 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     });
   }, [username, save]);
 
+  const updateResourceOrder = useCallback((phaseId: string, newOrder: string[]) => {
+    const u = localStorage.getItem('ai-roadmap-username') || username;
+    setResourceOrder(prev => {
+      const next = { ...prev, [phaseId]: newOrder };
+      rOrder.current = next;
+      save(u);
+      return next;
+    });
+  }, [username, save]);
+
+  const resetResourceOrder = useCallback((phaseId: string) => {
+    const u = localStorage.getItem('ai-roadmap-username') || username;
+    setResourceOrder(prev => {
+      const next = { ...prev };
+      delete next[phaseId];
+      rOrder.current = next;
+      save(u);
+      return next;
+    });
+  }, [username, save]);
+
   return (
     <AppContext.Provider value={{
-      isAuthenticated, username, pin, login, signup, recoverPin,
+      isAuthenticated, username, pin, login, signup, recoverPin, setNewPin,
       checkedTopics, checkedTasks, toggleTopic, toggleTask,
       syncStatus, isSearchOpen, setIsSearchOpen,
       activePhase, setActivePhase,
-      customResources, addCustomResource, removeCustomResource,
+      customResources, resourceOrder, addCustomResource, removeCustomResource,
+      updateResourceOrder, resetResourceOrder,
     }}>
       {children}
     </AppContext.Provider>

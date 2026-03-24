@@ -99,7 +99,7 @@ function ReferencesModal({ onClose }: { onClose: () => void }) {
 }
 
 export default function Dashboard() {
-  const { isAuthenticated, checkedTopics, setIsSearchOpen, pin, setNewPin, syncStatus } = useApp();
+  const { isAuthenticated, username, checkedTopics, setIsSearchOpen, pin, setNewPin, syncStatus } = useApp();
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [showPinChange, setShowPinChange] = useState(false);
@@ -155,20 +155,14 @@ export default function Dashboard() {
           }}>AI Engineer Roadmap</h1>
           <p style={{ color: '#64748B', fontSize: 14, marginBottom: 20 }}>~8-9 أشهر · 7 مراحل · {TOTAL_TOPICS} topic</p>
 
-          {/* Legend badges — centered */}
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 24, justifyContent: 'center' }}>
-            {[
-              { icon: '🇪🇬', label: 'عربي',   color: '#34D399', bg: 'rgba(52,211,153,0.1)' },
-              { icon: '🌍', label: 'English', color: '#00D4FF', bg: 'rgba(0,212,255,0.1)' },
-              { icon: '✅', label: 'عندك',    color: '#A78BFA', bg: 'rgba(167,139,250,0.1)' },
-              { icon: '⭐', label: 'أساسي',   color: '#FBBF24', bg: 'rgba(251,191,36,0.1)' },
-            ].map(b => (
-              <span key={b.label} style={{
-                display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 12px',
-                borderRadius: 20, background: b.bg, border: `1px solid ${b.color}30`,
-                color: b.color, fontSize: 12, fontWeight: 700,
-              }}>{b.icon} {b.label}</span>
-            ))}
+          {/* Welcome Banner */}
+          <div style={{ marginBottom: 32 }}>
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2" style={{
+              color: '#fff', fontSize: isMobile ? 28 : 42, lineHeight: 1.4, fontWeight: 900
+            }}>
+              مرحباً يا <span style={{ color: '#3B82F6' }}>{username}</span> 👋
+            </h1>
+            <p style={{ color: '#94A3B8', fontSize: 16 }}>"جاهز لاستكمال رحلتك في عالم الذكاء الاصطناعي؟"</p>
           </div>
 
           {/* Global progress card */}
@@ -202,14 +196,17 @@ export default function Dashboard() {
           </div>
 
           {/* ── Motivational Quote ── */}
-          <div style={{ textAlign: 'center', padding: '12px 24px', marginBottom: 8 }}>
+          <div style={{ textAlign: 'center', padding: '16px 32px', marginBottom: 24, marginTop: 24 }}>
             <p style={{
-              color: '#334155', fontSize: 14, fontStyle: 'italic', lineHeight: 1.8, fontWeight: 600,
+              background: 'linear-gradient(135deg, #34D399, #00D4FF)',
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+              fontSize: isMobile ? 22 : 28, fontStyle: 'italic', lineHeight: 1.8, fontWeight: 900,
+              textShadow: '0 0 24px rgba(52,211,153,0.3)',
             }}>
               "{quote.text}"
             </p>
             {quote.source && (
-              <p style={{ color: '#1E293B', fontSize: 11, marginTop: 4 }}>— {quote.source}</p>
+              <p style={{ color: '#94A3B8', fontSize: 14, marginTop: 8, fontWeight: 700 }}>— {quote.source}</p>
             )}
           </div>
         </header>

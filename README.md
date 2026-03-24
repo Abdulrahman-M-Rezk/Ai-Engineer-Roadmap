@@ -1,58 +1,55 @@
-# 🤖 AI Engineer Roadmap
+# 🚀 AI Engineer Roadmap Tracker
 
-Personalized AI Engineer Roadmap مع تزامن تلقائي بين الأجهزة
+A professional, real-time synchronized learning tracker designed specifically for aspiring AI & Computer Vision Engineers. Built with modern web technologies to ensure your progress is securely saved and accessible anywhere.
 
----
+## ✨ Features
 
-## الخطوة 1 — إنشاء Firebase (3 دقايق مجاناً)
+- **Secure Authentication:** Username + PIN system with recovery codes (No email required).
+- **Real-Time Sync:** Powered by Firebase Firestore, your progress updates instantly across devices.
+- **Custom Resources:** Add your own private courses and links to any phase.
+- **Dark Mode UI:** A beautiful, focus-driven interface tailored for long study sessions.
+- **RTL Support:** Native Arabic right-to-left layout for perfect readability.
 
-1. روح على **console.firebase.google.com**
-2. **Create a project** → اسمه `ai-roadmap` → Continue
-3. Disable Google Analytics → Create project
-4. من القايمة: **Build → Realtime Database → Create Database**
-5. اختار أقرب region → **Start in test mode** → Enable
-6. انسخ الرابط اللي هيظهر:
-   `https://ai-roadmap-xxxxx-default-rtdb.firebaseio.com`
+## 🛠️ Tech Stack
 
----
+- **Frontend:** React 18, TypeScript, Vite
+- **Styling:** Tailwind CSS v4, shadcn/ui components
+- **Database:** Firebase Firestore
+- **Deployment:** Vercel
 
-## الخطوة 2 — ضع الرابط في الكود
+## 🚀 Local Setup & Installation
 
-افتح `src/firebase-config.js` وبدّل:
-```js
-const FIREBASE_DB_URL = "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com";
-```
-بالرابط بتاعك.
+1. **Clone the repository**
 
----
+   ```bash
+   git clone https://github.com/yourusername/ai-roadmap.git
+   cd ai-roadmap
+   ```
 
-## الخطوة 3 — رفع على GitHub
+2. **Install Dependencies**
 
-1. روح **github.com/new** → اسمه `ai-roadmap` → Public → Create
-2. اضغط **"uploading an existing file"**
-3. ارفع كل محتوى الفولدر (src/, index.html, package.json, package-lock.json, vite.config.js, vercel.json, README.md)
-4. Commit changes ✅
+   ```bash
+   npm install
+   ```
 
----
+3. **Environment Variables**
+   Create a `.env` file in the root directory and add your Firebase credentials:
 
-## الخطوة 4 — Deploy على Vercel
+   ```env
+   VITE_FIREBASE_API_KEY=your_api_key
+   VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+   VITE_FIREBASE_PROJECT_ID=your_project_id
+   VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+   VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+   VITE_FIREBASE_APP_ID=your_app_id
+   ```
 
-1. روح **vercel.com** → Sign up with GitHub
-2. **Add New Project** → Import الـ repo
-3. Framework: **Vite** (تلقائي) → **Deploy** ✅
-4. بعد دقيقة: `ai-roadmap.vercel.app` 🎉
+4. **Run the Development Server**
 
----
+   ```bash
+   npm run dev
+   ```
 
-## إزاي بيشتغل التزامن؟
+## 📝 License
 
-- أول مرة: بيتولد Sync ID تلقائي
-- كل تغيير بيتحفظ على Firebase تلقائياً
-- على جهاز تاني: اضغط "تغيير ID" وادخل الـ ID بتاعك
-
----
-
-## تشغيل محلي
-```bash
-npm install && npm run dev
-```
+This project is open-source and available under the MIT License.
