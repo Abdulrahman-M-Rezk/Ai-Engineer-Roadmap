@@ -23,11 +23,10 @@ const QUOTES = [
 /* ── References ── */
 const REFERENCES = [
   { name: 'roadmap.sh — AI Engineer Roadmap', url: 'https://roadmap.sh/ai-engineer', desc: 'المرجع التقني الأساسي للـ Roadmap' },
+  { name: 'AI Engineer PDF — roadmap.sh', url: 'https://roadmap.sh/pdfs/roadmaps/ai-engineer.pdf', desc: 'النسخة الكاملة PDF' },
   { name: 'Moataz Elmesmary — Data Science Roadmap', url: 'https://github.com/Moataz-Elmesmary/Data-Science-Roadmap', desc: '4.2k ⭐ — أشمل Roadmap عربي للـ Data Science' },
   { name: 'Mariam Ahmed — IEEE ManCSC 2025', url: 'https://github.com/Mariam-Ahmed15/Data-Science-Roadmap-IEEEManCSC-2025', desc: 'Roadmap منظم بالأسابيع — مثالي للمبتدئين' },
-  { name: 'AI Engineer PDF — roadmap.sh', url: 'https://roadmap.sh/pdfs/roadmaps/ai-engineer.pdf', desc: 'النسخة الكاملة PDF' },
-  { name: 'Sandhya — AI Engineering Roadmap 2026', url: 'https://www.youtube.com/@sandhya_ai', desc: 'Roadmap 2026 المحدّث' },
-];
+  ];
 
 function SyncDot({ status }: { status: 'synced' | 'syncing' | 'error' }) {
   const colors: Record<string, string> = { synced: '#34D399', syncing: '#FBBF24', error: '#F87171' };

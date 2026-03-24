@@ -90,8 +90,8 @@ export const phases: Phase[] = [
     ],
     resources: [
       // ── Arabic (from backup) ──
-      { id: 'p1-s1', name: 'د. حاتم العطار — Linear Algebra', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/@ArtificialIntelligenceDataScie' },
-      { id: 'p1-s2', name: 'د. حاتم العطار — Statistics & Calculus', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/@ArtificialIntelligenceDataScie' },
+      { id: 'p1-s1', name: 'د. حاتم العطار — Linear Algebra', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/playlist?list=PLJM7jJIw2GC2I5gFd7fFMM5sXBCVOkXbB' },
+      { id: 'p1-s2', name: 'د. حاتم العطار — Statistics & Calculus', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/playlist?list=PLJM7jJIw2GC2Ihr__bRSeMxzsiFMZEsx7' },
       { id: 'p1-hatem-3', name: 'د. حاتم العطار — Probability for AI', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/playlist?list=PLJM7jJIw2GC2Ihr__bRSeMxzsiFMZEsx7' },
       { id: 'p0-s1', name: 'Elzero Web School — Python', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/@ElzeroWebSchool' },
       // ── English: Python ──
@@ -113,7 +113,7 @@ export const phases: Phase[] = [
     ],
     tasks: [
       { id: 'p1-task1', type: 'build', textAr: 'ابني data analysis project بـ Pandas على dataset من Kaggle', link: 'https://kaggle.com' },
-      { id: 'p1-task2', type: 'read', textAr: 'اقرأ Chapter 2 من Mathematics for Machine Learning' },
+      { id: 'p1-task2', type: 'read', textAr: 'اقرأ Chapter 2 من Mathematics for Machine Learning', link: 'https://mml-book.github.io' },
       { id: 'p1-task3', type: 'build', textAr: 'حل 20 مسألة على NumPy و Linear Algebra — Khan Academy', link: 'https://www.khanacademy.org/math/linear-algebra' },
       { id: 'p1-task4', type: 'deploy', textAr: 'ارفع الـ projects على GitHub بـ README واضح', link: 'https://github.com' },
       { id: 'p1-task5', type: 'build', textAr: 'حلل Dataset بـ Pandas وطلع 5 insights', link: 'https://www.kaggle.com/datasets' },
@@ -186,7 +186,7 @@ export const phases: Phase[] = [
       { id: 'p2-task1', type: 'build', textAr: 'ابني classification model على Titanic dataset', link: 'https://www.kaggle.com/c/titanic' },
       { id: 'p2-task2', type: 'build', textAr: 'طبّق Linear Regression من الصفر بـ NumPy' },
       { id: 'p2-task3', type: 'build', textAr: 'قارن بين 3 algorithms مختلفة على نفس dataset' },
-      { id: 'p2-task4', type: 'read', textAr: 'افهم كل metric واتى بتستخدمها فين' },
+      { id: 'p2-task4', type: 'read', textAr: 'افهم كل metric واتى بتستخدمها فين', link: 'https://scikit-learn.org/stable/modules/model_evaluation.html' },
       { id: 'p2-task5', type: 'deploy', textAr: 'ارفع التحليل الكامل على Kaggle Notebook', link: 'https://www.kaggle.com' },
       { id: 'p2-task6', type: 'build', textAr: 'شارك في أول Kaggle Competition', link: 'https://www.kaggle.com/competitions' },
     ],
@@ -259,11 +259,11 @@ export const phases: Phase[] = [
       { id: 'p3-extra-3', name: 'Deep Learning for Coders — fast.ai (book)', type: 'book', lang: 'en', price: 'free', url: 'https://course.fast.ai' },
     ],
     tasks: [
-      { id: 'p3-task1', type: 'build', textAr: 'ابني CNN لتصنيف الصور على CIFAR-10' },
+      { id: 'p3-task1', type: 'build', textAr: 'ابني CNN لتصنيف الصور على CIFAR-10', link: 'https://www.cs.toronto.edu/~kriz/cifar.html' },
       { id: 'p3-task2', type: 'build', textAr: 'ابني Neural Network من الصفر بـ NumPy (بدون PyTorch)' },
-      { id: 'p3-task3', type: 'build', textAr: 'صنّف MNIST Dataset بـ PyTorch ووصل لـ 99% accuracy', link: 'http://yann.lecun.com/exdb/mnist/' },
-      { id: 'p3-task4', type: 'build', textAr: 'طبق Transfer Learning بـ ResNet على custom dataset' },
-      { id: 'p3-task5', type: 'read', textAr: 'اقرأ ورقة بحثية — Attention is All You Need' },
+      { id: 'p3-task3', type: 'build', textAr: 'صنّف MNIST Dataset بـ PyTorch ووصل لـ 99% accuracy', link: 'https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html' },
+      { id: 'p3-task4', type: 'build', textAr: 'طبق Transfer Learning بـ ResNet على custom dataset', link: 'https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html' },
+      { id: 'p3-task5', type: 'read', textAr: 'اقرأ ورقة بحثية — Attention is All You Need', link: 'https://arxiv.org/abs/1706.03762' },
       { id: 'p3-task6', type: 'deploy', textAr: 'نشر الموديل على Hugging Face Spaces', link: 'https://huggingface.co/spaces' },
     ],
   },
@@ -328,9 +328,9 @@ export const phases: Phase[] = [
     tasks: [
       { id: 'p4-task1', type: 'build', textAr: 'اعمل Real-time Face Detection بـ OpenCV' },
       { id: 'p4-task2', type: 'build', textAr: 'شغّل YOLO على فيديو من اختيارك', link: 'https://docs.ultralytics.com' },
-      { id: 'p4-task3', type: 'build', textAr: 'ابني Image Classifier بـ CLIP' },
-      { id: 'p4-task4', type: 'build', textAr: 'اعمل Style Transfer app بـ Stable Diffusion' },
-      { id: 'p4-task5', type: 'deploy', textAr: 'شارك في Kaggle CV Competition', link: 'https://www.kaggle.com/competitions' },
+      { id: 'p4-task3', type: 'build', textAr: 'ابني Image Classifier بـ CLIP', link: 'https://github.com/openai/CLIP' },
+      { id: 'p4-task4', type: 'build', textAr: 'اعمل Style Transfer app بـ Stable Diffusion', link: 'https://github.com/AUTOMATIC1111/stable-diffusion-webui' },
+      { id: 'p4-task5', type: 'deploy', textAr: 'شارك في Kaggle CV Competition', link: 'https://www.kaggle.com/competitions?hostSegment=featured' },
     ],
   },
 
@@ -385,7 +385,6 @@ export const phases: Phase[] = [
       { id: 'p5-s3', name: 'OpenAI API Docs', type: 'article', lang: 'en', price: 'free', url: 'https://platform.openai.com/docs' },
       { id: 'p5-s4', name: 'Andrej Karpathy — YouTube Channel', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/@AndrejKarpathy' },
       { id: 'p5-s5', name: 'LangChain Docs', type: 'article', lang: 'en', price: 'free', url: 'https://python.langchain.com/docs' },
-      { id: 'p5-s6', name: 'NLP with Transformers — Hugging Face Course', type: 'video', lang: 'en', price: 'free', url: 'https://huggingface.co/learn/nlp-course' },
       { id: 'p5-s7', name: 'LLM Bootcamp — Full Stack Deep Learning', type: 'video', lang: 'en', price: 'free', url: 'https://fullstackdeeplearning.com/llm-bootcamp/spring-2023/' },
       { id: 'p5-s8', name: 'Moataz Elmesmary — DS Roadmap Resources', type: 'article', lang: 'ar', price: 'free', url: 'https://github.com/Moataz-Elmesmary/Data-Science-Roadmap' },
       { id: 'p5-s9', name: 'Speech & Language Processing — Jurafsky', type: 'book', lang: 'en', price: 'free', url: 'https://web.stanford.edu/~jurafsky/slp3/' },
@@ -394,11 +393,11 @@ export const phases: Phase[] = [
     ],
     tasks: [
       { id: 'p5-task1', type: 'build', textAr: 'ابني Image Search Engine بـ CLIP + FAISS' },
-      { id: 'p5-task2', type: 'build', textAr: 'اعمل Multimodal Chatbot بـ GPT-4V API' },
-      { id: 'p5-task3', type: 'build', textAr: 'Fine-tune HuggingFace model على Custom Data' },
+      { id: 'p5-task2', type: 'build', textAr: 'اعمل Multimodal Chatbot بـ GPT-4V API', link: 'https://platform.openai.com/docs/guides/vision' },
+      { id: 'p5-task3', type: 'build', textAr: 'Fine-tune HuggingFace model على Custom Data', link: 'https://huggingface.co/docs/transformers/training' },
       { id: 'p5-task4', type: 'deploy', textAr: 'انشر Model على HuggingFace Spaces', link: 'https://huggingface.co/spaces' },
-      { id: 'p5-task5', type: 'build', textAr: 'ابني RAG system على PDF files بـ ChromaDB' },
-      { id: 'p5-task6', type: 'build', textAr: 'استخدم OpenAI API عشان تبني chatbot بسيط' },
+      { id: 'p5-task5', type: 'build', textAr: 'ابني RAG system على PDF files بـ ChromaDB', link: 'https://docs.trychroma.com' },
+      { id: 'p5-task6', type: 'build', textAr: 'استخدم OpenAI API عشان تبني chatbot بسيط', link: 'https://platform.openai.com/docs/guides/text-generation' },
     ],
   },
 
@@ -461,8 +460,8 @@ export const phases: Phase[] = [
       { id: 'p6-task1', type: 'build', textAr: 'ابني AI App كاملة بـ Gradio وانشرها', link: 'https://www.gradio.app' },
       { id: 'p6-task2', type: 'build', textAr: 'ابني ML API بـ FastAPI وـ Docker' },
       { id: 'p6-task3', type: 'deploy', textAr: 'انشر الـ API على Railway أو Fly.io', link: 'https://railway.app' },
-      { id: 'p6-task4', type: 'build', textAr: 'اعمل MLflow Tracking لـ experiments' },
-      { id: 'p6-task5', type: 'read', textAr: 'اكتب README احترافي لكل Project' },
+      { id: 'p6-task4', type: 'build', textAr: 'اعمل MLflow Tracking لـ experiments', link: 'https://mlflow.org/docs/latest/quickstart.html' },
+      { id: 'p6-task5', type: 'read', textAr: 'اكتب README احترافي لكل Project', link: 'https://github.com/othneildrew/Best-README-Template' },
     ],
   },
 
@@ -518,10 +517,10 @@ export const phases: Phase[] = [
     ],
     tasks: [
       { id: 'p7-task1', type: 'build', textAr: 'اعمل مشروع Capstone يجمع كل المراحل' },
-      { id: 'p7-task2', type: 'build', textAr: 'حضّر LinkedIn profile وـ Resume احترافي' },
+      { id: 'p7-task2', type: 'build', textAr: 'حضّر LinkedIn profile وـ Resume احترافي', link: 'https://www.linkedin.com' },
       { id: 'p7-task3', type: 'read', textAr: 'راجع أهم 50 سؤال ML Interview', link: 'https://huyenchip.com/ml-interviews-book/' },
       { id: 'p7-task4', type: 'deploy', textAr: 'انشر Portfolio website على Vercel أو GitHub Pages', link: 'https://vercel.com' },
-      { id: 'p7-task5', type: 'build', textAr: 'ابعت apply على 5 وظايف AI وسجل الـ Feedback' },
+      { id: 'p7-task5', type: 'build', textAr: 'ابعت apply على 5 وظايف AI وسجل الـ Feedback', link: 'https://www.linkedin.com/jobs/search/?keywords=AI+Engineer' },
     ],
   },
 ];
