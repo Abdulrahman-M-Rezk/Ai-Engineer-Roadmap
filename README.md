@@ -1,122 +1,160 @@
-# 🤖 AI Engineer Roadmap Tracker
+# 🗺️ AI Engineer & Computer Vision Roadmap Tracker
 
 <div align="center">
 
-![AI Engineer Roadmap](https://img.shields.io/badge/AI_Engineer-Roadmap-00D4FF?style=for-the-badge&logo=robot&logoColor=white)
-![Version](https://img.shields.io/badge/version-1.0.0-A78BFA?style=for-the-badge)
-![Built With Vibe Coding](https://img.shields.io/badge/Built_With-Vibe_Coding_⚡-F472B6?style=for-the-badge)
-![Firebase](https://img.shields.io/badge/Firebase-Firestore-FBBF24?style=for-the-badge&logo=firebase&logoColor=white)
+![React](https://img.shields.io/badge/React_18-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)
 ![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
-**خريطة طريق شخصية لتعلم الـ AI Engineering — متخصصة في Computer Vision**
+A highly personalized, real-time synchronized learning tracker designed specifically for aspiring **AI & Computer Vision Engineers**.
 
-[🚀 الموقع المباشر](https://ai-engineer-roadmap-phi.vercel.app) • [📊 Firebase Console](https://console.firebase.google.com) • [🗺️ roadmap.sh](https://roadmap.sh/ai-engineer)
+**🌐 [Live Demo](https://ai-engineer-roadmap-phi.vercel.app/) • [🗺️ roadmap.sh Reference](https://roadmap.sh/ai-engineer)**
 
 </div>
 
 ---
 
-## 📸 لقطات الشاشة
+## 📸 Screenshots
+
+> *(Add screenshots here after running the app — see instructions below)*
 
 | PIN Entry | Dashboard | Phase Details |
 |-----------|-----------|---------------|
-| صفحة تسجيل الدخول الآمنة | لوحة التحكم الرئيسية | تفاصيل كل مرحلة |
+| `assets/screenshot-pin.png` | `assets/screenshot-dashboard.png` | `assets/screenshot-phase.png` |
+
+To add screenshots:
+1. Take screenshots of the live site
+2. Save them in `assets/` folder
+3. Replace the placeholder paths above
 
 ---
 
-## ✨ المميزات
+## ⚡ Built with Vibe Coding (AI-Assisted Engineering)
 
-- 🔐 **نظام مصادقة آمن** — Username + PIN + Recovery Code
-- 🔄 **تزامن فوري** — Firebase Firestore real-time sync عبر كل الأجهزة
-- 📊 **7 مراحل تعليمية** — من Python الأساسيات وحتى الـ Career
-- 📚 **76+ مصدر تعليمي** — فيديوهات، كتب، ومقالات بروابط مباشرة
-- ✅ **تتبع التقدم** — Checkboxes محفوظة مع Progress Bars تفاعلية
-- 📝 **ملاحظات شخصية** — أضف تواريخ بداية وانتهاء وملاحظات لكل موضوع
-- 🔀 **Drag & Drop** — رتب المصادر حسب أولوياتك الشخصية
-- ➕ **مصادر مخصصة** — أضف كورساتك ومصادرك الخاصة لكل مرحلة
-- 💬 **اقتباسات تحفيزية** — آيات قرآنية وأحاديث تشجعك على الاستمرار
-- 📱 **Responsive** — يعمل بنفس الكفاءة على الموبايل واللاب
+This project was architected, developed, and iteratively refined using **Vibe Coding** — an agentic AI development approach where I acted as the **Tech Lead & Systems Architect**, orchestrating AI agents to generate, debug, and refactor the codebase.
 
----
-
-## 🗺️ الـ Roadmap
+**Key Skills Demonstrated:**
+- **Prompt Engineering** — Formulating highly specific, context-aware prompts for complex state management and UI/UX overhauls
+- **Architectural Oversight** — Directing the AI to transition from `localStorage` to a secure, real-time Firebase Firestore database
+- **Security Auditing** — Identifying and patching a PIN-collision vulnerability by introducing a Username-based auth system
+- **Agent Collaboration** — Using multiple AI models (Claude + Gemini) to review code, implement `@dnd-kit` drag-and-drop, and manage the full dev lifecycle
 
 ```
-Phase 1 🐍  Python والرياضيات          (6-8 أسابيع)
-Phase 2 🤖  Machine Learning            (8-10 أسابيع)
-Phase 3 🧠  Deep Learning               (8-10 أسابيع)
-Phase 4 👁️  Computer Vision ⭐ تخصصك   (6-8 أسابيع)
-Phase 5 🔗  AI Engineer Layer           (6-8 أسابيع)
-Phase 6 ⚙️  MLOps & Deployment          (4-6 أسابيع)
-Phase 7 🎯  Projects & Career           (4-6 أسابيع)
-                              ──────────────────────
-                              الإجمالي: ~8-9 أشهر
+Tools Used:
+  🤖 Claude (Anthropic)   ← Architecture, Planning & Code Review
+  🔧 Antigravity          ← Local Code Execution & Refactoring
+  🎨 Figma AI             ← UI/UX Design
+  🚀 Vercel               ← Automated CI/CD Deployment
 ```
 
 ---
 
-## 🛠️ التقنيات المستخدمة
+## ✨ Core Features
 
-| التقنية | الاستخدام |
-|---------|-----------|
-| **React 18 + TypeScript** | Frontend Framework |
-| **Vite** | Build Tool |
-| **Tailwind CSS v4** | Styling |
-| **Firebase Firestore** | Real-time Database |
-| **React Router v7** | Navigation |
-| **@dnd-kit** | Drag & Drop |
-| **react-type-animation** | Welcome Animation |
-| **@radix-ui** | UI Components |
-| **Vercel** | Deployment |
-| **Cairo Font** | Arabic Typography |
+- 🔐 **Secure Anonymous Auth** — Custom `Username + PIN + Recovery Code` system. No emails required
+- 🔄 **Real-Time Sync** — Firebase Firestore keeps progress synced instantly across all devices
+- 📚 **76+ Curated Resources** — Videos, books, and articles with direct links for every phase
+- ✅ **Full Progress Tracking** — Checkboxes, progress bars, and completion percentages per phase
+- 📝 **Topic Details** — Log Start/End dates and personal notes for every topic
+- 🔀 **Drag & Drop Resources** — Reorder resources by personal priority using `@dnd-kit`
+- ➕ **Custom Private Resources** — Add your own Udemy courses or playlists — visible only to you
+- 💬 **Motivational Quotes** — Quranic verses and Arabic proverbs to keep you going
+- ✍️ **Typewriter Welcome** — Dynamic greeting with your username on login
+- 📱 **Fully Responsive** — Optimized for both mobile and desktop
 
 ---
 
-## 🚀 تشغيل المشروع محلياً
+## 🗺️ The Roadmap (7 Phases · ~8-9 Months)
 
-### المتطلبات
-- Node.js v18+
-- Firebase Project (مجاني)
+```
+Phase 1 🐍  Python & Mathematics         (6-8 weeks)
+Phase 2 🤖  Machine Learning             (8-10 weeks)
+Phase 3 🧠  Deep Learning                (8-10 weeks)
+Phase 4 👁️  Computer Vision ⭐ Focus     (6-8 weeks)
+Phase 5 🔗  AI Engineer Layer            (6-8 weeks)
+Phase 6 ⚙️  MLOps & Deployment           (4-6 weeks)
+Phase 7 🎯  Projects & Career            (4-6 weeks)
+```
 
-### الخطوات
+---
+
+## 🛠️ Tech Stack
+
+| Category | Technology |
+|----------|------------|
+| **Frontend** | React 18 + TypeScript |
+| **Build Tool** | Vite |
+| **Styling** | Tailwind CSS v4 + shadcn/ui (Radix Primitives) |
+| **Database** | Firebase Firestore (NoSQL, Real-time) |
+| **Routing** | React Router v7 |
+| **Drag & Drop** | `@dnd-kit/core` + `@dnd-kit/sortable` |
+| **Animations** | `react-type-animation` + `canvas-confetti` |
+| **Font** | Cairo (Google Fonts) — RTL Arabic Support |
+| **Deployment** | Vercel (CI/CD via GitHub) |
+
+---
+
+## 🔐 Authentication System
+
+```
+Sign Up:
+  ① Choose a unique username
+  ② Set a 4-digit PIN
+  ③ Save your Recovery Code (6 chars) — IMPORTANT!
+
+Login:
+  ① Enter username + PIN
+
+Recovery:
+  ① Enter username + Recovery Code
+  ② Set a new PIN
+```
+
+---
+
+## 🗄️ Firestore Data Structure
+
+```javascript
+/progress/{username}
+  ├── pin: string                           // Stored PIN
+  ├── recoveryCode: string                  // For account recovery
+  ├── checkedTopics: { [topicId]: bool }    // Completed topics
+  ├── checkedTasks: { [taskId]: bool }      // Completed tasks
+  ├── customResources: { [phaseId]: [] }    // User's private resources
+  ├── resourceOrder: { [phaseId]: [] }      // Custom drag-and-drop order
+  └── topicDetails: {
+        [topicId]: {
+          startDate: string,
+          endDate: string,
+          note: string
+        }
+      }
+```
+
+---
+
+## 🚀 Local Setup
 
 ```bash
-# 1. Clone المشروع
+# 1. Clone the repo
 git clone https://github.com/Abdulrahman-M-Rezk/Ai-Engineer-Roadmap.git
 cd Ai-Engineer-Roadmap
 
-# 2. تثبيت الـ Dependencies
+# 2. Install dependencies
 npm install
 
-# 3. إضافة متغيرات البيئة
+# 3. Set up environment variables
 cp .env.example .env.local
-# افتح .env.local وأضف قيم Firebase بتاعتك
+# Fill in your Firebase credentials
 
-# 4. تشغيل المشروع
+# 4. Run locally
 npm run dev
 ```
 
-### إعداد Firebase
-
-1. روح [console.firebase.google.com](https://console.firebase.google.com)
-2. أنشئ مشروع جديد
-3. فعّل Firestore Database في **test mode**
-4. أضف Web App واحصل على الـ config
-5. أضف الـ Security Rules دي:
-
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /progress/{userId} {
-      allow read, write: if true;
-    }
-  }
-}
-```
-
-6. أضف الـ config في `.env.local`:
-
+**`.env.local` template:**
 ```env
 VITE_FIREBASE_API_KEY=your_api_key
 VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
@@ -128,126 +166,29 @@ VITE_FIREBASE_APP_ID=your_app_id
 
 ---
 
-## 📁 هيكل المشروع
+## 📚 Roadmap References
 
-```
-src/
-├── firebase.js                        ← Firebase config
-├── app/
-│   ├── context/
-│   │   └── AppContext.tsx             ← Global state + Firebase sync
-│   ├── data/
-│   │   └── roadmapData.ts             ← كل بيانات الـ Roadmap
-│   ├── pages/
-│   │   ├── PinEntry.tsx               ← صفحة Login / Sign Up
-│   │   └── Dashboard.tsx              ← الصفحة الرئيسية
-│   └── components/
-│       ├── PhaseCard.tsx              ← كارت كل مرحلة
-│       ├── BottomNav.tsx              ← Navigation الموبايل
-│       └── SearchModal.tsx            ← موديل البحث
-└── styles/
-    ├── index.css                      ← Tailwind + Animations
-    └── fonts.css                      ← Cairo Font
-```
+| Source | Description |
+|--------|-------------|
+| [roadmap.sh/ai-engineer](https://roadmap.sh/ai-engineer) | Primary technical reference |
+| [Moataz Elmesmary — DS Roadmap](https://github.com/Moataz-Elmesmary/Data-Science-Roadmap) | 4.2k ⭐ — Most comprehensive Arabic DS roadmap |
+| [Mariam Ahmed — IEEE ManCSC 2025](https://github.com/Mariam-Ahmed15/Data-Science-Roadmap-IEEEManCSC-2025) | Week-by-week structured roadmap |
 
 ---
 
-## 🔐 نظام المصادقة
+## 🤝 Connect
 
-```
-التسجيل (Sign Up):
-  ① اختر username فريد
-  ② اختار PIN من 4 أرقام
-  ③ احفظ Recovery Code (6 أحرف) — مهم جداً!
+**Abdulrahman Rizk** — AI & Computer Vision Engineer
 
-تسجيل الدخول (Login):
-  ① ادخل username + PIN
-
-الاسترجاع (Recovery):
-  ① ادخل username + Recovery Code
-  ② اختار PIN جديد
-```
-
----
-
-## 🗄️ Firestore Data Structure
-
-```javascript
-/progress/{username}
-  ├── pin: string                          // مشفر
-  ├── recoveryCode: string                 // للاسترجاع
-  ├── checkedTopics: { [topicId]: bool }   // المواضيع المكتملة
-  ├── checkedTasks: { [taskId]: bool }     // التكاليف المكتملة
-  ├── customResources: { [phaseId]: [] }   // مصادر شخصية
-  ├── resourceOrder: { [phaseId]: [] }     // ترتيب المصادر
-  └── topicDetails: {                      // تفاصيل كل موضوع
-        [topicId]: {
-          startDate: string,
-          endDate: string,
-          note: string
-        }
-      }
-```
-
----
-
-## 🚢 الـ Deployment على Vercel
-
-```bash
-# Build المشروع
-npm run build
-
-# أو Deploy مباشرة من GitHub
-# Vercel بيتابع main branch تلقائياً
-```
-
-**Environment Variables على Vercel:**
-أضف نفس الـ 6 Variables من `.env.local` في Settings → Environment Variables
-
----
-
-## 📚 مصادر بناء الـ Roadmap
-
-| المصدر | الوصف |
-|--------|-------|
-| [roadmap.sh/ai-engineer](https://roadmap.sh/ai-engineer) | المرجع التقني الأساسي |
-| [Moataz Elmesmary DS Roadmap](https://github.com/Moataz-Elmesmary/Data-Science-Roadmap) | 4.2k ⭐ أشمل Roadmap عربي |
-| [Mariam Ahmed IEEE ManCSC 2025](https://github.com/Mariam-Ahmed15/Data-Science-Roadmap-IEEEManCSC-2025) | Roadmap منظم بالأسابيع |
-
----
-
-## ⚡ Built With Vibe Coding
-
-هذا المشروع بُني بالكامل باستخدام **Vibe Coding** — أسلوب تطوير حديث يعتمد على التعاون بين المبرمج والذكاء الاصطناعي لبناء تطبيقات احترافية بسرعة وكفاءة.
-
-```
-الأدوات المستخدمة في الـ Vibe Coding:
-  🤖 Claude (Anthropic)   ← التخطيط والـ Architecture
-  🔧 Antigravity          ← تنفيذ الكود محلياً
-  🎨 Figma AI             ← تصميم الواجهة
-  🚀 Vercel               ← Deploy تلقائي
-```
-
----
-
-## 🤝 المساهمة
-
-هذا مشروع شخصي، لكن لو عندك اقتراحات:
-1. افتح Issue بالاقتراح
-2. أو تواصل مباشرة
-
----
-
-## 📄 الترخيص
-
-هذا المشروع للاستخدام الشخصي والتعليمي.
+[![Email](https://img.shields.io/badge/Email-abdulrahman.m.rezk%40gmail.com-D14836?style=flat&logo=gmail&logoColor=white)](mailto:abdulrahman.m.rezk@gmail.com)
+[![GitHub](https://img.shields.io/badge/GitHub-Abdulrahman--M--Rezk-181717?style=flat&logo=github&logoColor=white)](https://github.com/Abdulrahman-M-Rezk)
 
 ---
 
 <div align="center">
 
-**وَأَن لَّيْسَ لِلْإِنسَانِ إِلَّا مَا سَعَىٰ**
+**وَأَن لَّيْسَ لِلْإِنسَانِ إِلَّا مَا سَعَىٰ** — سورة النجم
 
-*صُنع بـ ❤️ و ☕ في مصر*
+*Made with ❤️ and ☕ in Egypt*
 
 </div>
