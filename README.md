@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD033 MD036 -->
 # 🗺️ AI Engineer & Computer Vision Roadmap Tracker
 
 <div align="center">
@@ -19,16 +20,9 @@ A highly personalized, real-time synchronized learning tracker designed specific
 
 ## 📸 Screenshots
 
-> *(Add screenshots here after running the app — see instructions below)*
-
 | PIN Entry | Dashboard | Phase Details |
-|-----------|-----------|---------------|
-| `assets/screenshot-pin.png` | `assets/screenshot-dashboard.png` | `assets/screenshot-phase.png` |
-
-To add screenshots:
-1. Take screenshots of the live site
-2. Save them in `assets/` folder
-3. Replace the placeholder paths above
+| --------- | --------- | ------------- |
+| ![PIN Entry](assets/Screenshot_pin.png) | ![Dashboard](assets/Screenshot_dashboard.png) | ![Phase Details](assets/Screenshot_phase.png) |
 
 ---
 
@@ -37,14 +31,15 @@ To add screenshots:
 This project was architected, developed, and iteratively refined using **Vibe Coding** — an agentic AI development approach where I acted as the **Tech Lead & Systems Architect**, orchestrating AI agents to generate, debug, and refactor the codebase.
 
 **Key Skills Demonstrated:**
+
 - **Prompt Engineering** — Formulating highly specific, context-aware prompts for complex state management and UI/UX overhauls
 - **Architectural Oversight** — Directing the AI to transition from `localStorage` to a secure, real-time Firebase Firestore database
 - **Security Auditing** — Identifying and patching a PIN-collision vulnerability by introducing a Username-based auth system
 - **Agent Collaboration** — Using multiple AI models (Claude + Gemini) to review code, implement `@dnd-kit` drag-and-drop, and manage the full dev lifecycle
 
-```
+```txt
 Tools Used:
-  🤖 Claude (Anthropic)   ← Architecture, Planning & Code Review
+  🤖 Claude & Gemini      ← Architecture, Planning & Code Review
   🔧 Antigravity          ← Local Code Execution & Refactoring
   🎨 Figma AI             ← UI/UX Design
   🚀 Vercel               ← Automated CI/CD Deployment
@@ -69,7 +64,7 @@ Tools Used:
 
 ## 🗺️ The Roadmap (7 Phases · ~8-9 Months)
 
-```
+```txt
 Phase 1 🐍  Python & Mathematics         (6-8 weeks)
 Phase 2 🤖  Machine Learning             (8-10 weeks)
 Phase 3 🧠  Deep Learning                (8-10 weeks)
@@ -84,7 +79,7 @@ Phase 7 🎯  Projects & Career            (4-6 weeks)
 ## 🛠️ Tech Stack
 
 | Category | Technology |
-|----------|------------|
+| -------- | ---------- |
 | **Frontend** | React 18 + TypeScript |
 | **Build Tool** | Vite |
 | **Styling** | Tailwind CSS v4 + shadcn/ui (Radix Primitives) |
@@ -99,7 +94,7 @@ Phase 7 🎯  Projects & Career            (4-6 weeks)
 
 ## 🔐 Authentication System
 
-```
+```txt
 Sign Up:
   ① Choose a unique username
   ② Set a 4-digit PIN
@@ -155,6 +150,7 @@ npm run dev
 ```
 
 **`.env.local` template:**
+
 ```env
 VITE_FIREBASE_API_KEY=your_api_key
 VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
@@ -169,7 +165,7 @@ VITE_FIREBASE_APP_ID=your_app_id
 ## 📚 Roadmap References
 
 | Source | Description |
-|--------|-------------|
+| ------ | ----------- |
 | [roadmap.sh/ai-engineer](https://roadmap.sh/ai-engineer) | Primary technical reference |
 | [Moataz Elmesmary — DS Roadmap](https://github.com/Moataz-Elmesmary/Data-Science-Roadmap) | 4.2k ⭐ — Most comprehensive Arabic DS roadmap |
 | [Mariam Ahmed — IEEE ManCSC 2025](https://github.com/Mariam-Ahmed15/Data-Science-Roadmap-IEEEManCSC-2025) | Week-by-week structured roadmap |
