@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router';
+import { TypeAnimation } from 'react-type-animation';
 import { useApp } from '../context/AppContext';
 import { phases, TOTAL_TOPICS } from '../data/roadmapData';
 import { PhaseCard } from '../components/PhaseCard';
@@ -156,11 +157,44 @@ export default function Dashboard() {
           <p style={{ color: '#64748B', fontSize: 14, marginBottom: 20 }}>~8-9 أشهر · 7 مراحل · {TOTAL_TOPICS} topic</p>
 
           {/* Welcome Banner */}
+          <style>{`
+            @keyframes wave-animation {
+              0% { transform: rotate(0.0deg) }
+              10% { transform: rotate(14.0deg) }
+              20% { transform: rotate(-8.0deg) }
+              30% { transform: rotate(14.0deg) }
+              40% { transform: rotate(-4.0deg) }
+              50% { transform: rotate(10.0deg) }
+              60% { transform: rotate(0.0deg) }
+              100% { transform: rotate(0.0deg) }
+            }
+            .wave-emoji {
+              display: inline-block;
+              animation: wave-animation 2.5s infinite;
+              transform-origin: 70% 70%;
+            }
+          `}</style>
           <div style={{ marginBottom: 32 }}>
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2" style={{
-              color: '#fff', fontSize: isMobile ? 28 : 42, lineHeight: 1.4, fontWeight: 900
+              color: '#fff', fontSize: isMobile ? 28 : 42, lineHeight: 1.4, fontWeight: 900,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: '8px'
             }}>
-              مرحباً يا <span style={{ color: '#3B82F6' }}>{username}</span> 👋
+              <span>مرحباً يا</span>
+              <TypeAnimation
+                sequence={[
+                  '',        // Start empty
+                  1000,      // Wait 1 second
+                  username,  // Type Username in blue
+                  3000,      // Wait 3 seconds
+                  '',        // Erase Username only
+                  1000,      // Wait 1 second before repeating
+                ]}
+                wrapper="span"
+                cursor={true}
+                repeat={Infinity}
+                style={{ color: '#3B82F6', display: 'inline-block' }}
+              />
+              <span className="wave-emoji">👋</span>
             </h1>
             <p style={{ color: '#94A3B8', fontSize: 16 }}>"جاهز لاستكمال رحلتك في عالم الذكاء الاصطناعي؟"</p>
           </div>
