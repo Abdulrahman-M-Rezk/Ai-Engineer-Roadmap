@@ -32,7 +32,7 @@ interface AppContextType {
   removeCustomResource: (phaseId: string, resourceId: string) => void;
   updateResourceOrder: (phaseId: string, newOrder: string[]) => void;
   resetResourceOrder: (phaseId: string) => void;
-  setNewPin: (newPin: string) => Promise<void>;
+  setNewPin: (newPin: string, recoveryCode: string) => Promise<{ success: boolean; error?: string }>;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -188,14 +188,25 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   /* ── Change PIN ── */
-  const setNewPin = useCallback(async (newPin: string) => {
+  const setNewPin = useCallback(async (newPin: string, recoveryCode: string) => {
     try {
-      if (!username) return;
-      await updateDoc(doc(db, 'progress', username), { pin: newPin });
+      if (!username) return { success: false, error: 'غير مسجل الدخول' };
+      const ref = doc(db, 'progress', username);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) return { success: false, error: 'لم يتم العثور على الحساب' };
+      
+      const d = snap.data() as any;
+      if (d.recoveryCode !== recoveryCode) {
+        return { success: false, error: 'كود الاسترجاع غير صحيح' };
+      }
+
+      await updateDoc(ref, { pin: newPin });
       localStorage.setItem('ai-roadmap-pin', newPin);
       setPinState(newPin);
+      return { success: true };
     } catch (error) {
       console.error('Change PIN error:', error);
+      return { success: false, error: 'حدث خطأ في الاتصال' };
     }
   }, [username]);
 

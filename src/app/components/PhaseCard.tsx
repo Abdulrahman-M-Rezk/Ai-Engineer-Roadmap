@@ -180,7 +180,7 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
 
   const allResources = useMemo(() => [
     ...phase.resources.map(r => ({ ...r, isCustom: false })),
-    ...myResources.map(r => ({ id: r.id, name: r.name, url: r.url, desc: r.note, isCustom: true, type: 'custom', lang: 'ar', price: 'free' }))
+    ...myResources.map(r => ({ id: r.id, name: r.name, url: r.url, desc: r.note, isCustom: true, type: 'custom', lang: 'ar', price: 'free', groupId: undefined }))
   ], [phase.resources, myResources]);
 
   const order = resourceOrder[phase.id];
@@ -201,20 +201,58 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
     });
   }, [finalResources, resourceFilter]);
 
+  const groupedResources = useMemo(() => {
+    const groups: { title: string; id: string; resources: typeof filteredFinalResources }[] = [];
+    
+    // Create a bucket for each Phase Topic Group
+    phase.topicGroups.forEach(g => {
+      groups.push({ title: g.nameAr, id: g.id, resources: [] });
+    });
+    
+    // General & Custom bucket
+    groups.push({ title: 'مصادر عامة وشخصية', id: 'general', resources: [] });
+
+    filteredFinalResources.forEach(r => {
+      if (r.isCustom) {
+        groups[groups.length - 1].resources.push(r);
+      } else if (r.groupId) {
+        const targetGroup = groups.find(g => g.id === r.groupId);
+        if (targetGroup) targetGroup.resources.push(r);
+        else groups[groups.length - 1].resources.push(r);
+      } else {
+        groups[groups.length - 1].resources.push(r);
+      }
+    });
+
+    return groups.filter(g => g.resources.length > 0);
+  }, [filteredFinalResources, phase.topicGroups]);
+
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = useCallback((event: DragEndEvent, groupResources: any[]) => {
     const { active, over } = event;
     if (over && active.id !== over.id) {
-      const oldIndex = finalResources.findIndex(r => r.id === active.id);
-      const newIndex = finalResources.findIndex(r => r.id === over.id);
-      const newOrder = arrayMove(finalResources, oldIndex, newIndex).map(r => r.id);
-      updateResourceOrder(phase.id, newOrder);
+      const globalOrder = order || allResources.map(r => r.id);
+      
+      const oldIndexLocal = groupResources.findIndex(r => r.id === active.id);
+      const newIndexLocal = groupResources.findIndex(r => r.id === over.id);
+      if (oldIndexLocal === -1 || newIndexLocal === -1) return;
+
+      const newGroupOrderIds = arrayMove(groupResources, oldIndexLocal, newIndexLocal).map(r => r.id);
+      
+      const globalIndices = newGroupOrderIds.map(id => globalOrder.indexOf(id)).sort((a, b) => a - b);
+      
+      const nextGlobalOrder = [...globalOrder];
+      globalIndices.forEach((gIdx, i) => {
+        nextGlobalOrder[gIdx] = newGroupOrderIds[i];
+      });
+      
+      updateResourceOrder(phase.id, nextGlobalOrder);
     }
-  };
+  }, [order, allResources, updateResourceOrder, phase.id]);
 
   const taskTypeIcon = (type: string) => {
     if (type === 'build') return '🔨';
@@ -547,25 +585,31 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                             ))}
                           </div>
 
-                          {/* DND Context for Resources List */}
-                          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                            <SortableContext items={filteredFinalResources.map(r => r.id)} strategy={verticalListSortingStrategy}>
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-                                {filteredFinalResources.map(r => (
-                                  <SortableResourceItem
-                                    key={r.id}
-                                    resource={r}
-                                    rgb={rgb}
-                                    color={color}
-                                    onRemoveCustom={(id) => removeCustomResource(phase.id, id)}
-                                  />
-                                ))}
-                                {filteredFinalResources.length === 0 && (
-                                  <p style={{ color: '#475569', textAlign: 'center', padding: 20, fontSize: 13 }}>ما فيش نتائج</p>
-                                )}
-                              </div>
-                            </SortableContext>
-                          </DndContext>
+                          {/* DND Context for Resources List per Group */}
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                            {groupedResources.length === 0 ? (
+                              <p style={{ color: '#475569', textAlign: 'center', padding: 20, fontSize: 13 }}>ما فيش نتائج</p>
+                            ) : (
+                              groupedResources.map(group => (
+                                <div key={group.id}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: color, boxShadow: `0 0 8px ${color}` }} />
+                                    <h4 style={{ color: '#CBD5E1', fontSize: 13, fontWeight: 700, margin: 0 }}>{group.title}</h4>
+                                    <div style={{ flex: 1, height: 1, background: `rgba(${rgb}, 0.2)` }} />
+                                  </div>
+                                  <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e, group.resources)}>
+                                    <SortableContext items={group.resources.map(r => r.id)} strategy={verticalListSortingStrategy}>
+                                      <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                                        {group.resources.map(r => (
+                                          <SortableResourceItem key={r.id} resource={r} rgb={rgb} color={color} onRemoveCustom={(id) => removeCustomResource(phase.id, id)} />
+                                        ))}
+                                      </div>
+                                    </SortableContext>
+                                  </DndContext>
+                                </div>
+                              ))
+                            )}
+                          </div>
 
                           {/* Reset order button */}
                           {hasCustomOrder && resourceFilter === 'all' && (

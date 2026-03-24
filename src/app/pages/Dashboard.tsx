@@ -105,9 +105,9 @@ export default function Dashboard() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [showPinChange, setShowPinChange] = useState(false);
   const [newPinInput, setNewPinInput] = useState('');
+  const [recoveryCodeInput, setRecoveryCodeInput] = useState('');
   const [showReferences, setShowReferences] = useState(false);
-
-  // Pick a random quote once per visit
+  const [greetingDone, setGreetingDone] = useState(false); // per visit
   const quote = useMemo(() => QUOTES[Math.floor(Math.random() * QUOTES.length)], []);
 
   useEffect(() => { if (!isAuthenticated) navigate('/'); }, [isAuthenticated, navigate]);
@@ -120,13 +120,24 @@ export default function Dashboard() {
   const totalDone = Object.values(checkedTopics).filter(Boolean).length;
   const pct = TOTAL_TOPICS > 0 ? Math.round((totalDone / TOTAL_TOPICS) * 100) : 0;
 
-  const handlePinChange = () => {
-    if (newPinInput.length === 4 && /^\d{4}$/.test(newPinInput)) {
-      setNewPin(newPinInput);
+  const handlePinChange = async () => {
+    if (newPinInput.length !== 4 || !/^\d{4}$/.test(newPinInput)) {
+      alert('❌ أدخل 4 أرقام صحيحة للـ PIN الجديد');
+      return;
+    }
+    if (!recoveryCodeInput.trim() || recoveryCodeInput.length !== 6) {
+      alert('❌ يرجى إدخال كود الاسترجاع (6 رموز)');
+      return;
+    }
+
+    const res = await setNewPin(newPinInput, recoveryCodeInput.trim());
+    if (res.success) {
       setShowPinChange(false);
       setNewPinInput('');
+      setRecoveryCodeInput('');
+      alert('✅ تم تغيير الرقم السري بنجاح');
     } else {
-      alert('❌ أدخل 4 أرقام صحيحة');
+      alert(`❌ ${res.error}`);
     }
   };
 
@@ -289,18 +300,27 @@ export default function Dashboard() {
         {showPinChange && (
           <div className="animate-slide-down glass-card" style={{
             position: 'fixed', bottom: isMobile ? 90 : 20, left: '50%', transform: 'translateX(-50%)',
-            width: '90%', maxWidth: 340, padding: '20px', borderRadius: 16,
+            width: '90%', maxWidth: 360, padding: '24px', borderRadius: 16,
             border: '1px solid rgba(0,212,255,0.3)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)',
-            zIndex: 100, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap',
+            zIndex: 100, display: 'flex', flexDirection: 'column', gap: 12,
           }}>
-            <p style={{ color: '#94A3B8', fontSize: 13, width: '100%', marginBottom: 4 }}>تغيير الـ PIN:</p>
+            <p style={{ color: '#94A3B8', fontSize: 13, fontWeight: 700, margin: 0 }}>تغيير الـ PIN:</p>
+            
+            <input type="text" maxLength={6}
+              placeholder="كود الاسترجاع (6 رموز)" value={recoveryCodeInput}
+              onChange={e => setRecoveryCodeInput(e.target.value)}
+              style={{ padding: '10px 14px', borderRadius: 10, border: '1px solid rgba(167,139,250,0.3)', background: 'rgba(255,255,255,0.04)', color: '#F1F5F9', fontSize: 14, fontFamily: "'Cairo', sans-serif", outline: 'none', letterSpacing: 2, textAlign: 'center' }} />
+              
             <input type="password" inputMode="numeric" maxLength={4}
               placeholder="PIN جديد (4 أرقام)" value={newPinInput}
               onChange={e => setNewPinInput(e.target.value.replace(/\D/g, '').slice(0, 4))}
               onKeyDown={e => e.key === 'Enter' && handlePinChange()}
-              style={{ flex: 1, padding: '10px 14px', borderRadius: 10, border: '1px solid rgba(0,212,255,0.3)', background: 'rgba(255,255,255,0.04)', color: '#F1F5F9', fontSize: 16, fontFamily: "'Cairo', sans-serif", outline: 'none', letterSpacing: 4, textAlign: 'center' }} />
-            <button onClick={handlePinChange} style={{ padding: '10px 16px', borderRadius: 10, border: 'none', background: 'linear-gradient(135deg,#00D4FF,#0099BB)', color: '#000', fontWeight: 700, fontFamily: "'Cairo', sans-serif", cursor: 'pointer', fontSize: 13 }}>حفظ</button>
-            <button onClick={() => setShowPinChange(false)} style={{ padding: '10px 12px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#64748B', fontFamily: "'Cairo', sans-serif", cursor: 'pointer', fontSize: 13 }}>إلغاء</button>
+              style={{ padding: '10px 14px', borderRadius: 10, border: '1px solid rgba(0,212,255,0.3)', background: 'rgba(255,255,255,0.04)', color: '#F1F5F9', fontSize: 16, fontFamily: "'Cairo', sans-serif", outline: 'none', letterSpacing: 4, textAlign: 'center' }} />
+              
+            <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
+              <button onClick={handlePinChange} style={{ flex: 1, padding: '10px 16px', borderRadius: 10, border: 'none', background: 'linear-gradient(135deg,#00D4FF,#0099BB)', color: '#000', fontWeight: 700, fontFamily: "'Cairo', sans-serif", cursor: 'pointer', fontSize: 13 }}>تغيير</button>
+              <button onClick={() => { setShowPinChange(false); setRecoveryCodeInput(''); setNewPinInput(''); }} style={{ flex: 1, padding: '10px 12px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#64748B', fontFamily: "'Cairo', sans-serif", cursor: 'pointer', fontSize: 13 }}>إلغاء</button>
+            </div>
           </div>
         )}
       </div>

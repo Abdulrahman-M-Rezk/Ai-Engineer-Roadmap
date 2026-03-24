@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useApp } from '../context/AppContext';
+import { Copy } from 'lucide-react';
 
 type AuthMode = 'login' | 'signup' | 'recovery';
 
@@ -14,6 +15,7 @@ export default function PinEntry() {
   const [shake, setShake] = useState(false);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
   
   // Modals / Success states
   const [signupRecoveryCode, setSignupRecoveryCode] = useState<string | null>(null);
@@ -129,16 +131,38 @@ export default function PinEntry() {
           <div>
             <div className="animate-float" style={{ fontSize:64, marginBottom:20 }}>🎉</div>
             <h2 style={{ color:'#fff', fontSize:22, marginBottom:16 }}>تم إنشاء الحساب بنجاح!</h2>
-            <p style={{ color:'#94A3B8', fontSize:14, marginBottom:24 }}>
-              يرجى الاحتفاظ بكود الاسترجاع التالي في مكان آمن. ستحتاجه إذا نسيت الرقم السري.
-            </p>
+            
+            <div style={{
+              background: 'rgba(248,113,113,0.1)',
+              border: '1px solid rgba(248,113,113,0.5)',
+              borderRadius: 12, padding: 16, marginBottom: 20
+            }}>
+              <p style={{ color: '#FCA5A5', fontSize: 13, fontWeight: 700, margin: 0, lineHeight: 1.6 }}>
+                ⚠️ تحذير هام: احتفظ بهذا الكود في مكان آمن جداً. إذا فقدت الرقم السري، فهذا الكود هو الطريقة الوحيدة لاسترجاع حسابك وتغيير رقمك السري لاحقاً!
+              </p>
+            </div>
+
             <div style={{
               background:'rgba(255,255,255,0.1)', padding:'16px', borderRadius:12,
-              fontSize:32, letterSpacing:4, fontWeight:900, color:'#34D399', marginBottom:32,
-              userSelect:'all'
+              fontSize:32, letterSpacing:4, fontWeight:900, color:'#34D399', marginBottom:20,
+              userSelect:'all', display: 'flex', justifyContent: 'center', alignItems: 'center'
             }}>
               {signupRecoveryCode}
             </div>
+            
+            <button onClick={() => {
+              navigator.clipboard.writeText(signupRecoveryCode);
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2000);
+            }} style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              width: '100%', padding: '12px', borderRadius: 12, border: '1px solid rgba(52,211,153,0.4)',
+              background: 'rgba(52,211,153,0.1)', color: '#34D399', fontSize: 14, fontWeight: 700,
+              cursor: 'pointer', fontFamily: "'Cairo', sans-serif", marginBottom: 24, transition: 'all 0.2s'
+            }}>
+              {copied ? 'تم النسخ ✓' : <><Copy size={16} /> نسخ الكود</>}
+            </button>
+
             <button onClick={() => {
               // Auto-login after generating recovery code
               resetForm('login');

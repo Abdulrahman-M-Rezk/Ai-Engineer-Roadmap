@@ -19,6 +19,8 @@ export interface Resource {
   lang: 'ar' | 'en';
   price: 'free' | 'paid';
   url?: string;
+  groupId?: string;
+  desc?: string;
 }
 
 export interface Task {
@@ -90,26 +92,26 @@ export const phases: Phase[] = [
     ],
     resources: [
       // ── Arabic (from backup) ──
-      { id: 'p1-s1', name: 'د. حاتم العطار — Linear Algebra', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/playlist?list=PLJM7jJIw2GC2I5gFd7fFMM5sXBCVOkXbB' },
-      { id: 'p1-s2', name: 'د. حاتم العطار — Statistics & Calculus', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/playlist?list=PLJM7jJIw2GC2Ihr__bRSeMxzsiFMZEsx7' },
-      { id: 'p1-hatem-3', name: 'د. حاتم العطار — Probability for AI', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/playlist?list=PLJM7jJIw2GC2Ihr__bRSeMxzsiFMZEsx7' },
-      { id: 'p0-s1', name: 'Elzero Web School — Python', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/@ElzeroWebSchool' },
+      { id: 'p1-s1', groupId: 'p1-g2', name: 'د. حاتم العطار — Linear Algebra', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/playlist?list=PLJM7jJIw2GC2I5gFd7fFMM5sXBCVOkXbB' },
+      { id: 'p1-s2', groupId: 'p1-g2', name: 'د. حاتم العطار — Statistics & Calculus', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/playlist?list=PLJM7jJIw2GC2Ihr__bRSeMxzsiFMZEsx7' },
+      { id: 'p1-hatem-3', groupId: 'p1-g2', name: 'د. حاتم العطار — Probability for AI', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/playlist?list=PLJM7jJIw2GC2Ihr__bRSeMxzsiFMZEsx7' },
+      { id: 'p0-s1', groupId: 'p1-g1', name: 'Elzero Web School — Python', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/@ElzeroWebSchool' },
       // ── English: Python ──
-      { id: 'p0-s2', name: 'CS50P — Harvard (Python)', type: 'video', lang: 'en', price: 'free', url: 'https://cs50.harvard.edu/python' },
-      { id: 'p0-s3', name: 'Automate the Boring Stuff with Python', type: 'book', lang: 'en', price: 'free', url: 'https://automatetheboringstuff.com' },
-      { id: 'p0-s4', name: 'Real Python — مقالات', type: 'article', lang: 'en', price: 'free', url: 'https://realpython.com' },
+      { id: 'p0-s2', groupId: 'p1-g1', name: 'CS50P — Harvard (Python)', type: 'video', lang: 'en', price: 'free', url: 'https://cs50.harvard.edu/python' },
+      { id: 'p0-s3', groupId: 'p1-g1', name: 'Automate the Boring Stuff with Python', type: 'book', lang: 'en', price: 'free', url: 'https://automatetheboringstuff.com' },
+      { id: 'p0-s4', groupId: 'p1-g1', name: 'Real Python — مقالات', type: 'article', lang: 'en', price: 'free', url: 'https://realpython.com' },
       { id: 'p0-s5', name: 'Git & GitHub — FreeCodeCamp', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/watch?v=RGOj5yH7evk' },
-      { id: 'p0-s6', name: 'Python Crash Course — Eric Matthes', type: 'book', lang: 'en', price: 'paid', url: 'https://nostarch.com/python-crash-course-3rd-edition' },
+      { id: 'p0-s6', groupId: 'p1-g1', name: 'Python Crash Course — Eric Matthes', type: 'book', lang: 'en', price: 'paid', url: 'https://nostarch.com/python-crash-course-3rd-edition' },
       // ── English: Math ──
-      { id: 'p1-s3', name: '3Blue1Brown — Essence of Linear Algebra', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2ZAgoSUO7RRMB' },
-      { id: 'p1-s4', name: '3Blue1Brown — Essence of Calculus', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr' },
-      { id: 'p1-s5', name: 'StatQuest with Josh Starmer', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/@statquest' },
-      { id: 'p1-s6', name: 'Kaggle Learn — Pandas', type: 'article', lang: 'en', price: 'free', url: 'https://www.kaggle.com/learn/pandas' },
-      { id: 'p1-s7', name: 'Mathematics for Machine Learning (Deisenroth)', type: 'book', lang: 'en', price: 'free', url: 'https://mml-book.github.io' },
-      { id: 'p1-s8', name: 'Probability Bootcamp — Dr. Steve', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/playlist?list=PLMrJAkhIeNNR3sNYvfgiKgcStwuPSts9V' },
-      { id: 'p1-s9', name: 'Mathematics for ML — Andrew Ng (Coursera)', type: 'video', lang: 'en', price: 'free', url: 'https://www.coursera.org/specializations/mathematics-for-machine-learning-and-data-science' },
-      { id: 'p1-s10', name: 'Corey Schafer — Pandas', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/watch?v=ZyhVh-qRZPA&list=PL-osiE80TeTsWmV9i9c58mdDCSskIFdDS' },
-      { id: 'p1-s11', name: 'NumPy Tutorial — Keith Galli', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/watch?v=5-5CrLmf2vk&list=PLIA_seGogbkGDYq-dnVCsELEIq_7HK7Ca' },
+      { id: 'p1-s3', groupId: 'p1-g2', name: '3Blue1Brown — Essence of Linear Algebra', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2ZAgoSUO7RRMB' },
+      { id: 'p1-s4', groupId: 'p1-g2', name: '3Blue1Brown — Essence of Calculus', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr' },
+      { id: 'p1-s5', groupId: 'p1-g2', name: 'StatQuest with Josh Starmer', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/@statquest' },
+      { id: 'p1-s6', groupId: 'p1-g3', name: 'Kaggle Learn — Pandas', type: 'article', lang: 'en', price: 'free', url: 'https://www.kaggle.com/learn/pandas' },
+      { id: 'p1-s7', groupId: 'p1-g2', name: 'Mathematics for Machine Learning (Deisenroth)', type: 'book', lang: 'en', price: 'free', url: 'https://mml-book.github.io' },
+      { id: 'p1-s8', groupId: 'p1-g2', name: 'Probability Bootcamp — Dr. Steve', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/playlist?list=PLMrJAkhIeNNR3sNYvfgiKgcStwuPSts9V' },
+      { id: 'p1-s9', groupId: 'p1-g2', name: 'Mathematics for ML — Andrew Ng (Coursera)', type: 'video', lang: 'en', price: 'free', url: 'https://www.coursera.org/specializations/mathematics-for-machine-learning-and-data-science' },
+      { id: 'p1-s10', groupId: 'p1-g3', name: 'Corey Schafer — Pandas', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/watch?v=ZyhVh-qRZPA&list=PL-osiE80TeTsWmV9i9c58mdDCSskIFdDS' },
+      { id: 'p1-s11', groupId: 'p1-g3', name: 'NumPy Tutorial — Keith Galli', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/watch?v=5-5CrLmf2vk&list=PLIA_seGogbkGDYq-dnVCsELEIq_7HK7Ca' },
     ],
     tasks: [
       { id: 'p1-task1', type: 'build', textAr: 'ابني data analysis project بـ Pandas على dataset من Kaggle', link: 'https://kaggle.com' },
@@ -169,7 +171,7 @@ export const phases: Phase[] = [
     ],
     resources: [
       // ── Arabic ──
-      { id: 'p2-mostafa-1', name: 'د. مصطفى سعد — Classical ML كامل', type: 'video', lang: 'ar', price: 'paid', url: 'https://drive.google.com/drive/folders/11prZislvJy0f6vTnd2eWmnCWaF0fJ5m6' },
+      { id: 'p2-mostafa-1', name: 'د. مصطفى سعد — Classical ML كامل', type: 'video', lang: 'ar', price: 'paid', url: 'https://t.me/mostvision/1179', desc: 'لدعم الكورس والحصول على الخصم، اذكر للدكتور أنك من طرف Abdulrahman Rizk والإيميل: abdulrahman.m.rezk@gmail.com' },
       { id: 'p2-s7', name: 'Hesham Asem — ML Arabic', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/@HeshamAsem' },
       // ── English ──
       { id: 'p2-s1', name: 'StatQuest with Josh Starmer — ML Playlist', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/@statquest' },
@@ -246,12 +248,12 @@ export const phases: Phase[] = [
     ],
     resources: [
       // ── Arabic ──
-      { id: 'p3-mostafa-1', name: 'د. مصطفى سعد — Deep Learning Intro', type: 'video', lang: 'ar', price: 'paid', url: 'https://drive.google.com/drive/folders/11prZislvJy0f6vTnd2eWmnCWaF0fJ5m6' },
+      { id: 'p3-mostafa-1', name: 'د. مصطفى سعد — Deep Learning Intro', type: 'video', lang: 'ar', price: 'paid', url: 'https://t.me/mostvision/1179', desc: 'لدعم الكورس والحصول على الخصم، اذكر للدكتور أنك من طرف Abdulrahman Rizk والإيميل: abdulrahman.m.rezk@gmail.com' },
       // ── English ──
       { id: 'p3-s2', name: 'fast.ai — Practical Deep Learning', type: 'video', lang: 'en', price: 'free', url: 'https://course.fast.ai' },
       { id: 'p3-s3', name: 'Andrej Karpathy — Neural Networks Zero to Hero', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ' },
       { id: 'p3-s4', name: 'Andrew Ng — Deep Learning Specialization', type: 'video', lang: 'en', price: 'free', url: 'https://www.coursera.org/specializations/deep-learning' },
-      { id: 'p3-s5', name: 'PyTorch Official Tutorials', type: 'article', lang: 'en', price: 'free', url: 'https://pytorch.org/tutorials' },
+      { id: 'p3-s5', groupId: 'p3-g4', name: 'PyTorch Official Tutorials', type: 'article', lang: 'en', price: 'free', url: 'https://pytorch.org/tutorials' },
       { id: 'p3-s6', name: 'Deep Learning Book — Goodfellow et al.', type: 'book', lang: 'en', price: 'free', url: 'https://www.deeplearningbook.org' },
       { id: 'p3-s7', name: 'd2l.ai — Dive into Deep Learning', type: 'book', lang: 'en', price: 'free', url: 'https://d2l.ai' },
       { id: 'p3-s8', name: 'MIT — Intro to Deep Learning', type: 'video', lang: 'en', price: 'free', url: 'http://introtodeeplearning.com' },
@@ -314,16 +316,16 @@ export const phases: Phase[] = [
       },
     ],
     resources: [
-      { id: 'p4-s1', name: 'PyImageSearch — OpenCV Tutorials', type: 'article', lang: 'en', price: 'free', url: 'https://pyimagesearch.com' },
-      { id: 'p4-s2', name: 'OpenCV Official Docs', type: 'article', lang: 'en', price: 'free', url: 'https://docs.opencv.org/4.x/d9/df8/tutorial_root.html' },
-      { id: 'p4-s3', name: 'Ultralytics YOLO Docs', type: 'article', lang: 'en', price: 'free', url: 'https://docs.ultralytics.com' },
-      { id: 'p4-s4', name: 'HuggingFace — Computer Vision Course', type: 'video', lang: 'en', price: 'free', url: 'https://huggingface.co/learn/computer-vision-course' },
-      { id: 'p4-s5', name: 'Roboflow — CV Tutorials & Projects', type: 'article', lang: 'en', price: 'free', url: 'https://roboflow.com/learn' },
+      { id: 'p4-s1', groupId: 'p4-g1', name: 'PyImageSearch — OpenCV Tutorials', type: 'article', lang: 'en', price: 'free', url: 'https://pyimagesearch.com' },
+      { id: 'p4-s2', groupId: 'p4-g1', name: 'OpenCV Official Docs', type: 'article', lang: 'en', price: 'free', url: 'https://docs.opencv.org/4.x/d9/df8/tutorial_root.html' },
+      { id: 'p4-s3', groupId: 'p4-g2', name: 'Ultralytics YOLO Docs', type: 'article', lang: 'en', price: 'free', url: 'https://docs.ultralytics.com' },
+      { id: 'p4-s4', groupId: 'p4-g2', name: 'HuggingFace — Computer Vision Course', type: 'video', lang: 'en', price: 'free', url: 'https://huggingface.co/learn/computer-vision-course' },
+      { id: 'p4-s5', groupId: 'p4-g2', name: 'Roboflow — CV Tutorials & Projects', type: 'article', lang: 'en', price: 'free', url: 'https://roboflow.com/learn' },
       { id: 'p4-s6', name: 'fast.ai — CV Part', type: 'video', lang: 'en', price: 'free', url: 'https://course.fast.ai' },
       { id: 'p4-s7', name: 'Programming Computer Vision — Jan Solem', type: 'book', lang: 'en', price: 'free', url: 'http://programmingcomputervision.com' },
       { id: 'p4-s8', name: 'Practical Deep Learning for CV — O\'Reilly', type: 'book', lang: 'en', price: 'paid', url: 'https://www.oreilly.com/library/view/practical-deep-learning/9781492034858/' },
       { id: 'p4-s9', name: 'Deep Learning for CV — Michigan', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/playlist?list=PL5-TkQAfAZFbzxjBHtzdVCWE0Zbhomg7r' },
-      { id: 'p4-s10', name: 'Modern CV — UC Berkeley CS198', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/playlist?list=PLzWRmD0Vi2KVsrCqA4VnztE4t71KnTnP5' },
+      { id: 'p4-s10', groupId: 'p4-g2', name: 'Modern CV — UC Berkeley CS198', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/playlist?list=PLzWRmD0Vi2KVsrCqA4VnztE4t71KnTnP5' },
     ],
     tasks: [
       { id: 'p4-task1', type: 'build', textAr: 'اعمل Real-time Face Detection بـ OpenCV' },
@@ -380,15 +382,15 @@ export const phases: Phase[] = [
       },
     ],
     resources: [
-      { id: 'p5-s1', name: 'HuggingFace — Transformers Course', type: 'video', lang: 'en', price: 'free', url: 'https://huggingface.co/learn/nlp-course' },
-      { id: 'p5-s2', name: 'HuggingFace — Computer Vision Course', type: 'video', lang: 'en', price: 'free', url: 'https://huggingface.co/learn/computer-vision-course' },
-      { id: 'p5-s3', name: 'OpenAI API Docs', type: 'article', lang: 'en', price: 'free', url: 'https://platform.openai.com/docs' },
-      { id: 'p5-s4', name: 'Andrej Karpathy — YouTube Channel', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/@AndrejKarpathy' },
-      { id: 'p5-s5', name: 'LangChain Docs', type: 'article', lang: 'en', price: 'free', url: 'https://python.langchain.com/docs' },
-      { id: 'p5-s7', name: 'LLM Bootcamp — Full Stack Deep Learning', type: 'video', lang: 'en', price: 'free', url: 'https://fullstackdeeplearning.com/llm-bootcamp/spring-2023/' },
+      { id: 'p5-s1', groupId: 'p5-g1', name: 'HuggingFace — Transformers Course', type: 'video', lang: 'en', price: 'free', url: 'https://huggingface.co/learn/nlp-course' },
+      { id: 'p5-s2', groupId: 'p5-g1', name: 'HuggingFace — Computer Vision Course', type: 'video', lang: 'en', price: 'free', url: 'https://huggingface.co/learn/computer-vision-course' },
+      { id: 'p5-s3', groupId: 'p5-g2', name: 'OpenAI API Docs', type: 'article', lang: 'en', price: 'free', url: 'https://platform.openai.com/docs' },
+      { id: 'p5-s4', groupId: 'p5-g2', name: 'Andrej Karpathy — YouTube Channel', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/@AndrejKarpathy' },
+      { id: 'p5-s5', groupId: 'p5-g3', name: 'LangChain Docs', type: 'article', lang: 'en', price: 'free', url: 'https://python.langchain.com/docs' },
+      { id: 'p5-s7', groupId: 'p5-g2', name: 'LLM Bootcamp — Full Stack Deep Learning', type: 'video', lang: 'en', price: 'free', url: 'https://fullstackdeeplearning.com/llm-bootcamp/spring-2023/' },
       { id: 'p5-s8', name: 'Moataz Elmesmary — DS Roadmap Resources', type: 'article', lang: 'ar', price: 'free', url: 'https://github.com/Moataz-Elmesmary/Data-Science-Roadmap' },
       { id: 'p5-s9', name: 'Speech & Language Processing — Jurafsky', type: 'book', lang: 'en', price: 'free', url: 'https://web.stanford.edu/~jurafsky/slp3/' },
-      { id: 'p5-s10', name: 'The Illustrated Transformer — Jay Alammar', type: 'article', lang: 'en', price: 'free', url: 'https://jalammar.github.io/illustrated-transformer/' },
+      { id: 'p5-s10', groupId: 'p5-g1', name: 'The Illustrated Transformer — Jay Alammar', type: 'article', lang: 'en', price: 'free', url: 'https://jalammar.github.io/illustrated-transformer/' },
       { id: 'p5-s11', name: 'roadmap.sh — AI Engineer', type: 'article', lang: 'en', price: 'free', url: 'https://roadmap.sh/ai-engineer' },
     ],
     tasks: [
@@ -445,16 +447,16 @@ export const phases: Phase[] = [
       },
     ],
     resources: [
-      { id: 'p6-s1', name: 'Gradio Docs', type: 'article', lang: 'en', price: 'free', url: 'https://www.gradio.app/guides' },
-      { id: 'p6-s2', name: 'FastAPI Docs', type: 'article', lang: 'en', price: 'free', url: 'https://fastapi.tiangolo.com' },
-      { id: 'p6-s3', name: 'Streamlit Docs', type: 'article', lang: 'en', price: 'free', url: 'https://docs.streamlit.io' },
-      { id: 'p6-s4', name: 'HuggingFace Spaces Guide', type: 'article', lang: 'en', price: 'free', url: 'https://huggingface.co/docs/hub/spaces' },
-      { id: 'p6-s5', name: 'TechWithTim — FastAPI + Docker', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/@TechWithTim' },
-      { id: 'p6-s6', name: 'Docker Official Docs — Get Started', type: 'article', lang: 'en', price: 'free', url: 'https://docs.docker.com/get-started/' },
-      { id: 'p6-s7', name: 'MLflow Docs', type: 'article', lang: 'en', price: 'free', url: 'https://mlflow.org/docs/latest/index.html' },
+      { id: 'p6-s1', groupId: 'p6-g1', name: 'Gradio Docs', type: 'article', lang: 'en', price: 'free', url: 'https://www.gradio.app/guides' },
+      { id: 'p6-s2', groupId: 'p6-g1', name: 'FastAPI Docs', type: 'article', lang: 'en', price: 'free', url: 'https://fastapi.tiangolo.com' },
+      { id: 'p6-s3', groupId: 'p6-g1', name: 'Streamlit Docs', type: 'article', lang: 'en', price: 'free', url: 'https://docs.streamlit.io' },
+      { id: 'p6-s4', groupId: 'p6-g2', name: 'HuggingFace Spaces Guide', type: 'article', lang: 'en', price: 'free', url: 'https://huggingface.co/docs/hub/spaces' },
+      { id: 'p6-s5', groupId: 'p6-g1', name: 'TechWithTim — FastAPI + Docker', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/@TechWithTim' },
+      { id: 'p6-s6', groupId: 'p6-g1', name: 'Docker Official Docs — Get Started', type: 'article', lang: 'en', price: 'free', url: 'https://docs.docker.com/get-started/' },
+      { id: 'p6-s7', groupId: 'p6-g3', name: 'MLflow Docs', type: 'article', lang: 'en', price: 'free', url: 'https://mlflow.org/docs/latest/index.html' },
       { id: 'p6-s8', name: 'MLOps Zoomcamp — DataTalks.Club', type: 'video', lang: 'en', price: 'free', url: 'https://github.com/DataTalksClub/mlops-zoomcamp' },
-      { id: 'p6-s9', name: 'FastAPI بالعربي — Codezilla', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/@Codezilla' },
-      { id: 'p6-s10', name: 'Designing Machine Learning Systems — Chip Huyen', type: 'book', lang: 'en', price: 'paid', url: 'https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/' },
+      { id: 'p6-s9', groupId: 'p6-g1', name: 'FastAPI بالعربي — Codezilla', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/@Codezilla' },
+      { id: 'p6-s10', groupId: 'p6-g3', name: 'Designing Machine Learning Systems — Chip Huyen', type: 'book', lang: 'en', price: 'paid', url: 'https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/' },
     ],
     tasks: [
       { id: 'p6-task1', type: 'build', textAr: 'ابني AI App كاملة بـ Gradio وانشرها', link: 'https://www.gradio.app' },
@@ -509,10 +511,10 @@ export const phases: Phase[] = [
       },
     ],
     resources: [
-      { id: 'p7-r1', name: 'ML Interview Guide — Chip Huyen', type: 'book', lang: 'en', price: 'free', url: 'https://huyenchip.com/ml-interviews-book/' },
-      { id: 'p7-r2', name: 'System Design Interview for AI', type: 'video', lang: 'en', price: 'paid', url: 'https://www.educative.io/courses/grokking-the-machine-learning-interview' },
-      { id: 'p7-r3', name: 'How to Build an ML Portfolio — TDS', type: 'article', lang: 'en', price: 'free', url: 'https://towardsdatascience.com/how-to-build-a-data-science-portfolio-5f566517c79c' },
-      { id: 'p7-r4', name: 'LeetCode — ML & Coding Interview', type: 'article', lang: 'en', price: 'free', url: 'https://leetcode.com' },
+      { id: 'p7-r1', groupId: 'p7-g3', name: 'ML Interview Guide — Chip Huyen', type: 'book', lang: 'en', price: 'free', url: 'https://huyenchip.com/ml-interviews-book/' },
+      { id: 'p7-r2', groupId: 'p7-g3', name: 'System Design Interview for AI', type: 'video', lang: 'en', price: 'paid', url: 'https://www.educative.io/courses/grokking-the-machine-learning-interview' },
+      { id: 'p7-r3', groupId: 'p7-g1', name: 'How to Build an ML Portfolio — TDS', type: 'article', lang: 'en', price: 'free', url: 'https://towardsdatascience.com/how-to-build-a-data-science-portfolio-5f566517c79c' },
+      { id: 'p7-r4', groupId: 'p7-g3', name: 'LeetCode — ML & Coding Interview', type: 'article', lang: 'en', price: 'free', url: 'https://leetcode.com' },
       { id: 'p7-r5', name: 'roadmap.sh — AI Engineer', type: 'article', lang: 'en', price: 'free', url: 'https://roadmap.sh/ai-engineer' },
     ],
     tasks: [
