@@ -12,9 +12,11 @@ export interface CustomResource {
 
 interface AppContextType {
   isAuthenticated: boolean;
+  username: string;
   pin: string;
-  authenticate: (enteredPin: string) => Promise<boolean>;
-  setNewPin: (newPin: string) => void;
+  login: (username: string, pin: string) => Promise<{ success: boolean; error?: string }>;
+  signup: (username: string, pin: string) => Promise<{ success: boolean; error?: string; recoveryCode?: string }>;
+  recoverPin: (username: string, recoveryCode: string) => Promise<{ success: boolean; error?: string; pin?: string }>;
   checkedTopics: Record<string, boolean>;
   checkedTasks: Record<string, boolean>;
   toggleTopic: (id: string) => void;
@@ -33,6 +35,7 @@ const AppContext = createContext<AppContextType | null>(null);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated]   = useState(false);
+  const [username, setUsername]                  = useState<string>(() => localStorage.getItem('ai-roadmap-username') || '');
   const [pin, setPinState]                       = useState<string>(() => localStorage.getItem('ai-roadmap-pin') || '');
   const [checkedTopics, setCheckedTopics]        = useState<Record<string, boolean>>(DEFAULT_CHECKED);
   const [checkedTasks, setCheckedTasks]          = useState<Record<string, boolean>>({});
@@ -52,9 +55,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => { rCustom.current = customResources; }, [customResources]);
 
   /* ── Firestore listener ── */
-  const attachListener = useCallback((p: string) => {
+  const attachListener = useCallback((pUsername: string) => {
     if (unsubRef.current) { unsubRef.current(); unsubRef.current = null; }
-    const ref = doc(db, 'progress', p);
+    const ref = doc(db, 'progress', pUsername);
     unsubRef.current = onSnapshot(
       ref,
       snap => {
@@ -71,14 +74,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   /* ── Debounced save ── */
-  const save = useCallback((p: string) => {
-    if (!p) return;
+  const save = useCallback((pUsername: string) => {
+    if (!pUsername) return;
     if (saveTimer.current) clearTimeout(saveTimer.current);
     setSyncStatus('syncing');
     saveTimer.current = setTimeout(async () => {
       try {
         await setDoc(
-          doc(db, 'progress', p),
+          doc(db, 'progress', pUsername),
           {
             checked: rTopics.current,
             tasks: rTasks.current,
@@ -94,98 +97,141 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }, 700);
   }, []);
 
-  /* ── Authenticate ── */
-  const authenticate = useCallback(async (enteredPin: string): Promise<boolean> => {
+  /* ── Login Logic ── */
+  const login = useCallback(async (enteredUsername: string, enteredPin: string) => {
     try {
-      const ref  = doc(db, 'progress', enteredPin);
+      const ref = doc(db, 'progress', enteredUsername);
       const snap = await getDoc(ref);
       if (!snap.exists()) {
-        await setDoc(ref, { checked: DEFAULT_CHECKED, tasks: {}, customResources: {}, createdAt: Date.now() });
-        setCheckedTopics(DEFAULT_CHECKED);
-        setCheckedTasks({});
-        setCustomResources({});
-      } else {
-        const d = snap.data() as any;
-        setCheckedTopics(d.checked           || DEFAULT_CHECKED);
-        setCheckedTasks(d.tasks              || {});
-        setCustomResources(d.customResources || {});
+        return { success: false, error: 'اسم المستخدم غير صحيح' };
       }
+      const d = snap.data() as any;
+      if (d.pin !== enteredPin) {
+        return { success: false, error: 'الرقم السري خاطئ' };
+      }
+      setCheckedTopics(d.checked || DEFAULT_CHECKED);
+      setCheckedTasks(d.tasks || {});
+      setCustomResources(d.customResources || {});
+      
+      localStorage.setItem('ai-roadmap-username', enteredUsername);
       localStorage.setItem('ai-roadmap-pin', enteredPin);
+      setUsername(enteredUsername);
       setPinState(enteredPin);
       setIsAuthenticated(true);
-      attachListener(enteredPin);
-      return true;
-    } catch (e) {
-      console.error('Auth error:', e);
-      return false;
+      attachListener(enteredUsername);
+      return { success: true };
+    } catch (error) {
+      console.error('Login error:', error);
+      return { success: false, error: 'حدث خطأ في الاتصال' };
     }
   }, [attachListener]);
 
+  /* ── Signup Logic ── */
+  const signup = useCallback(async (enteredUsername: string, enteredPin: string) => {
+    try {
+      const ref = doc(db, 'progress', enteredUsername);
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        return { success: false, error: 'اسم المستخدم محجوز، اختر اسماً آخر' };
+      }
+      
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let recoveryCode = '';
+      for (let i = 0; i < 6; i++) {
+        recoveryCode += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+
+      await setDoc(ref, { 
+        pin: enteredPin,
+        recoveryCode,
+        checked: DEFAULT_CHECKED, 
+        tasks: {}, 
+        customResources: {}, 
+        createdAt: Date.now() 
+      });
+
+      return { success: true, recoveryCode };
+    } catch (error) {
+      console.error('Signup error:', error);
+      return { success: false, error: 'حدث خطأ في الاتصال' };
+    }
+  }, []);
+
+  /* ── Account Recovery ── */
+  const recoverPin = useCallback(async (enteredUsername: string, enteredRecoveryCode: string) => {
+    try {
+      const ref = doc(db, 'progress', enteredUsername);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) {
+        return { success: false, error: 'اسم المستخدم غير صحيح' };
+      }
+      const d = snap.data() as any;
+      if (d.recoveryCode !== enteredRecoveryCode) {
+        return { success: false, error: 'كود الاسترجاع غير صحيح' };
+      }
+      return { success: true, pin: d.pin };
+    } catch (error) {
+      console.error('Recovery error:', error);
+      return { success: false, error: 'حدث خطأ في الاتصال' };
+    }
+  }, []);
+
   /* ── Auto-login ── */
   useEffect(() => {
+    const savedUsername = localStorage.getItem('ai-roadmap-username');
     const savedPin = localStorage.getItem('ai-roadmap-pin');
-    if (savedPin) authenticate(savedPin);
+    if (savedUsername && savedPin) {
+      login(savedUsername, savedPin);
+    }
     return () => { unsubRef.current?.(); };
-  }, []); // eslint-disable-line
-
-  /* ── Change PIN ── */
-  const setNewPin = useCallback((newPin: string) => {
-    localStorage.setItem('ai-roadmap-pin', newPin);
-    setPinState(newPin);
-    setDoc(
-      doc(db, 'progress', newPin),
-      { checked: rTopics.current, tasks: rTasks.current, customResources: rCustom.current, updatedAt: Date.now() },
-      { merge: true }
-    );
-    attachListener(newPin);
-  }, [attachListener]);
+  }, [login]);
 
   /* ── Toggles ── */
   const toggleTopic = useCallback((id: string) => {
-    const p = localStorage.getItem('ai-roadmap-pin') || pin;
+    const u = localStorage.getItem('ai-roadmap-username') || username;
     setCheckedTopics(prev => {
       const next = { ...prev, [id]: !prev[id] };
       rTopics.current = next;
-      save(p);
+      save(u);
       return next;
     });
-  }, [pin, save]);
+  }, [username, save]);
 
   const toggleTask = useCallback((id: string) => {
-    const p = localStorage.getItem('ai-roadmap-pin') || pin;
+    const u = localStorage.getItem('ai-roadmap-username') || username;
     setCheckedTasks(prev => {
       const next = { ...prev, [id]: !prev[id] };
       rTasks.current = next;
-      save(p);
+      save(u);
       return next;
     });
-  }, [pin, save]);
+  }, [username, save]);
 
   /* ── Custom Resources ── */
   const addCustomResource = useCallback((phaseId: string, resource: { name: string; url: string; note: string }) => {
-    const p = localStorage.getItem('ai-roadmap-pin') || pin;
+    const u = localStorage.getItem('ai-roadmap-username') || username;
     const newRes: CustomResource = { ...resource, id: `cr-${Date.now()}` };
     setCustomResources(prev => {
       const next = { ...prev, [phaseId]: [...(prev[phaseId] || []), newRes] };
       rCustom.current = next;
-      save(p);
+      save(u);
       return next;
     });
-  }, [pin, save]);
+  }, [username, save]);
 
   const removeCustomResource = useCallback((phaseId: string, resourceId: string) => {
-    const p = localStorage.getItem('ai-roadmap-pin') || pin;
+    const u = localStorage.getItem('ai-roadmap-username') || username;
     setCustomResources(prev => {
       const next = { ...prev, [phaseId]: (prev[phaseId] || []).filter(r => r.id !== resourceId) };
       rCustom.current = next;
-      save(p);
+      save(u);
       return next;
     });
-  }, [pin, save]);
+  }, [username, save]);
 
   return (
     <AppContext.Provider value={{
-      isAuthenticated, pin, authenticate, setNewPin,
+      isAuthenticated, username, pin, login, signup, recoverPin,
       checkedTopics, checkedTasks, toggleTopic, toggleTask,
       syncStatus, isSearchOpen, setIsSearchOpen,
       activePhase, setActivePhase,
