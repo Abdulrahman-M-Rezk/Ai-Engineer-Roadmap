@@ -10,6 +10,12 @@ export interface CustomResource {
   note: string;
 }
 
+export type TopicDetails = {
+  startDate?: string;
+  endDate?: string;
+  note?: string;
+};
+
 interface AppContextType {
   isAuthenticated: boolean;
   username: string;
@@ -33,6 +39,8 @@ interface AppContextType {
   updateResourceOrder: (phaseId: string, newOrder: string[]) => void;
   resetResourceOrder: (phaseId: string) => void;
   setNewPin: (newPin: string, recoveryCode: string) => Promise<{ success: boolean; error?: string }>;
+  topicDetails: Record<string, TopicDetails>;
+  updateTopicDetails: (topicId: string, details: Partial<TopicDetails>) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -45,6 +53,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [checkedTasks, setCheckedTasks]          = useState<Record<string, boolean>>({});
   const [customResources, setCustomResources]    = useState<Record<string, CustomResource[]>>({});
   const [resourceOrder, setResourceOrder]        = useState<Record<string, string[]>>({});
+  const [topicDetails, setTopicDetails]          = useState<Record<string, TopicDetails>>({});
   const [syncStatus, setSyncStatus]              = useState<'synced' | 'syncing' | 'error'>('synced');
   const [isSearchOpen, setIsSearchOpen]          = useState(false);
   const [activePhase, setActivePhase]            = useState<string | null>('phase-1');
@@ -55,11 +64,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const rTasks       = useRef<Record<string, boolean>>({});
   const rCustom      = useRef<Record<string, CustomResource[]>>({});
   const rOrder       = useRef<Record<string, string[]>>({});
+  const rTopicDetails = useRef<Record<string, TopicDetails>>({});
 
   useEffect(() => { rTopics.current = checkedTopics; }, [checkedTopics]);
   useEffect(() => { rTasks.current  = checkedTasks;  }, [checkedTasks]);
   useEffect(() => { rCustom.current = customResources; }, [customResources]);
   useEffect(() => { rOrder.current = resourceOrder; }, [resourceOrder]);
+  useEffect(() => { rTopicDetails.current = topicDetails; }, [topicDetails]);
 
   /* ── Firestore listener ── */
   const attachListener = useCallback((pUsername: string) => {
@@ -74,6 +85,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           setCheckedTasks(d.tasks            || {});
           setCustomResources(d.customResources || {});
           setResourceOrder(d.resourceOrder || {});
+          setTopicDetails(d.topicDetails || {});
         }
         setSyncStatus('synced');
       },
@@ -95,6 +107,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             tasks: rTasks.current,
             customResources: rCustom.current,
             resourceOrder: rOrder.current,
+            topicDetails: rTopicDetails.current,
             updatedAt: Date.now(),
           },
           { merge: true }
@@ -122,6 +135,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       setCheckedTasks(d.tasks || {});
       setCustomResources(d.customResources || {});
       setResourceOrder(d.resourceOrder || {});
+      setTopicDetails(d.topicDetails || {});
       
       localStorage.setItem('ai-roadmap-username', enteredUsername);
       localStorage.setItem('ai-roadmap-pin', enteredPin);
@@ -158,6 +172,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         tasks: {}, 
         customResources: {}, 
         resourceOrder: {},
+        topicDetails: {},
         createdAt: Date.now() 
       });
 
@@ -274,15 +289,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, [username, save]);
 
   const resetResourceOrder = useCallback((phaseId: string) => {
-    const u = localStorage.getItem('ai-roadmap-username') || username;
     setResourceOrder(prev => {
       const next = { ...prev };
       delete next[phaseId];
       rOrder.current = next;
-      save(u);
+      save(username);
       return next;
     });
-  }, [username, save]);
+  }, [save, username]);
+
+  const updateTopicDetails = useCallback((topicId: string, details: Partial<TopicDetails>) => {
+    setTopicDetails(prev => ({ ...prev, [topicId]: { ...prev[topicId], ...details } }));
+    rTopicDetails.current = { ...rTopicDetails.current, [topicId]: { ...rTopicDetails.current[topicId], ...details } };
+    save(username);
+  }, [save, username]);
 
   return (
     <AppContext.Provider value={{
@@ -292,6 +312,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       activePhase, setActivePhase,
       customResources, resourceOrder, addCustomResource, removeCustomResource,
       updateResourceOrder, resetResourceOrder,
+      topicDetails, updateTopicDetails
     }}>
       {children}
     </AppContext.Provider>

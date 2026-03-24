@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import confetti from 'canvas-confetti';
 import * as Accordion from '@radix-ui/react-accordion';
-import { GripVertical } from 'lucide-react';
+import { GripVertical, Copy, Check, Edit3, ChevronDown } from 'lucide-react';
 import {
   DndContext,
   closestCenter,
@@ -56,6 +56,8 @@ const PULSE_CLASS: Record<string, string> = {
 };
 
 function SortableResourceItem({ resource, rgb, color, onRemoveCustom }: { resource: any, rgb: string, color: string, onRemoveCustom: (id: string) => void }) {
+  const [copiedName, setCopiedName] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: resource.id });
 
   const style = {
@@ -104,8 +106,45 @@ function SortableResourceItem({ resource, rgb, color, onRemoveCustom }: { resour
            </div>
         )}
         
-        {resource.isCustom && resource.desc && (
-           <p style={{ color: '#475569', fontSize: 11, marginTop: 4 }}>{resource.desc}</p>
+        {resource.desc && (
+           <div style={{ marginTop: 8, padding: '8px 12px', background: 'rgba(56, 189, 248, 0.1)', borderLeft: '3px solid #38BDF8', borderRadius: '4px 8px 8px 4px' }}>
+             <p style={{ color: '#E0F2FE', fontSize: 11.5, lineHeight: 1.5, margin: 0 }}>{resource.desc}</p>
+           </div>
+        )}
+        
+        {resource.referral && (
+          <div style={{ marginTop: 8, padding: '12px 14px', background: 'rgba(56, 189, 248, 0.08)', borderRight: '3px solid #38BDF8', borderRadius: '8px 4px 4px 8px' }}>
+            <p style={{ color: '#E0F2FE', fontSize: 13, lineHeight: 1.6, margin: '0 0 12px 0', whiteSpace: 'pre-wrap' }}>
+              {resource.referral.message}
+            </p>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigator.clipboard.writeText(resource.referral.name);
+                  setCopiedName(true);
+                  setTimeout(() => setCopiedName(false), 2000);
+                }}
+                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 10px', borderRadius: 6, border: '1px solid rgba(56, 189, 248, 0.2)', background: 'rgba(255,255,255,0.05)', color: '#38BDF8', fontSize: 11, cursor: 'pointer', transition: 'all 0.2s', fontFamily: "'Cairo', sans-serif" }}
+              >
+                {copiedName ? <Check size={12} /> : <Copy size={12} />}
+                {copiedName ? 'تم النسخ' : resource.referral.name}
+              </button>
+              
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigator.clipboard.writeText(resource.referral.email);
+                  setCopiedEmail(true);
+                  setTimeout(() => setCopiedEmail(false), 2000);
+                }}
+                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 10px', borderRadius: 6, border: '1px solid rgba(56, 189, 248, 0.2)', background: 'rgba(255,255,255,0.05)', color: '#38BDF8', fontSize: 11, cursor: 'pointer', transition: 'all 0.2s', fontFamily: "'Cairo', sans-serif" }}
+              >
+                {copiedEmail ? <Check size={12} /> : <Copy size={12} />}
+                {copiedEmail ? 'تم النسخ' : resource.referral.email}
+              </button>
+            </div>
+          </div>
         )}
       </div>
       
@@ -124,10 +163,11 @@ function SortableResourceItem({ resource, rgb, color, onRemoveCustom }: { resour
 
 
 export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
-  const { checkedTopics, checkedTasks, toggleTopic, toggleTask, activePhase, setActivePhase, customResources, addCustomResource, removeCustomResource, resourceOrder, updateResourceOrder, resetResourceOrder } = useApp();
+  const { checkedTopics, checkedTasks, toggleTopic, toggleTask, activePhase, setActivePhase, customResources, addCustomResource, removeCustomResource, resourceOrder, updateResourceOrder, resetResourceOrder, topicDetails, updateTopicDetails } = useApp();
   const [activeTab, setActiveTab] = useState<TabType>('content');
   const [resourceFilter, setResourceFilter] = useState('all');
   const [showAddForm, setShowAddForm] = useState(false);
+  const [expandedTopic, setExpandedTopic] = useState<string | null>(null);
   const [newResName, setNewResName] = useState('');
   const [newResUrl, setNewResUrl] = useState('');
   const [newResNote, setNewResNote] = useState('');
@@ -489,61 +529,102 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                         {group.topics.map((topic, ti) => {
                           const checked = !!checkedTopics[topic.id];
                           return (
-                            <div
-                              key={topic.id}
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 10,
-                                padding: '8px 0',
-                                borderBottom: ti < group.topics.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
-                                cursor: 'pointer',
-                              }}
-                              onClick={() => handleToggleTopic(topic.id)}
-                            >
-                              {/* Custom checkbox */}
-                              <div style={{
-                                width: 22,
-                                height: 22,
-                                borderRadius: 6,
-                                border: checked ? `2px solid ${color}` : '2px solid rgba(255,255,255,0.15)',
-                                background: checked ? `rgba(${rgb}, 0.2)` : 'transparent',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0,
-                                transition: 'all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67)',
-                                boxShadow: checked ? `0 0 8px rgba(${rgb}, 0.4)` : 'none',
-                              }}>
-                                {checked && (
-                                  <span className="animate-checkbox" style={{ color, fontSize: 13, fontWeight: 700 }}>✓</span>
-                                )}
-                              </div>
-
-                              <div style={{ flex: 1 }}>
-                                <span style={{
-                                  color: checked ? '#475569' : '#CBD5E1',
-                                  textDecoration: checked ? 'line-through' : 'none',
-                                  fontSize: 13,
-                                  fontWeight: checked ? 400 : 600,
-                                  transition: 'all 0.2s',
+                            <div key={topic.id} style={{ borderBottom: ti < group.topics.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: 10,
+                                  padding: '8px 0',
+                                  cursor: 'pointer',
+                                }}
+                                onClick={() => handleToggleTopic(topic.id)}
+                              >
+                                {/* Custom checkbox */}
+                                <div style={{
+                                  width: 22,
+                                  height: 22,
+                                  borderRadius: 6,
+                                  border: checked ? `2px solid ${color}` : '2px solid rgba(255,255,255,0.15)',
+                                  background: checked ? `rgba(${rgb}, 0.2)` : 'transparent',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  flexShrink: 0,
+                                  transition: 'all 0.25s cubic-bezier(0.17, 0.67, 0.83, 0.67)',
+                                  boxShadow: checked ? `0 0 8px rgba(${rgb}, 0.4)` : 'none',
                                 }}>
-                                  {topic.nameAr}
-                                </span>
-                                {topic.essential && (
-                                  <span style={{
-                                    marginRight: 6,
-                                    fontSize: 10,
-                                    color: '#FBBF24',
-                                    background: 'rgba(251,191,36,0.1)',
-                                    borderRadius: 4,
-                                    padding: '1px 5px',
-                                    border: '1px solid rgba(251,191,36,0.2)',
-                                  }}>⭐ أساسي</span>
-                                )}
-                              </div>
+                                  {checked && (
+                                    <span className="animate-checkbox" style={{ color, fontSize: 13, fontWeight: 700 }}>✓</span>
+                                  )}
+                                </div>
 
-                              <span style={{ color: '#334155', fontSize: 11 }}>{topic.nameEn}</span>
+                                <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+                                  <span style={{
+                                    color: checked ? '#475569' : '#CBD5E1',
+                                    textDecoration: checked ? 'line-through' : 'none',
+                                    fontSize: 13,
+                                    fontWeight: checked ? 400 : 600,
+                                    transition: 'all 0.2s',
+                                  }}>
+                                    {topic.nameAr}
+                                  </span>
+                                  {topic.essential && (
+                                    <span style={{
+                                      marginRight: 6,
+                                      fontSize: 10,
+                                      color: '#FBBF24',
+                                      background: 'rgba(251,191,36,0.1)',
+                                      borderRadius: 4,
+                                      padding: '1px 5px',
+                                      border: '1px solid rgba(251,191,36,0.2)',
+                                    }}>⭐ أساسي</span>
+                                  )}
+                                  <button
+                                    onClick={(e) => { e.stopPropagation(); setExpandedTopic(expandedTopic === topic.id ? null : topic.id); }}
+                                    style={{ background: 'none', border: 'none', color: expandedTopic === topic.id ? color : '#64748B', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', padding: '4px 8px', marginRight: 8, transition: 'color 0.2s', borderRadius: 6 }}
+                                    title="إضافة ملاحظات وتواريخ"
+                                  >
+                                    <Edit3 size={14} />
+                                  </button>
+                                </div>
+
+                                <span style={{ color: '#334155', fontSize: 11 }}>{topic.nameEn}</span>
+                              </div>
+                              
+                              {/* Inline Details Panel */}
+                              {expandedTopic === topic.id && (
+                                <div className="animate-slide-down" style={{ padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: 8, marginBottom: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                  <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                                    <div style={{ flex: 1, minWidth: 120 }}>
+                                      <label style={{ display: 'block', fontSize: 11, color: '#94A3B8', marginBottom: 4 }}>تاريخ البدء</label>
+                                      <input type="date"
+                                        value={topicDetails[topic.id]?.startDate || ''}
+                                        onChange={(e) => updateTopicDetails(topic.id, { startDate: e.target.value })}
+                                        style={{ width: '100%', padding: '6px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.3)', color: '#F8FAFC', fontSize: 12, fontFamily: "'Cairo', sans-serif", outline: 'none', colorScheme: 'dark' }}
+                                      />
+                                    </div>
+                                    <div style={{ flex: 1, minWidth: 120 }}>
+                                      <label style={{ display: 'block', fontSize: 11, color: '#94A3B8', marginBottom: 4 }}>تاريخ الانتهاء</label>
+                                      <input type="date"
+                                        value={topicDetails[topic.id]?.endDate || ''}
+                                        onChange={(e) => updateTopicDetails(topic.id, { endDate: e.target.value })}
+                                        style={{ width: '100%', padding: '6px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.3)', color: '#F8FAFC', fontSize: 12, fontFamily: "'Cairo', sans-serif", outline: 'none', colorScheme: 'dark' }}
+                                      />
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <label style={{ display: 'block', fontSize: 11, color: '#94A3B8', marginBottom: 4 }}>ملاحظات</label>
+                                    <textarea
+                                      value={topicDetails[topic.id]?.note || ''}
+                                      onChange={(e) => updateTopicDetails(topic.id, { note: e.target.value })}
+                                      placeholder="اكتب ملاحظاتك هنا..."
+                                      rows={2}
+                                      style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.3)', color: '#F8FAFC', fontSize: 12, fontFamily: "'Cairo', sans-serif", outline: 'none', resize: 'vertical' }}
+                                    />
+                                  </div>
+                                </div>
+                              )}
                             </div>
                           );
                         })}

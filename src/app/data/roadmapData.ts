@@ -21,6 +21,7 @@ export interface Resource {
   url?: string;
   groupId?: string;
   desc?: string;
+  referral?: { message: string; name: string; email: string; };
 }
 
 export interface Task {
@@ -171,7 +172,7 @@ export const phases: Phase[] = [
     ],
     resources: [
       // ── Arabic ──
-      { id: 'p2-mostafa-1', name: 'د. مصطفى سعد — Classical ML كامل', type: 'video', lang: 'ar', price: 'paid', url: 'https://t.me/mostvision/1179', desc: 'لدعم الكورس والحصول على الخصم، اذكر للدكتور أنك من طرف Abdulrahman Rizk والإيميل: abdulrahman.m.rezk@gmail.com' },
+      { id: 'p2-mostafa-1', name: 'د. مصطفى سعد — Classical ML كامل', type: 'video', lang: 'ar', price: 'paid', url: 'https://t.me/mostvision/1179', referral: { message: '🚀 هنا أنصحك متضيعش وقتك في كورسات كتير! إستثمر في نفسك صح \n كورس د. مصطفى سعد مش مجرد شرح هو "تأسيس لك أنت شخصياً" يختصر عليك شهور من التشتت \n و هيريحك أنت في اللي جاي.\n 💡 نصيحة ذهبية: عند تواصلك للاشتراك، أخبر الدكتور أنك قادم من طرف زميلك. \nهذا الإجراء يمنحنا معاً خصومات استثنائية على الكورسات القادمة!', name: 'Abdulrahman Rizk', email: 'abdulrahman.m.rezk@gmail.com' } },
       { id: 'p2-s7', name: 'Hesham Asem — ML Arabic', type: 'video', lang: 'ar', price: 'free', url: 'https://www.youtube.com/@HeshamAsem' },
       // ── English ──
       { id: 'p2-s1', name: 'StatQuest with Josh Starmer — ML Playlist', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/@statquest' },
@@ -248,7 +249,7 @@ export const phases: Phase[] = [
     ],
     resources: [
       // ── Arabic ──
-      { id: 'p3-mostafa-1', name: 'د. مصطفى سعد — Deep Learning Intro', type: 'video', lang: 'ar', price: 'paid', url: 'https://t.me/mostvision/1179', desc: 'لدعم الكورس والحصول على الخصم، اذكر للدكتور أنك من طرف Abdulrahman Rizk والإيميل: abdulrahman.m.rezk@gmail.com' },
+      { id: 'p3-mostafa-1', name: 'د. مصطفى سعد — Deep Learning Intro', type: 'video', lang: 'ar', price: 'paid', url: 'https://t.me/mostvision/1179', referral: { message: '🚀 هنا أنصحك متضيعش وقتك في كورسات كتير! إستثمر في نفسك صح \n كورس د. مصطفى سعد مش مجرد شرح هو "تأسيس لك أنت شخصياً" يختصر عليك شهور من التشتت \n و هيريحك أنت في اللي جاي.\n 💡 نصيحة ذهبية: عند تواصلك للاشتراك، أخبر الدكتور أنك قادم من طرف زميلك. \nهذا الإجراء يمنحنا معاً خصومات استثنائية على الكورسات القادمة!', name: 'Abdulrahman Rizk', email: 'abdulrahman.m.rezk@gmail.com' } },
       // ── English ──
       { id: 'p3-s2', name: 'fast.ai — Practical Deep Learning', type: 'video', lang: 'en', price: 'free', url: 'https://course.fast.ai' },
       { id: 'p3-s3', name: 'Andrej Karpathy — Neural Networks Zero to Hero', type: 'video', lang: 'en', price: 'free', url: 'https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ' },
