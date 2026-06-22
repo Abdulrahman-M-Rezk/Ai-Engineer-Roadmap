@@ -31,7 +31,7 @@ const TOPICS_MAP: Record<string, MockResult> = {
   'transformer': {
     topic: 'Transformer Architecture',
     description:
-      'الـ Transformer هو أس��س كل الـ LLMs الحديثة زي GPT وـ BERT. معماريته بتعتمد على Attention Mechanism بدل الـ RNNs. فهمه مهم جدًا لأي AI Engineer.',
+      'الـ Transformer هو أساس كل الـ LLMs الحديثة زي GPT وـ BERT. معماريته بتعتمد على Attention Mechanism بدل الـ RNNs. فهمه مهم جدًا لأي AI Engineer.',
     resources: [
       { type: 'video', name: 'Andrej Karpathy — Building GPT from Scratch', lang: 'en', price: 'free' },
       { type: 'article', name: 'The Illustrated Transformer — Jay Alammar', lang: 'en', price: 'free' },
@@ -123,55 +123,29 @@ export function SearchModal() {
   return (
     <div
       dir="rtl"
+      className="fixed inset-0 z-[1000] flex items-center justify-center p-4"
       style={{
-        position: 'fixed',
-        inset: 0,
         background: 'rgba(6, 10, 18, 0.85)',
         backdropFilter: 'blur(16px)',
-        zIndex: 1000,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '1rem',
-        fontFamily: "'Cairo', sans-serif",
       }}
       onClick={e => { if (e.target === e.currentTarget) setIsSearchOpen(false); }}
     >
       <div
-        className="animate-slide-down"
+        className="animate-slide-down w-full max-w-[560px] rounded-3xl p-8 max-h-[90vh] overflow-y-auto"
         style={{
-          width: '100%',
-          maxWidth: 560,
           background: 'rgba(13, 21, 37, 0.95)',
           border: '1px solid rgba(167, 139, 250, 0.4)',
-          borderRadius: 24,
-          padding: '32px 28px',
           boxShadow: '0 0 60px rgba(167,139,250,0.2), 0 30px 80px rgba(0,0,0,0.6)',
-          maxHeight: '90vh',
-          overflowY: 'auto',
         }}
       >
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-          <h2 style={{ color: '#F1F5F9', fontSize: 20, fontWeight: 800 }}>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-slate-200 text-xl font-black">
             🔍 ابحث عن أي topic
           </h2>
           <button
             onClick={() => setIsSearchOpen(false)}
-            style={{
-              background: 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              color: '#64748B',
-              width: 36,
-              height: 36,
-              borderRadius: 10,
-              cursor: 'pointer',
-              fontSize: 16,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'all 0.2s',
-            }}
+            className="bg-white/5 border border-white/10 text-slate-500 w-9 h-9 rounded-xl cursor-pointer text-base flex items-center justify-center transition-all"
             onMouseEnter={e => (e.currentTarget.style.color = '#F1F5F9')}
             onMouseLeave={e => (e.currentTarget.style.color = '#64748B')}
           >
@@ -180,7 +154,7 @@ export function SearchModal() {
         </div>
 
         {/* Search input */}
-        <div style={{ position: 'relative', marginBottom: 16 }}>
+        <div className="relative mb-4">
           <input
             ref={inputRef}
             type="text"
@@ -188,18 +162,10 @@ export function SearchModal() {
             onChange={e => setQuery(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleSearch()}
             placeholder="اكتب الـ topic اللي عايز تتعلمه... مثلاً: RAG, LangChain, Docker"
+            className="w-full p-[14px_16px] rounded-xl text-slate-200 text-sm outline-none transition-all box-border"
             style={{
-              width: '100%',
-              padding: '14px 16px',
-              borderRadius: 14,
               border: '1px solid rgba(167,139,250,0.3)',
               background: 'rgba(255,255,255,0.04)',
-              color: '#F1F5F9',
-              fontSize: 14,
-              fontFamily: "'Cairo', sans-serif",
-              outline: 'none',
-              boxSizing: 'border-box',
-              transition: 'all 0.2s',
             }}
             onFocus={e => {
               e.target.style.border = '1px solid rgba(167,139,250,0.7)';
@@ -216,47 +182,31 @@ export function SearchModal() {
         <button
           onClick={handleSearch}
           disabled={loading || !query.trim()}
+          className="w-full p-[14px] rounded-xl border-none text-sm font-black mb-5 transition-all"
           style={{
-            width: '100%',
-            padding: '14px',
-            borderRadius: 14,
-            border: 'none',
             background: loading || !query.trim()
               ? 'rgba(167,139,250,0.2)'
               : 'linear-gradient(135deg, #A78BFA, #7C3AED)',
             color: loading || !query.trim() ? '#64748B' : '#fff',
-            fontSize: 15,
-            fontWeight: 800,
-            fontFamily: "'Cairo', sans-serif",
             cursor: loading || !query.trim() ? 'not-allowed' : 'pointer',
-            transition: 'all 0.3s',
             boxShadow: loading || !query.trim() ? 'none' : '0 4px 20px rgba(167,139,250,0.4)',
-            marginBottom: 20,
           }}
         >
           {loading ? (
-            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+            <span className="flex items-center justify-center gap-[6px]">
               جاري البحث
-              <span className="animate-dots-1" style={{ width: 8, height: 8, borderRadius: '50%', background: '#A78BFA', display: 'inline-block' }} />
-              <span className="animate-dots-2" style={{ width: 8, height: 8, borderRadius: '50%', background: '#A78BFA', display: 'inline-block' }} />
-              <span className="animate-dots-3" style={{ width: 8, height: 8, borderRadius: '50%', background: '#A78BFA', display: 'inline-block' }} />
+              <span className="w-2 h-2 rounded-full bg-purple-400 inline-block animate-dots-1" />
+              <span className="w-2 h-2 rounded-full bg-purple-400 inline-block animate-dots-2" />
+              <span className="w-2 h-2 rounded-full bg-purple-400 inline-block animate-dots-3" />
             </span>
           ) : 'بحث بـ AI ✨'}
         </button>
 
         {/* Loading state */}
         {loading && (
-          <div style={{ textAlign: 'center', padding: '20px 0' }}>
-            <div style={{
-              width: 48,
-              height: 48,
-              borderRadius: '50%',
-              border: '3px solid rgba(167,139,250,0.2)',
-              borderTop: '3px solid #A78BFA',
-              animation: 'spin 1s linear infinite',
-              margin: '0 auto 12px',
-            }} />
-            <p style={{ color: '#64748B', fontSize: 13 }}>بنسأل الـ AI عن أفضل مصادر...</p>
+          <div className="text-center py-5">
+            <div className="w-12 h-12 rounded-full border-3 border-purple-400/20 mx-auto mb-3" style={{ borderTop: '3px solid #A78BFA', animation: 'spin 1s linear infinite' }} />
+            <p className="text-slate-500 text-sm">بنسأل الـ AI عن أفضل مصادر...</p>
             <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
           </div>
         )}
@@ -265,47 +215,38 @@ export function SearchModal() {
         {result && !loading && (
           <div className="animate-slide-down">
             {/* Topic description */}
-            <div style={{
-              padding: '16px',
-              borderRadius: 14,
+            <div className="p-4 rounded-xl mb-[14px]" style={{
               border: '1px solid rgba(167,139,250,0.2)',
               background: 'rgba(167,139,250,0.05)',
-              marginBottom: 14,
             }}>
-              <h3 style={{ color: '#A78BFA', fontSize: 15, fontWeight: 800, marginBottom: 8 }}>
+              <h3 className="text-purple-400 text-sm font-black mb-2">
                 {result.topic}
               </h3>
-              <p style={{ color: '#94A3B8', fontSize: 13, lineHeight: 1.8 }}>{result.description}</p>
+              <p className="text-slate-400 text-sm leading-relaxed">{result.description}</p>
             </div>
 
             {/* Resources */}
-            <p style={{ color: '#64748B', fontSize: 12, fontWeight: 700, marginBottom: 10, letterSpacing: 1 }}>
+            <p className="text-slate-500 text-xs font-bold mb-2.5 tracking-[1px]">
               المصادر المقترحة:
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 14 }}>
+            <div className="flex flex-col gap-2 mb-[14px]">
               {result.resources.map((r, i) => (
-                <div key={i} style={{
-                  padding: '12px 14px',
-                  borderRadius: 12,
+                <div key={i} className="p-[12px_14px] rounded-xl flex items-center justify-between gap-2.5" style={{
                   border: '1px solid rgba(255,255,255,0.07)',
                   background: 'rgba(255,255,255,0.03)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: 10,
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ fontSize: 18 }}>{getTypeIcon(r.type)}</span>
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-lg">{getTypeIcon(r.type)}</span>
                     <div>
-                      <p style={{ color: '#CBD5E1', fontSize: 12, fontWeight: 600 }}>{r.name}</p>
-                      <div style={{ display: 'flex', gap: 5, marginTop: 3 }}>
-                        <span style={{ fontSize: 10, color: '#A78BFA', background: 'rgba(167,139,250,0.1)', padding: '1px 6px', borderRadius: 4 }}>
+                      <p className="text-slate-300 text-xs font-semibold">{r.name}</p>
+                      <div className="flex gap-[5px] mt-[3px]">
+                        <span className="text-[10px] text-purple-400 bg-purple-400/10 px-[6px] py-[1px] rounded">
                           {getTypeLabel(r.type)}
                         </span>
-                        <span style={{ fontSize: 10, color: r.lang === 'ar' ? '#34D399' : '#00D4FF', background: r.lang === 'ar' ? 'rgba(52,211,153,0.1)' : 'rgba(0,212,255,0.1)', padding: '1px 6px', borderRadius: 4 }}>
+                        <span className={`text-[10px] px-[6px] py-[1px] rounded ${r.lang === 'ar' ? 'text-emerald-400 bg-emerald-400/10' : 'text-cyan-400 bg-cyan-400/10'}`}>
                           {r.lang === 'ar' ? '🇪🇬 عربي' : '🌍 English'}
                         </span>
-                        <span style={{ fontSize: 10, color: r.price === 'free' ? '#34D399' : '#FBBF24', background: r.price === 'free' ? 'rgba(52,211,153,0.1)' : 'rgba(251,191,36,0.1)', padding: '1px 6px', borderRadius: 4 }}>
+                        <span className={`text-[10px] px-[6px] py-[1px] rounded ${r.price === 'free' ? 'text-emerald-400 bg-emerald-400/10' : 'text-amber-400 bg-amber-400/10'}`}>
                           {r.price === 'free' ? 'مجاني' : 'مدفوع'}
                         </span>
                       </div>
@@ -316,37 +257,24 @@ export function SearchModal() {
             </div>
 
             {/* Task card */}
-            <div style={{
-              padding: '14px 16px',
-              borderRadius: 12,
+            <div className="p-[14px_16px] rounded-xl flex items-start gap-2.5 mb-4" style={{
               border: '1px solid rgba(251,146,60,0.25)',
               background: 'rgba(251,146,60,0.06)',
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: 10,
-              marginBottom: 16,
             }}>
-              <span style={{ fontSize: 20, flexShrink: 0 }}>🚀</span>
+              <span className="text-xl shrink-0">🚀</span>
               <div>
-                <p style={{ color: '#FB923C', fontSize: 12, fontWeight: 700, marginBottom: 4 }}>التكليف المقترح</p>
-                <p style={{ color: '#CBD5E1', fontSize: 13, lineHeight: 1.7 }}>{result.task}</p>
+                <p className="text-orange-400 text-xs font-bold mb-1">التكليف المقترح</p>
+                <p className="text-slate-300 text-sm leading-relaxed">{result.task}</p>
               </div>
             </div>
 
             {/* Add to roadmap button */}
             <button
+              className="w-full p-[13px] rounded-xl text-sm font-bold cursor-pointer transition-all"
               style={{
-                width: '100%',
-                padding: '13px',
-                borderRadius: 12,
                 border: '1px solid rgba(52,211,153,0.3)',
                 background: 'rgba(52,211,153,0.1)',
                 color: '#34D399',
-                fontSize: 14,
-                fontWeight: 700,
-                fontFamily: "'Cairo', sans-serif",
-                cursor: 'pointer',
-                transition: 'all 0.2s',
               }}
               onMouseEnter={e => {
                 (e.currentTarget as HTMLButtonElement).style.background = 'rgba(52,211,153,0.2)';
