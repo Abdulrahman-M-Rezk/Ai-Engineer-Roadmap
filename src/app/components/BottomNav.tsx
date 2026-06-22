@@ -6,20 +6,11 @@ export function BottomNav() {
 
   return (
     <div
+      className="fixed bottom-0 left-0 right-0 flex justify-around items-center px-1 pb-[14px] pt-2.5 z-50"
       style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
         background: 'rgba(6, 10, 18, 0.92)',
         backdropFilter: 'blur(20px)',
         borderTop: '1px solid rgba(255,255,255,0.06)',
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        padding: '10px 4px 14px',
-        zIndex: 50,
-        fontFamily: "'Cairo', sans-serif",
       }}
     >
       {phases.map(phase => {
@@ -36,22 +27,10 @@ export function BottomNav() {
             key={phase.id}
             onClick={() => {
               setActivePhase(isActive ? null : phase.id);
-              // Scroll to phase
               document.getElementById(phase.id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 2,
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: '4px 6px',
-              borderRadius: 10,
-              transition: 'all 0.2s',
-              opacity: isActive ? 1 : 0.6,
-            }}
+            className="flex flex-col items-center gap-0.5 bg-none border-none cursor-pointer px-[6px] py-1 rounded-lg transition-all"
+            style={{ opacity: isActive ? 1 : 0.6 }}
           >
             {/* Phase circle */}
             <div style={{

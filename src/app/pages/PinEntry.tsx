@@ -17,7 +17,6 @@ export default function PinEntry() {
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   
-  // Modals / Success states
   const [signupRecoveryCode, setSignupRecoveryCode] = useState<string | null>(null);
   const [recoveredPin, setRecoveredPin] = useState<string | null>(null);
 
@@ -108,14 +107,10 @@ export default function PinEntry() {
   };
 
   return (
-    <div dir="rtl" className="noise-bg" style={{
-      minHeight: '100vh', background: '#060A12',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      fontFamily: "'Cairo', sans-serif", position: 'relative', overflow: 'hidden',
-    }}>
+    <div dir="rtl" className="noise-bg min-h-screen bg-[#060A12] flex items-center justify-center relative overflow-hidden">
       {/* Background glows */}
-      <div style={{ position:'absolute', top:'20%', left:'50%', transform:'translateX(-50%)', width:600, height:600, background:'radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%)', pointerEvents:'none' }} />
-      <div style={{ position:'absolute', bottom:'10%', right:'10%', width:400, height:400, background:'radial-gradient(circle, rgba(167,139,250,0.06) 0%, transparent 70%)', pointerEvents:'none' }} />
+      <div className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%)' }} />
+      <div className="absolute bottom-[10%] right-[10%] w-[400px] h-[400px] pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(167,139,250,0.06) 0%, transparent 70%)' }} />
 
       {/* Card */}
       <div className={`glass-card ${shake ? 'animate-shake' : ''}`} style={{
@@ -129,24 +124,16 @@ export default function PinEntry() {
       }}>
         {signupRecoveryCode ? (
           <div>
-            <div className="animate-float" style={{ fontSize:64, marginBottom:20 }}>🎉</div>
-            <h2 style={{ color:'#fff', fontSize:22, marginBottom:16 }}>تم إنشاء الحساب بنجاح!</h2>
+            <div className="animate-float text-6xl mb-5">🎉</div>
+            <h2 className="text-white text-[22px] mb-4">تم إنشاء الحساب بنجاح!</h2>
             
-            <div style={{
-              background: 'rgba(248,113,113,0.1)',
-              border: '1px solid rgba(248,113,113,0.5)',
-              borderRadius: 12, padding: 16, marginBottom: 20
-            }}>
-              <p style={{ color: '#FCA5A5', fontSize: 13, fontWeight: 700, margin: 0, lineHeight: 1.6 }}>
+            <div className="bg-red-400/10 border border-red-400/50 rounded-xl p-4 mb-5">
+              <p className="text-red-300 text-sm font-bold m-0 leading-relaxed">
                 ⚠️ تحذير هام: احتفظ بهذا الكود في مكان آمن جداً. إذا فقدت الرقم السري، فهذا الكود هو الطريقة الوحيدة لاسترجاع حسابك وتغيير رقمك السري لاحقاً!
               </p>
             </div>
 
-            <div style={{
-              background:'rgba(255,255,255,0.1)', padding:'16px', borderRadius:12,
-              fontSize:32, letterSpacing:4, fontWeight:900, color:'#34D399', marginBottom:20,
-              userSelect:'all', display: 'flex', justifyContent: 'center', alignItems: 'center'
-            }}>
+            <div className="bg-white/10 p-4 rounded-xl text-[32px] tracking-[4px] font-black text-emerald-400 mb-5 select-all flex justify-center items-center">
               {signupRecoveryCode}
             </div>
             
@@ -154,100 +141,72 @@ export default function PinEntry() {
               navigator.clipboard.writeText(signupRecoveryCode);
               setCopied(true);
               setTimeout(() => setCopied(false), 2000);
-            }} style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-              width: '100%', padding: '12px', borderRadius: 12, border: '1px solid rgba(52,211,153,0.4)',
-              background: 'rgba(52,211,153,0.1)', color: '#34D399', fontSize: 14, fontWeight: 700,
-              cursor: 'pointer', fontFamily: "'Cairo', sans-serif", marginBottom: 24, transition: 'all 0.2s'
-            }}>
+            }} className="flex items-center justify-center gap-2 w-full p-3 rounded-xl border border-emerald-400/40 bg-emerald-400/10 text-emerald-400 text-sm font-bold cursor-pointer mb-6 transition-all">
               {copied ? 'تم النسخ ✓' : <><Copy size={16} /> نسخ الكود</>}
             </button>
 
             <button onClick={() => {
-              // Auto-login after generating recovery code
               resetForm('login');
               handleSubmit(digits.join(''));
-            }} style={{
-              width:'100%', padding:'16px', borderRadius:14, border:'none',
-              background: 'linear-gradient(135deg,#34D399,#059669)',
-              color:'#000', fontSize:18, fontWeight:800, cursor:'pointer', fontFamily:"'Cairo', sans-serif"
-            }}>
+            }} className="w-full p-4 rounded-xl border-none bg-gradient-to-r from-emerald-400 to-emerald-600 text-black text-lg font-black cursor-pointer">
               دخول للوحة التحكم →
             </button>
           </div>
         ) : recoveredPin ? (
           <div>
-            <div className="animate-float" style={{ fontSize:64, marginBottom:20 }}>🔓</div>
-            <h2 style={{ color:'#fff', fontSize:22, marginBottom:16 }}>تم استرجاع الرقم السري</h2>
-            <div style={{
-              background:'rgba(255,255,255,0.1)', padding:'16px', borderRadius:12,
-              fontSize:36, letterSpacing:8, fontWeight:900, color:'#00D4FF', marginBottom:32,
-            }}>
+            <div className="animate-float text-6xl mb-5">🔓</div>
+            <h2 className="text-white text-[22px] mb-4">تم استرجاع الرقم السري</h2>
+            <div className="bg-white/10 p-4 rounded-xl text-4xl tracking-[8px] font-black text-cyan-400 mb-8">
               {recoveredPin}
             </div>
-            <button onClick={() => resetForm('login')} style={{
-              width:'100%', padding:'16px', borderRadius:14, border:'none',
-              background: 'linear-gradient(135deg,#00D4FF,#0099BB)',
-              color:'#000', fontSize:18, fontWeight:800, cursor:'pointer', fontFamily:"'Cairo', sans-serif"
-            }}>
+            <button onClick={() => resetForm('login')} className="w-full p-4 rounded-xl border-none bg-gradient-to-r from-cyan-400 to-cyan-600 text-black text-lg font-black cursor-pointer">
               العودة لتسجيل الدخول
             </button>
           </div>
         ) : (
           <>
-            <div className="animate-float" style={{ fontSize:64, marginBottom:20, display:'block', lineHeight:1 }}>
+            <div className="animate-float text-6xl mb-5 block leading-none">
               {mode === 'signup' ? '✨' : mode === 'recovery' ? '🔑' : '🔐'}
             </div>
 
-            <h1 style={{
+            <h1 className="font-black mb-2 leading-tight text-[26px]" style={{
               background: 'linear-gradient(135deg, #00D4FF, #A78BFA)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              fontSize: 26, fontWeight: 800, marginBottom: 8, lineHeight: 1.4,
             }}>
               {mode === 'signup' ? 'إنشاء حساب جديد' : mode === 'recovery' ? 'استرجاع الرقم السري' : 'تسجيل دخول'}
             </h1>
-            <p style={{ color:'#64748B', fontSize:14, marginBottom:36 }}>AI Engineer Roadmap · نظام شخصي</p>
+            <p className="text-slate-500 text-sm mb-9">AI Engineer Roadmap · نظام شخصي</p>
 
             {/* Username input */}
-            <div style={{ marginBottom: 20 }}>
+            <div className="mb-5">
               <input
                 ref={usernameRef}
                 type="text"
                 placeholder="اسم المستخدم"
                 value={username}
                 onChange={e => setUsername(e.target.value)}
-                style={{
-                  width:'100%', padding:'14px 16px', borderRadius:14,
-                  background: 'rgba(13,21,37,0.9)', border: '2px solid rgba(255,255,255,0.08)',
-                  color:'#fff', fontSize:16, fontFamily:"'Cairo', sans-serif", outline:'none',
-                  transition:'all 0.2s ease', 
-                }}
+                className="w-full p-[14px_16px] rounded-xl bg-[#0D1525]/90 border-2 border-white/10 text-white text-base outline-none transition-all"
                 onFocus={e => { e.target.style.border='2px solid #00D4FF'; }}
                 onBlur={e => { e.target.style.border='2px solid rgba(255,255,255,0.08)'; }}
               />
             </div>
 
             {mode === 'recovery' ? (
-              <div style={{ marginBottom: 28 }}>
+              <div className="mb-7">
                 <input
                   type="text"
                   placeholder="كود الاسترجاع (6 رموز)"
                   maxLength={6}
                   value={recoveryCodeInput}
                   onChange={e => setRecoveryCodeInput(e.target.value)}
-                  style={{
-                    width:'100%', padding:'14px 16px', borderRadius:14,
-                    background: 'rgba(13,21,37,0.9)', border: '2px solid rgba(255,255,255,0.08)',
-                    color:'#fff', fontSize:16, fontFamily:"'Cairo', sans-serif", outline:'none',
-                    letterSpacing: 2, textAlign: 'center', transition:'all 0.2s ease', 
-                  }}
+                  className="w-full p-[14px_16px] rounded-xl bg-[#0D1525]/90 border-2 border-white/10 text-white text-base outline-none tracking-[2px] text-center transition-all"
                   onFocus={e => { e.target.style.border='2px solid #A78BFA'; }}
                   onBlur={e => { e.target.style.border='2px solid rgba(255,255,255,0.08)'; }}
                 />
               </div>
             ) : (
               /* PIN inputs */
-              <div style={{ display:'flex', gap:14, justifyContent:'center', marginBottom:28, direction:'ltr' }}>
+              <div className="flex gap-[14px] justify-center mb-7 ltr">
                 {digits.map((digit, i) => (
                   <input key={i}
                     ref={el => { inputRefs.current[i] = el; }}
@@ -255,14 +214,10 @@ export default function PinEntry() {
                     value={digit}
                     onChange={e => handlePinChange(i, e.target.value)}
                     onKeyDown={e => handleKeyDown(i, e)}
+                    className="w-[72px] h-[72px] rounded-2xl bg-[#0D1525]/90 text-cyan-400 text-[28px] font-black text-center outline-none transition-all caret-cyan-400"
                     style={{
-                      width:72, height:72, borderRadius:16,
-                      background: 'rgba(13,21,37,0.9)',
                       border: digit ? '2px solid #00D4FF' : error ? '2px solid #F87171' : '2px solid rgba(255,255,255,0.08)',
-                      color:'#00D4FF', fontSize:28, fontWeight:800, textAlign:'center',
-                      fontFamily:"'Cairo', sans-serif", outline:'none', transition:'all 0.2s ease',
                       boxShadow: digit ? '0 0 20px rgba(0,212,255,0.35)' : 'none',
-                      caretColor:'#00D4FF',
                     }}
                     onFocus={e => { e.target.style.border='2px solid #00D4FF'; e.target.style.boxShadow='0 0 24px rgba(0,212,255,0.5)'; }}
                     onBlur={e => { if (!digit) { e.target.style.border= error ? '2px solid #F87171' : '2px solid rgba(255,255,255,0.08)'; e.target.style.boxShadow='none'; } }}
@@ -271,27 +226,26 @@ export default function PinEntry() {
               </div>
             )}
 
-            {error && <p style={{ color:'#F87171', fontSize:13, marginBottom:16, fontWeight:600 }}>{error}</p>}
+            {error && <p className="text-red-400 text-sm mb-4 font-semibold">{error}</p>}
 
             <button onClick={() => handleSubmit()} disabled={loading}
+              className="w-full p-4 rounded-xl border-none text-black text-lg font-black cursor-pointer transition-all"
               style={{
-                width:'100%', padding:'16px', borderRadius:14, border:'none',
                 background: success ? 'linear-gradient(135deg,#34D399,#059669)' : 'linear-gradient(135deg,#00D4FF,#0099BB)',
-                color:'#000', fontSize:18, fontWeight:800, fontFamily:"'Cairo', sans-serif",
-                cursor: loading ? 'not-allowed' : 'pointer', transition:'all 0.3s ease',
-                boxShadow:'0 4px 24px rgba(0,212,255,0.4)', opacity: loading ? 0.7 : 1,
+                cursor: loading ? 'not-allowed' : 'pointer',
+                boxShadow: '0 4px 24px rgba(0,212,255,0.4)', opacity: loading ? 0.7 : 1,
               }}>
               {loading ? '⏳ جاري التحميل...' : success ? '✅ جاي...' : mode === 'signup' ? 'إنشاء حساب' : mode === 'recovery' ? 'استرجاع الـ PIN' : 'دخول →'}
             </button>
 
-            <div style={{ marginTop:20, display:'flex', flexDirection:'column', gap:10 }}>
+            <div className="mt-5 flex flex-col gap-2.5">
               {mode === 'login' ? (
                 <>
-                  <button onClick={() => resetForm('signup')} style={{ background:'none', border:'none', color:'#00D4FF', fontSize:13, cursor:'pointer', textDecoration:'underline', fontFamily:"'Cairo', sans-serif" }}>ليس لديك حساب؟ إنشاء حساب جديد</button>
-                  <button onClick={() => resetForm('recovery')} style={{ background:'none', border:'none', color:'#94A3B8', fontSize:13, cursor:'pointer', fontFamily:"'Cairo', sans-serif" }}>نسيت الرقم السري؟</button>
+                  <button onClick={() => resetForm('signup')} className="bg-none border-none text-cyan-400 text-sm cursor-pointer underline">ليس لديك حساب؟ إنشاء حساب جديد</button>
+                  <button onClick={() => resetForm('recovery')} className="bg-none border-none text-slate-400 text-sm cursor-pointer">نسيت الرقم السري؟</button>
                 </>
               ) : (
-                <button onClick={() => resetForm('login')} style={{ background:'none', border:'none', color:'#94A3B8', fontSize:13, cursor:'pointer', fontFamily:"'Cairo', sans-serif" }}>العودة لتسجيل الدخول</button>
+                <button onClick={() => resetForm('login')} className="bg-none border-none text-slate-400 text-sm cursor-pointer">العودة لتسجيل الدخول</button>
               )}
             </div>
           </>

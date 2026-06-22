@@ -32,7 +32,7 @@ function SyncDot({ status }: { status: 'synced' | 'syncing' | 'error' }) {
   const colors: Record<string, string> = { synced: '#34D399', syncing: '#FBBF24', error: '#F87171' };
   const c = colors[status];
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+    <div className="flex items-center gap-[6px]">
       <div style={{ width: 8, height: 8, borderRadius: '50%', background: c, boxShadow: `0 0 8px ${c}88`, transition: 'all 0.3s' }} />
       <span style={{ color: c, fontSize: 11, fontWeight: 700 }}>
         {status === 'synced' ? 'محفوظ' : status === 'syncing' ? 'جاري الحفظ...' : 'خطأ في الحفظ'}
@@ -45,37 +45,27 @@ function ReferencesModal({ onClose }: { onClose: () => void }) {
   return (
     <div
       dir="rtl"
-      style={{
-        position: 'fixed', inset: 0, background: 'rgba(6,10,18,0.88)',
-        backdropFilter: 'blur(16px)', zIndex: 1000,
-        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',
-        fontFamily: "'Cairo', sans-serif",
-      }}
+      className="fixed inset-0 z-[1000] flex items-center justify-center p-4"
+      style={{ background: 'rgba(6,10,18,0.88)', backdropFilter: 'blur(16px)' }}
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="animate-slide-down glass-card" style={{
-        width: '100%', maxWidth: 520, borderRadius: 24,
+      <div className="animate-slide-down glass-card w-full max-w-[520px] rounded-3xl p-8 max-h-[85vh] overflow-y-auto" style={{
         border: '1px solid rgba(251,191,36,0.3)',
-        padding: '32px 28px', maxHeight: '85vh', overflowY: 'auto',
         boxShadow: '0 0 60px rgba(251,191,36,0.1), 0 30px 80px rgba(0,0,0,0.6)',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-          <h2 style={{ color: '#F1F5F9', fontSize: 18, fontWeight: 800 }}>📚 مصادر بناء هذا الـ Roadmap</h2>
-          <button onClick={onClose} style={{
-            background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
-            color: '#64748B', width: 36, height: 36, borderRadius: 10,
-            cursor: 'pointer', fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>✕</button>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-slate-200 text-lg font-black">📚 مصادر بناء هذا الـ Roadmap</h2>
+          <button onClick={onClose} className="bg-white/5 border border-white/10 text-slate-500 w-9 h-9 rounded-xl cursor-pointer text-base flex items-center justify-center">
+            ✕
+          </button>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div className="flex flex-col gap-2.5">
           {REFERENCES.map((ref, i) => (
-            <a key={i} href={ref.url} target="_blank" rel="noopener noreferrer" style={{
-              padding: '14px 16px', borderRadius: 14,
-              border: '1px solid rgba(251,191,36,0.15)',
-              background: 'rgba(251,191,36,0.04)',
-              display: 'flex', alignItems: 'center', gap: 12,
-              textDecoration: 'none', transition: 'all 0.2s',
-            }}
+            <a key={i} href={ref.url} target="_blank" rel="noopener noreferrer" className="p-[14px_16px] rounded-xl flex items-center gap-3 no-underline transition-all"
+              style={{
+                border: '1px solid rgba(251,191,36,0.15)',
+                background: 'rgba(251,191,36,0.04)',
+              }}
               onMouseEnter={e => {
                 (e.currentTarget as HTMLElement).style.borderColor = 'rgba(251,191,36,0.4)';
                 (e.currentTarget as HTMLElement).style.background = 'rgba(251,191,36,0.08)';
@@ -85,11 +75,11 @@ function ReferencesModal({ onClose }: { onClose: () => void }) {
                 (e.currentTarget as HTMLElement).style.background = 'rgba(251,191,36,0.04)';
               }}
             >
-              <div style={{ flex: 1 }}>
-                <p style={{ color: '#FBBF24', fontSize: 13, fontWeight: 700, marginBottom: 4 }}>{ref.name}</p>
-                <p style={{ color: '#64748B', fontSize: 12 }}>{ref.desc}</p>
+              <div className="flex-1">
+                <p className="text-amber-400 text-sm font-bold mb-1">{ref.name}</p>
+                <p className="text-slate-500 text-xs">{ref.desc}</p>
               </div>
-              <span style={{ color: '#FBBF24', fontSize: 18, opacity: 0.7 }}>↗</span>
+              <span className="text-amber-400 text-lg opacity-70">↗</span>
             </a>
           ))}
         </div>
@@ -105,7 +95,7 @@ export default function Dashboard() {
   const [newPinInput, setNewPinInput] = useState('');
   const [recoveryCodeInput, setRecoveryCodeInput] = useState('');
   const [showReferences, setShowReferences] = useState(false);
-  const [greetingDone, setGreetingDone] = useState(false); // per visit
+  const [greetingDone, setGreetingDone] = useState(false);
   const quote = useMemo(() => QUOTES[Math.floor(Math.random() * QUOTES.length)], []);
 
   useEffect(() => {
@@ -139,30 +129,26 @@ export default function Dashboard() {
   };
 
   return (
-    <div dir="rtl" className="noise-bg" style={{
-      minHeight: '100vh', background: '#060A12',
-      fontFamily: "'Cairo', sans-serif", color: '#F1F5F9',
-      position: 'relative', paddingBottom: isMobile ? 90 : 60,
-    }}>
+    <div dir="rtl" className="noise-bg min-h-screen bg-[#060A12] text-slate-200 relative" style={{ paddingBottom: isMobile ? 90 : 60 }}>
       {/* Sync dot top-left */}
-      <div style={{ position: 'fixed', top: 14, left: 14, zIndex: 100 }}>
+      <div className="fixed top-[14px] left-[14px] z-[100]">
         <SyncDot status={syncStatus} />
       </div>
 
       {/* Background glow orbs */}
-      <div style={{ position: 'fixed', top: 0, left: '50%', transform: 'translateX(-50%)', width: 800, height: 400, background: 'radial-gradient(ellipse, rgba(0,212,255,0.04) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
-      <div style={{ position: 'fixed', bottom: '20%', right: 0, width: 500, height: 500, background: 'radial-gradient(circle, rgba(167,139,250,0.04) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] pointer-events-none z-0" style={{ background: 'radial-gradient(ellipse, rgba(0,212,255,0.04) 0%, transparent 70%)' }} />
+      <div className="fixed bottom-[20%] right-0 w-[500px] h-[500px] pointer-events-none z-0" style={{ background: 'radial-gradient(circle, rgba(167,139,250,0.04) 0%, transparent 70%)' }} />
 
-      <div style={{ maxWidth: 880, margin: '0 auto', padding: '0 1rem', position: 'relative', zIndex: 1 }}>
+      <div className="max-w-[880px] mx-auto px-4 relative z-[1]">
 
         {/* ── HEADER ── */}
-        <header style={{ paddingTop: 40, paddingBottom: 24, textAlign: 'center' }}>
-          <h1 className="animate-rainbow" style={{
+        <header className="pt-10 pb-6 text-center">
+          <h1 className="animate-rainbow font-black mb-[6px] leading-tight" style={{
             background: 'linear-gradient(135deg,#00D4FF,#A78BFA,#F472B6)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-            fontSize: isMobile ? 26 : 36, fontWeight: 900, marginBottom: 6, lineHeight: 1.3,
+            fontSize: isMobile ? 26 : 36,
           }}>AI Engineer Roadmap</h1>
-          <p style={{ color: '#64748B', fontSize: 14, marginBottom: 20 }}>~8-9 أشهر · 7 مراحل · {TOTAL_TOPICS} topic</p>
+          <p className="text-slate-500 text-sm mb-5">~8-9 أشهر · 7 مراحل · {TOTAL_TOPICS} topic</p>
 
           {/* Welcome Banner */}
           <style>{`
@@ -182,10 +168,9 @@ export default function Dashboard() {
               transform-origin: 70% 70%;
             }
           `}</style>
-          <div style={{ marginBottom: 32 }}>
-            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2" style={{
+          <div className="mb-8">
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2 flex items-center justify-center flex-wrap gap-2" style={{
               color: '#fff', fontSize: isMobile ? 28 : 42, lineHeight: 1.4, fontWeight: 900,
-              display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: '8px'
             }}>
               <span>مرحباً يا</span>
               <TypeAnimation
@@ -204,41 +189,44 @@ export default function Dashboard() {
               />
               <span className="wave-emoji">👋</span>
             </h1>
-            <p style={{ color: '#94A3B8', fontSize: 16 }}>"جاهز لاستكمال رحلتك في عالم الذكاء الاصطناعي؟"</p>
+            <p className="text-slate-400 text-base">"جاهز لاستكمال رحلتك في عالم الذكاء الاصطناعي؟"</p>
           </div>
 
           {/* Global progress card */}
-          <div className="glass-card" style={{
-            borderRadius: 20, border: '1px solid rgba(255,255,255,0.07)',
-            padding: '20px 24px', marginBottom: 16, boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+          <div className="glass-card rounded-[20px] p-5 mb-4" style={{
+            border: '1px solid rgba(255,255,255,0.07)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <div className="flex items-center justify-between mb-3">
               <div>
-                <p style={{ color: '#64748B', fontSize: 12, marginBottom: 3 }}>التقدم الكلي</p>
-                <p style={{ fontSize: 22, fontWeight: 800, background: 'linear-gradient(135deg,#00D4FF,#A78BFA)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                <p className="text-slate-500 text-xs mb-[3px]">التقدم الكلي</p>
+                <p className="text-[22px] font-black" style={{
+                  background: 'linear-gradient(135deg,#00D4FF,#A78BFA)',
+                  WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+                }}>
                   {totalDone} / {TOTAL_TOPICS}
                 </p>
               </div>
-              <div style={{ textAlign: 'center' }}>
-                <p style={{ fontSize: 32, fontWeight: 900, color: '#F1F5F9' }}>{pct}%</p>
-                <p style={{ color: '#64748B', fontSize: 11 }}>مكتمل</p>
+              <div className="text-center">
+                <p className="text-[32px] font-black text-slate-200">{pct}%</p>
+                <p className="text-slate-500 text-[11px]">مكتمل</p>
               </div>
               <SyncDot status={syncStatus} />
             </div>
 
             {/* Rainbow progress bar */}
-            <div style={{ height: 10, borderRadius: 5, background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
-              <div className="animate-rainbow" style={{
-                height: '100%', width: `${pct}%`,
+            <div className="h-2.5 rounded-[5px] overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+              <div className="animate-rainbow h-full rounded-[5px]" style={{
+                width: `${pct}%`,
                 background: 'linear-gradient(90deg,#00D4FF,#A78BFA,#F472B6,#34D399,#FBBF24)',
-                borderRadius: 5, boxShadow: '0 0 12px rgba(0,212,255,0.5)',
+                boxShadow: '0 0 12px rgba(0,212,255,0.5)',
                 transition: 'width 0.8s cubic-bezier(0.34,1.56,0.64,1)',
               }} />
             </div>
           </div>
 
           {/* ── Motivational Quote ── */}
-          <div style={{ textAlign: 'center', padding: '16px 32px', marginBottom: 24, marginTop: 24 }}>
+          <div className="text-center px-8 mb-6 mt-6">
             <p style={{
               background: 'linear-gradient(135deg, #34D399, #00D4FF)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
@@ -248,16 +236,16 @@ export default function Dashboard() {
               "{quote.text}"
             </p>
             {quote.source && (
-              <p style={{ color: '#94A3B8', fontSize: 14, marginTop: 8, fontWeight: 700 }}>— {quote.source}</p>
+              <p className="text-slate-400 text-sm mt-2 font-bold">— {quote.source}</p>
             )}
           </div>
         </header>
 
         {/* ── PHASE TIMELINE ── */}
         <section>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-            <h2 style={{ color: '#94A3B8', fontSize: 13, fontWeight: 700, letterSpacing: 2 }}>◈ المراحل</h2>
-            <span style={{ color: '#334155', fontSize: 12 }}>
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-slate-400 text-sm font-bold tracking-[2px]">◈ المراحل</h2>
+            <span className="text-slate-700 text-xs">
               {phases.filter(p => p.topicGroups.reduce((a, g) => a + g.topics.filter(t => checkedTopics[t.id]).length, 0) === p.topicGroups.reduce((a, g) => a + g.topics.length, 0)).length} / 7 مكتملة
             </span>
           </div>
@@ -269,71 +257,63 @@ export default function Dashboard() {
         </section>
 
         {/* ── FOOTER ── */}
-        <footer style={{ marginTop: 32, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
-          <p style={{ color: '#334155', fontSize: 12 }}>
-            🔑 PIN: <code style={{ color: '#00D4FF88', letterSpacing: 2 }}>{pin}</code> ·{' '}
-            <button onClick={() => setShowPinChange(!showPinChange)} style={{ background: 'none', border: 'none', color: '#475569', fontFamily: "'Cairo', sans-serif", fontSize: 12, cursor: 'pointer', textDecoration: 'underline', padding: '0 4px' }}>
+        <footer className="mt-8 pt-5 flex items-center justify-between flex-wrap gap-2.5" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+          <p className="text-slate-700 text-xs">
+            🔑 PIN: <code className="text-cyan-400/50 tracking-[2px]">{pin}</code> ·{' '}
+            <button onClick={() => setShowPinChange(!showPinChange)} className="bg-none border-none text-slate-600 text-xs cursor-pointer underline px-[4px]">
               تغيير PIN
             </button>
           </p>
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <div className="flex gap-3 items-center">
             <button
               onClick={() => setShowReferences(true)}
-              style={{
-                background: 'none', border: '1px solid rgba(251,191,36,0.2)', color: '#64748B',
-                fontFamily: "'Cairo', sans-serif", fontSize: 12, cursor: 'pointer',
-                padding: '4px 12px', borderRadius: 8, transition: 'all 0.2s',
-              }}
+              className="bg-none text-slate-500 text-xs cursor-pointer px-3 py-1 rounded-lg transition-all"
+              style={{ border: '1px solid rgba(251,191,36,0.2)' }}
               onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = '#FBBF24'; }}
               onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = '#64748B'; }}
             >
               📚 مصادر الـ Roadmap
             </button>
-            <p style={{ color: '#1E293B', fontSize: 11 }}>AI Engineer Roadmap © 2026</p>
+            <p className="text-slate-800 text-[11px]">AI Engineer Roadmap © 2026</p>
           </div>
         </footer>
 
         {/* PIN change form */}
         {showPinChange && (
-          <div className="animate-slide-down glass-card" style={{
-            position: 'fixed', bottom: isMobile ? 90 : 20, left: '50%', transform: 'translateX(-50%)',
-            width: '90%', maxWidth: 360, padding: '24px', borderRadius: 16,
+          <div className="animate-slide-down glass-card fixed w-[90%] max-w-[360px] p-6 rounded-2xl z-[100] flex flex-col gap-3" style={{
+            bottom: isMobile ? 90 : 20, left: '50%', transform: 'translateX(-50%)',
             border: '1px solid rgba(0,212,255,0.3)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)',
-            zIndex: 100, display: 'flex', flexDirection: 'column', gap: 12,
           }}>
-            <p style={{ color: '#94A3B8', fontSize: 13, fontWeight: 700, margin: 0 }}>تغيير الـ PIN:</p>
+            <p className="text-slate-400 text-sm font-bold m-0">تغيير الـ PIN:</p>
             
             <input type="text" maxLength={6}
               placeholder="كود الاسترجاع (6 رموز)" value={recoveryCodeInput}
               onChange={e => setRecoveryCodeInput(e.target.value)}
-              style={{ padding: '10px 14px', borderRadius: 10, border: '1px solid rgba(167,139,250,0.3)', background: 'rgba(255,255,255,0.04)', color: '#F1F5F9', fontSize: 14, fontFamily: "'Cairo', sans-serif", outline: 'none', letterSpacing: 2, textAlign: 'center' }} />
+              className="p-[10px_14px] rounded-xl border border-purple-400/30 bg-white/5 text-slate-200 text-sm outline-none tracking-[2px] text-center" />
               
             <input type="password" inputMode="numeric" maxLength={4}
               placeholder="PIN جديد (4 أرقام)" value={newPinInput}
               onChange={e => setNewPinInput(e.target.value.replace(/\D/g, '').slice(0, 4))}
               onKeyDown={e => e.key === 'Enter' && handlePinChange()}
-              style={{ padding: '10px 14px', borderRadius: 10, border: '1px solid rgba(0,212,255,0.3)', background: 'rgba(255,255,255,0.04)', color: '#F1F5F9', fontSize: 16, fontFamily: "'Cairo', sans-serif", outline: 'none', letterSpacing: 4, textAlign: 'center' }} />
+              className="p-[10px_14px] rounded-xl border border-cyan-400/30 bg-white/5 text-slate-200 text-base outline-none tracking-[4px] text-center" />
               
-            <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
-              <button onClick={handlePinChange} style={{ flex: 1, padding: '10px 16px', borderRadius: 10, border: 'none', background: 'linear-gradient(135deg,#00D4FF,#0099BB)', color: '#000', fontWeight: 700, fontFamily: "'Cairo', sans-serif", cursor: 'pointer', fontSize: 13 }}>تغيير</button>
-              <button onClick={() => { setShowPinChange(false); setRecoveryCodeInput(''); setNewPinInput(''); }} style={{ flex: 1, padding: '10px 12px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#64748B', fontFamily: "'Cairo', sans-serif", cursor: 'pointer', fontSize: 13 }}>إلغاء</button>
+            <div className="flex gap-2.5 mt-1">
+              <button onClick={handlePinChange} className="flex-1 p-[10px_16px] rounded-xl border-none bg-gradient-to-r from-cyan-400 to-cyan-600 text-black font-bold text-sm cursor-pointer">تغيير</button>
+              <button onClick={() => { setShowPinChange(false); setRecoveryCodeInput(''); setNewPinInput(''); }} className="flex-1 p-[10px_12px] rounded-xl border border-white/10 bg-transparent text-slate-500 text-sm cursor-pointer">إلغاء</button>
             </div>
           </div>
         )}
       </div>
 
       {/* Floating search button */}
-      <button onClick={() => setIsSearchOpen(true)} className="animate-float"
+      <button onClick={() => setIsSearchOpen(true)} className="animate-float fixed z-40 p-[14px_20px] rounded-[50px] flex items-center gap-2 text-sm font-black text-purple-400 cursor-pointer whitespace-nowrap transition-all"
         style={{
-          position: 'fixed', bottom: isMobile ? 78 : 24,
+          bottom: isMobile ? 78 : 24,
           left: isMobile ? '50%' : undefined, right: isMobile ? undefined : 24,
           transform: isMobile ? 'translateX(-50%)' : undefined,
-          padding: '14px 20px', borderRadius: 50,
           border: '1px solid rgba(167,139,250,0.5)', background: 'rgba(13,21,37,0.95)',
-          color: '#A78BFA', fontSize: 14, fontWeight: 800, fontFamily: "'Cairo', sans-serif",
-          cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8,
           boxShadow: '0 0 24px rgba(167,139,250,0.3), 0 8px 32px rgba(0,0,0,0.4)',
-          zIndex: 40, transition: 'all 0.3s', whiteSpace: 'nowrap', backdropFilter: 'blur(20px)',
+          backdropFilter: 'blur(20px)',
         }}>
         🔍 <span>topic جديد</span>
       </button>

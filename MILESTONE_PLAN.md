@@ -23,7 +23,7 @@
 
 ---
 
-## M1 — Security (PIN Hashing + Env + Rules + Route Guard)
+## M1 — Security (PIN Hashing + Env + Rules + Route Guard) ✅ Complete
 
 **Files affected:**
 - `ai-roadmap/src/app/context/AppContext.tsx` — replace `d.pin !== enteredPin` with `bcrypt.compareSync`, store hash on signup
