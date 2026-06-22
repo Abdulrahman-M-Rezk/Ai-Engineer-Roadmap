@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router';
 import { TypeAnimation } from 'react-type-animation';
 import { useApp } from '../context/AppContext';
 import { phases, TOTAL_TOPICS } from '../data/roadmapData';
@@ -101,7 +100,6 @@ function ReferencesModal({ onClose }: { onClose: () => void }) {
 
 export default function Dashboard() {
   const { isAuthenticated, username, checkedTopics, setIsSearchOpen, pin, setNewPin, syncStatus } = useApp();
-  const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [showPinChange, setShowPinChange] = useState(false);
   const [newPinInput, setNewPinInput] = useState('');
@@ -110,7 +108,6 @@ export default function Dashboard() {
   const [greetingDone, setGreetingDone] = useState(false); // per visit
   const quote = useMemo(() => QUOTES[Math.floor(Math.random() * QUOTES.length)], []);
 
-  useEffect(() => { if (!isAuthenticated) navigate('/'); }, [isAuthenticated, navigate]);
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);

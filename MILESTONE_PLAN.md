@@ -1,6 +1,6 @@
 # MILESTONE_PLAN.md — AI Roadmap Security-Refactor
 
-## M0 — Git Branch + Orphan Cleanup
+## M0 — Git Branch + Orphan Cleanup ✅ Complete
 
 **Files affected:**
 - **Delete (11 files):**
@@ -19,6 +19,7 @@
 - **New dependency:** `git checkout -b security-refactor`
 - **Success criteria:** `git status` shows only active files; `npm run build` succeeds
 - **Order:** 1st (prerequisite for all else)
+- **Result:** Commit `849cf75` — all orphan files deleted, build passes, branch pushed
 
 ---
 

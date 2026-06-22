@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useCallback, useEffect, use
 import { doc, getDoc, setDoc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { DEFAULT_CHECKED } from '../data/roadmapData';
+import bcrypt from 'bcryptjs';
 
 export interface CustomResource {
   id: string;
@@ -128,9 +129,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         return { success: false, error: 'اسم المستخدم غير صحيح' };
       }
       const d = snap.data() as any;
-      if (d.pin !== enteredPin) {
+      const storedPin = d.pin;
+      
+      let pinValid = false;
+      // Case 1: Plaintext PIN (old user, 4-digit)
+      if (typeof storedPin === 'string' && storedPin.length === 4) {
+        pinValid = storedPin === enteredPin;
+        if (pinValid) {
+          // Migrate: re-hash the PIN immediately
+          const newHash = bcrypt.hashSync(enteredPin, 10);
+          await setDoc(ref, { pin: newHash }, { merge: true });
+        }
+      } else {
+        // Case 2: Hashed PIN (bcrypt)
+        pinValid = bcrypt.compareSync(enteredPin, storedPin);
+      }
+      
+      if (!pinValid) {
         return { success: false, error: 'الرقم السري خاطئ' };
       }
+      
       setCheckedTopics(d.checked || {});
       setCheckedTasks(d.tasks || {});
       setCustomResources(d.customResources || {});
@@ -165,8 +183,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         recoveryCode += chars.charAt(Math.floor(Math.random() * chars.length));
       }
 
+      const hashedPin = bcrypt.hashSync(enteredPin, 10);
+
       await setDoc(ref, { 
-        pin: enteredPin,
+        pin: hashedPin,
         recoveryCode,
         checked: {}, 
         tasks: {}, 
@@ -195,7 +215,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       if (d.recoveryCode !== enteredRecoveryCode) {
         return { success: false, error: 'كود الاسترجاع غير صحيح' };
       }
-      return { success: true, pin: d.pin };
+      const storedPin = d.pin;
+      // If hashed (bcrypt hash > 4 chars), generate new temporary PIN
+      if (typeof storedPin === 'string' && storedPin.length > 4) {
+        const newPin = Math.floor(1000 + Math.random() * 9000).toString();
+        const newHash = bcrypt.hashSync(newPin, 10);
+        await setDoc(ref, { pin: newHash }, { merge: true });
+        return { success: true, pin: newPin };
+      }
+      return { success: true, pin: storedPin };
     } catch (error) {
       console.error('Recovery error:', error);
       return { success: false, error: 'حدث خطأ في الاتصال' };
@@ -215,7 +243,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         return { success: false, error: 'كود الاسترجاع غير صحيح' };
       }
 
-      await updateDoc(ref, { pin: newPin });
+      const newHash = bcrypt.hashSync(newPin, 10);
+      await updateDoc(ref, { pin: newHash });
       localStorage.setItem('ai-roadmap-pin', newPin);
       setPinState(newPin);
       return { success: true };
