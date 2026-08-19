@@ -81,43 +81,43 @@ function SortableResourceItem({ resource, rgb, color, onRemoveCustom }: { resour
   
   return (
     <div ref={setNodeRef} style={style}>
-      <div {...attributes} {...listeners} style={{ cursor: 'grab', display: 'flex', alignItems: 'center', color: '#64748B', padding: '0 4px', touchAction: 'none' }}>
+      <div {...attributes} {...listeners} className="cursor-grab flex items-center text-slate-500 px-1 touch-none">
         <GripVertical size={18} />
       </div>
       
-      <div style={{ flex: 1 }}>
-        <a href={resource.url || '#'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+      <div className="flex-1">
+        <a href={resource.url || '#'} target="_blank" rel="noopener noreferrer" className="no-underline">
            <p style={{ color: resource.isCustom ? color : '#CBD5E1', fontSize: 13, fontWeight: 600, marginBottom: resource.isCustom && !resource.desc ? 0 : 6 }}>
               {resource.isCustom ? `📌 ${resource.name}` : resource.name}
            </p>
         </a>
         
         {!resource.isCustom && (
-           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-             <span style={{ fontSize: 10, padding: '2px 7px', borderRadius: 6, background: 'rgba(167,139,250,0.1)', border: '1px solid rgba(167,139,250,0.2)', color: '#A78BFA' }}>
+           <div className="flex gap-[6px] flex-wrap">
+             <span className="text-[10px] px-[7px] py-[2px] rounded text-purple-400" style={{ background: 'rgba(167,139,250,0.1)', border: '1px solid rgba(167,139,250,0.2)' }}>
                {resource.type === 'video' ? '📹 فيديو' : resource.type === 'book' ? '📕 كتاب' : '📄 مقال'}
              </span>
-             <span style={{ fontSize: 10, padding: '2px 7px', borderRadius: 6, background: isAr ? 'rgba(52,211,153,0.1)' : 'rgba(0,212,255,0.1)', border: `1px solid ${isAr ? 'rgba(52,211,153,0.2)' : 'rgba(0,212,255,0.2)'}`, color: isAr ? '#34D399' : '#00D4FF' }}>
+             <span className={`text-[10px] px-[7px] py-[2px] rounded ${isAr ? 'text-emerald-400' : 'text-cyan-400'}`} style={{ background: isAr ? 'rgba(52,211,153,0.1)' : 'rgba(0,212,255,0.1)', border: `1px solid ${isAr ? 'rgba(52,211,153,0.2)' : 'rgba(0,212,255,0.2)'}` }}>
                {isAr ? '🇪🇬 عربي' : '🌍 English'}
              </span>
-             <span style={{ fontSize: 10, padding: '2px 7px', borderRadius: 6, background: isFree ? 'rgba(52,211,153,0.1)' : 'rgba(251,191,36,0.1)', border: `1px solid ${isFree ? 'rgba(52,211,153,0.2)' : 'rgba(251,191,36,0.2)'}`, color: isFree ? '#34D399' : '#FBBF24' }}>
+             <span className={`text-[10px] px-[7px] py-[2px] rounded ${isFree ? 'text-emerald-400' : 'text-amber-400'}`} style={{ background: isFree ? 'rgba(52,211,153,0.1)' : 'rgba(251,191,36,0.1)', border: `1px solid ${isFree ? 'rgba(52,211,153,0.2)' : 'rgba(251,191,36,0.2)'}` }}>
                {isFree ? 'مجاني ✓' : 'مدفوع 💳'}
              </span>
            </div>
         )}
         
         {resource.desc && (
-           <div style={{ marginTop: 8, padding: '8px 12px', background: 'rgba(56, 189, 248, 0.1)', borderLeft: '3px solid #38BDF8', borderRadius: '4px 8px 8px 4px' }}>
-             <p style={{ color: '#E0F2FE', fontSize: 11.5, lineHeight: 1.5, margin: 0 }}>{resource.desc}</p>
+           <div className="mt-2 p-[8px_12px] rounded-[4px_8px_8px_4px]" style={{ background: 'rgba(56, 189, 248, 0.1)', borderLeft: '3px solid #38BDF8' }}>
+             <p className="text-sky-100 text-[11.5px] leading-relaxed m-0">{resource.desc}</p>
            </div>
         )}
         
         {resource.referral && (
-          <div style={{ marginTop: 8, padding: '12px 14px', background: 'rgba(56, 189, 248, 0.08)', borderRight: '3px solid #38BDF8', borderRadius: '8px 4px 4px 8px' }}>
-            <p style={{ color: '#E0F2FE', fontSize: 13, lineHeight: 1.6, margin: '0 0 12px 0', whiteSpace: 'pre-wrap' }}>
+          <div className="mt-2 p-[12px_14px] rounded-[8px_4px_4px_8px]" style={{ background: 'rgba(56, 189, 248, 0.08)', borderRight: '3px solid #38BDF8' }}>
+            <p className="text-sky-100 text-sm leading-relaxed m-0 mb-3 whitespace-pre-wrap">
               {resource.referral.message}
             </p>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <div className="flex gap-2 flex-wrap">
               <button
                 onClick={(e) => {
                   e.preventDefault();
@@ -125,7 +125,7 @@ function SortableResourceItem({ resource, rgb, color, onRemoveCustom }: { resour
                   setCopiedName(true);
                   setTimeout(() => setCopiedName(false), 2000);
                 }}
-                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 10px', borderRadius: 6, border: '1px solid rgba(56, 189, 248, 0.2)', background: 'rgba(255,255,255,0.05)', color: '#38BDF8', fontSize: 11, cursor: 'pointer', transition: 'all 0.2s', fontFamily: "'Cairo', sans-serif" }}
+                className="flex items-center gap-[6px] px-[10px] py-[6px] rounded text-[11px] cursor-pointer transition-all" style={{ border: '1px solid rgba(56, 189, 248, 0.2)', background: 'rgba(255,255,255,0.05)', color: '#38BDF8' }}
               >
                 {copiedName ? <Check size={12} /> : <Copy size={12} />}
                 {copiedName ? 'تم النسخ' : resource.referral.name}
@@ -138,7 +138,7 @@ function SortableResourceItem({ resource, rgb, color, onRemoveCustom }: { resour
                   setCopiedEmail(true);
                   setTimeout(() => setCopiedEmail(false), 2000);
                 }}
-                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 10px', borderRadius: 6, border: '1px solid rgba(56, 189, 248, 0.2)', background: 'rgba(255,255,255,0.05)', color: '#38BDF8', fontSize: 11, cursor: 'pointer', transition: 'all 0.2s', fontFamily: "'Cairo', sans-serif" }}
+                className="flex items-center gap-[6px] px-[10px] py-[6px] rounded text-[11px] cursor-pointer transition-all" style={{ border: '1px solid rgba(56, 189, 248, 0.2)', background: 'rgba(255,255,255,0.05)', color: '#38BDF8' }}
               >
                 {copiedEmail ? <Check size={12} /> : <Copy size={12} />}
                 {copiedEmail ? 'تم النسخ' : resource.referral.email}
@@ -149,11 +149,11 @@ function SortableResourceItem({ resource, rgb, color, onRemoveCustom }: { resour
       </div>
       
       {!resource.isCustom ? (
-         <a href={resource.url || '#'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', padding: '0 4px' }}>
+         <a href={resource.url || '#'} target="_blank" rel="noopener noreferrer" className="no-underline px-1">
            <span style={{ color: color, fontSize: 16, opacity: 0.7 }}>↗</span>
          </a>
       ) : (
-         <button onClick={() => onRemoveCustom(resource.id)} style={{ background: 'none', border: 'none', color: '#475569', cursor: 'pointer', fontSize: 16, padding: '0 4px', flexShrink: 0 }} title="حذف">
+         <button onClick={() => onRemoveCustom(resource.id)} className="bg-none border-none text-slate-600 cursor-pointer text-base px-1 shrink-0" title="حذف">
            🗑️
          </button>
       )}
@@ -193,7 +193,6 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
   const isCompleted = doneTopics === totalTopics;
   const isExpanded = activePhase === phase.id;
 
-  // Determine phase state
   const isCurrentPhase = !isCompleted && (phaseIndex === 0 || phaseProgress > 0);
   const isFuture = !isCompleted && phaseProgress === 0 && phaseIndex > 0;
 
@@ -206,7 +205,6 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
     toggleTopic(topicId);
     const nowDone = wasDone + (checkedTopics[topicId] ? -1 : 1);
     if (nowDone === totalTopics && !checkedTopics[topicId]) {
-      // Completed!
       setTimeout(() => {
         confetti({
           particleCount: 120,
@@ -244,12 +242,10 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
   const groupedResources = useMemo(() => {
     const groups: { title: string; id: string; resources: typeof filteredFinalResources }[] = [];
     
-    // Create a bucket for each Phase Topic Group
     phase.topicGroups.forEach(g => {
       groups.push({ title: g.nameAr, id: g.id, resources: [] });
     });
     
-    // General & Custom bucket
     groups.push({ title: 'مصادر عامة وشخصية', id: 'general', resources: [] });
 
     filteredFinalResources.forEach(r => {
@@ -301,9 +297,9 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
   };
 
   return (
-    <div dir="rtl" style={{ display: 'flex', gap: 16, marginBottom: isLast ? 0 : 0, position: 'relative' }}>
+    <div className="flex gap-4 relative" dir="rtl" style={{ marginBottom: 0 }}>
       {/* Timeline column */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, width: 52 }}>
+      <div className="flex flex-col items-center shrink-0 w-[52px]">
         {/* Circle */}
         <div
           className={isCurrentPhase && !isCompleted ? pulseClass : ''}
@@ -363,16 +359,14 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
       </div>
 
       {/* Card column */}
-      <div style={{ flex: 1, marginBottom: 20 }}>
+      <div className="flex-1 mb-5">
         {/* Card header */}
         <div
-          className="glass-card"
+          className="glass-card cursor-pointer transition-all"
           style={{
             borderRadius: isExpanded ? '16px 16px 0 0' : 16,
             border: `1px solid ${isExpanded ? `rgba(${rgb}, 0.4)` : `rgba(${rgb}, 0.15)`}`,
             padding: '16px 20px',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
             boxShadow: isExpanded
               ? `0 0 24px rgba(${rgb}, 0.15), 0 8px 32px rgba(0,0,0,0.3)`
               : `0 4px 16px rgba(0,0,0,0.2)`,
@@ -392,8 +386,8 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
             }
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div className="flex items-center justify-between mb-2.5">
+            <div className="flex items-center gap-2.5">
               <span style={{
                 background: `rgba(${rgb}, 0.15)`,
                 border: `1px solid rgba(${rgb}, 0.3)`,
@@ -405,36 +399,25 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
               }}>
                 المرحلة {phase.number}
               </span>
-              <span style={{ color: '#475569', fontSize: 12 }}>{phase.duration}</span>
+              <span className="text-slate-600 text-xs">{phase.duration}</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div className="flex items-center gap-2">
               <span style={{ color: color, fontSize: 12, fontWeight: 700 }}>
                 {doneTopics}/{totalTopics}
               </span>
-              <span style={{
-                color: '#64748B',
-                fontSize: 14,
-                transition: 'transform 0.3s',
-                display: 'inline-block',
-                transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-              }}>▼</span>
+              <span className="text-slate-500 text-sm inline-block transition-transform duration-300" style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
             </div>
           </div>
 
-          <div style={{ marginBottom: 10 }}>
-            <h3 style={{ color: '#F1F5F9', fontWeight: 800, fontSize: 16, marginBottom: 2 }}>
+          <div className="mb-2.5">
+            <h3 className="text-slate-200 font-black text-base mb-[2px]">
               {phase.nameAr}
             </h3>
-            <p style={{ color: '#64748B', fontSize: 12 }}>{phase.nameEn}</p>
+            <p className="text-slate-500 text-xs">{phase.nameEn}</p>
           </div>
 
           {/* Mini progress bar */}
-          <div style={{
-            height: 6,
-            borderRadius: 3,
-            background: 'rgba(255,255,255,0.06)',
-            overflow: 'hidden',
-          }}>
+          <div className="h-[6px] rounded-[3px] overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
             <div style={{
               height: '100%',
               width: `${phaseProgress}%`,
@@ -446,8 +429,8 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
               transition: 'width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
             }} />
           </div>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 4 }}>
-            <span style={{ color: '#475569', fontSize: 11 }}>{phaseProgress}% مكتمل</span>
+          <div className="flex justify-end mt-1">
+            <span className="text-slate-600 text-[11px]">{phaseProgress}% مكتمل</span>
           </div>
         </div>
 
@@ -463,11 +446,7 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
             }}
           >
             {/* Tabs */}
-            <div style={{
-              display: 'flex',
-              borderBottom: '1px solid rgba(255,255,255,0.06)',
-              padding: '0 16px',
-            }}>
+            <div className="flex" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '0 16px' }}>
               {([
                 { key: 'content', label: 'المحتوى' },
                 { key: 'resources', label: 'المصادر' },
@@ -476,18 +455,12 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
+                  className="bg-none border-none text-sm cursor-pointer transition-all mb-[-1px]"
                   style={{
                     padding: '12px 16px',
-                    background: 'none',
-                    border: 'none',
                     borderBottom: activeTab === tab.key ? `2px solid ${color}` : '2px solid transparent',
                     color: activeTab === tab.key ? color : '#64748B',
-                    fontFamily: "'Cairo', sans-serif",
-                    fontSize: 13,
                     fontWeight: activeTab === tab.key ? 700 : 500,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s',
-                    marginBottom: -1,
                   }}
                 >
                   {tab.label}
@@ -496,14 +469,14 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
             </div>
 
             {/* Tab content */}
-            <div style={{ padding: 20 }}>
+            <div className="p-5">
               {/* CONTENT TAB */}
               {activeTab === 'content' && (
                 <div>
                   {phase.topicGroups.map((group, gi) => (
                     <div key={group.id} style={{ marginBottom: gi < phase.topicGroups.length - 1 ? 28 : 0 }}>
                       {/* Group header with left dot */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, direction: 'rtl' }}>
+                      <div className="flex items-center gap-2.5 mb-[14px]" dir="rtl">
                         <div style={{
                           width: 10,
                           height: 10,
@@ -519,8 +492,8 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                           flexShrink: 0,
                         }} />
                         <div>
-                          <span style={{ color: '#CBD5E1', fontWeight: 700, fontSize: 13 }}>{group.nameAr}</span>
-                          <span style={{ color: '#475569', fontSize: 11, marginRight: 8 }}>{group.nameEn}</span>
+                          <span className="text-slate-300 font-bold text-sm">{group.nameAr}</span>
+                          <span className="text-slate-600 text-[11px] mr-2">{group.nameEn}</span>
                         </div>
                       </div>
 
@@ -531,13 +504,7 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                           return (
                             <div key={topic.id} style={{ borderBottom: ti < group.topics.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
                               <div
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: 10,
-                                  padding: '8px 0',
-                                  cursor: 'pointer',
-                                }}
+                                className="flex items-center gap-2.5 py-2 cursor-pointer"
                                 onClick={() => handleToggleTopic(topic.id)}
                               >
                                 {/* Custom checkbox */}
@@ -559,7 +526,7 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                                   )}
                                 </div>
 
-                                <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+                                <div className="flex-1 flex items-center">
                                   <span style={{
                                     color: checked ? '#475569' : '#CBD5E1',
                                     textDecoration: checked ? 'line-through' : 'none',
@@ -570,57 +537,49 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                                     {topic.nameAr}
                                   </span>
                                   {topic.essential && (
-                                    <span style={{
-                                      marginRight: 6,
-                                      fontSize: 10,
-                                      color: '#FBBF24',
-                                      background: 'rgba(251,191,36,0.1)',
-                                      borderRadius: 4,
-                                      padding: '1px 5px',
-                                      border: '1px solid rgba(251,191,36,0.2)',
-                                    }}>⭐ أساسي</span>
+                                    <span className="mr-[6px] text-[10px] text-amber-400 rounded px-[5px] py-[1px]" style={{ background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.2)' }}>⭐ أساسي</span>
                                   )}
                                   <button
                                     onClick={(e) => { e.stopPropagation(); setExpandedTopic(expandedTopic === topic.id ? null : topic.id); }}
-                                    style={{ background: 'none', border: 'none', color: expandedTopic === topic.id ? color : '#64748B', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', padding: '4px 8px', marginRight: 8, transition: 'color 0.2s', borderRadius: 6 }}
+                                    className="bg-none border-none cursor-pointer px-2 py-1 mr-2 transition-colors rounded" style={{ color: expandedTopic === topic.id ? color : '#64748B' }}
                                     title="إضافة ملاحظات وتواريخ"
                                   >
                                     <Edit3 size={14} />
                                   </button>
                                 </div>
 
-                                <span style={{ color: '#334155', fontSize: 11 }}>{topic.nameEn}</span>
+                                <span className="text-slate-700 text-[11px]">{topic.nameEn}</span>
                               </div>
                               
                               {/* Inline Details Panel */}
                               {expandedTopic === topic.id && (
-                                <div className="animate-slide-down" style={{ padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: 8, marginBottom: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                                  <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                                    <div style={{ flex: 1, minWidth: 120 }}>
-                                      <label style={{ display: 'block', fontSize: 11, color: '#94A3B8', marginBottom: 4 }}>تاريخ البدء</label>
+                                <div className="animate-slide-down p-3 rounded-lg mb-3 flex flex-col gap-2.5" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                                  <div className="flex gap-3 flex-wrap">
+                                    <div className="flex-1 min-w-[120px]">
+                                      <label className="block text-[11px] text-slate-400 mb-1">تاريخ البدء</label>
                                       <input type="date"
                                         value={topicDetails[topic.id]?.startDate || ''}
                                         onChange={(e) => updateTopicDetails(topic.id, { startDate: e.target.value })}
-                                        style={{ width: '100%', padding: '6px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.3)', color: '#F8FAFC', fontSize: 12, fontFamily: "'Cairo', sans-serif", outline: 'none', colorScheme: 'dark' }}
+                                        className="w-full px-[10px] py-[6px] rounded text-sm outline-none" style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.3)', color: '#F8FAFC', colorScheme: 'dark' }}
                                       />
                                     </div>
-                                    <div style={{ flex: 1, minWidth: 120 }}>
-                                      <label style={{ display: 'block', fontSize: 11, color: '#94A3B8', marginBottom: 4 }}>تاريخ الانتهاء</label>
+                                    <div className="flex-1 min-w-[120px]">
+                                      <label className="block text-[11px] text-slate-400 mb-1">تاريخ الانتهاء</label>
                                       <input type="date"
                                         value={topicDetails[topic.id]?.endDate || ''}
                                         onChange={(e) => updateTopicDetails(topic.id, { endDate: e.target.value })}
-                                        style={{ width: '100%', padding: '6px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.3)', color: '#F8FAFC', fontSize: 12, fontFamily: "'Cairo', sans-serif", outline: 'none', colorScheme: 'dark' }}
+                                        className="w-full px-[10px] py-[6px] rounded text-sm outline-none" style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.3)', color: '#F8FAFC', colorScheme: 'dark' }}
                                       />
                                     </div>
                                   </div>
                                   <div>
-                                    <label style={{ display: 'block', fontSize: 11, color: '#94A3B8', marginBottom: 4 }}>ملاحظات</label>
+                                    <label className="block text-[11px] text-slate-400 mb-1">ملاحظات</label>
                                     <textarea
                                       value={topicDetails[topic.id]?.note || ''}
                                       onChange={(e) => updateTopicDetails(topic.id, { note: e.target.value })}
                                       placeholder="اكتب ملاحظاتك هنا..."
                                       rows={2}
-                                      style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.3)', color: '#F8FAFC', fontSize: 12, fontFamily: "'Cairo', sans-serif", outline: 'none', resize: 'vertical' }}
+                                      className="w-full px-[10px] py-2 rounded text-sm outline-none resize-y" style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.3)', color: '#F8FAFC' }}
                                     />
                                   </div>
                                 </div>
@@ -640,26 +599,32 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                   <Accordion.Root type="single" collapsible defaultValue="">
                     <Accordion.Item value="resources" style={{ border: 'none' }}>
                       <Accordion.Header style={{ margin: 0 }}>
-                        <Accordion.Trigger style={{
-                          width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                          padding: '16px 20px', background: `rgba(${rgb}, 0.06)`, border: `1px solid rgba(${rgb}, 0.2)`,
-                          borderRadius: 12, color: '#F1F5F9', fontSize: 14, fontWeight: 700, fontFamily: "'Cairo', sans-serif",
-                          cursor: 'pointer', outline: 'none', transition: 'all 0.2s',
-                        }}>
+                        <Accordion.Trigger className="w-full flex items-center justify-between text-sm font-bold text-slate-200 cursor-pointer outline-none transition-all"
+                          style={{
+                            padding: '16px 20px',
+                            background: `rgba(${rgb}, 0.06)`,
+                            border: `1px solid rgba(${rgb}, 0.2)`,
+                            borderRadius: 12,
+                          }}>
                           <span>📚 المصادر والمراجع ({finalResources.length})</span>
-                          <span style={{ color: '#64748B', fontSize: 12 }}>▼ عرض</span>
+                          <span className="text-slate-500 text-xs">▼ عرض</span>
                         </Accordion.Trigger>
                       </Accordion.Header>
                       <Accordion.Content className="animate-slide-down" style={{ overflow: 'hidden' }}>
-                        <div style={{ paddingTop: 16 }}>
+                        <div className="pt-4">
                           
                           {/* Filter bar */}
-                          <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+                          <div className="flex gap-2 mb-4 flex-wrap">
                             {RESOURCE_FILTERS.map(f => (
                               <button
                                 key={f.key}
                                 onClick={() => setResourceFilter(f.key)}
-                                style={{ padding: '5px 12px', borderRadius: 20, border: `1px solid ${resourceFilter === f.key ? `rgba(${rgb}, 0.5)` : 'rgba(255,255,255,0.08)'}`, background: resourceFilter === f.key ? `rgba(${rgb}, 0.15)` : 'rgba(255,255,255,0.03)', color: resourceFilter === f.key ? color : '#64748B', fontSize: 12, fontWeight: 600, fontFamily: "'Cairo', sans-serif", cursor: 'pointer', transition: 'all 0.2s' }}
+                                className="px-3 py-[5px] rounded-full text-xs font-semibold cursor-pointer transition-all"
+                                style={{
+                                  border: `1px solid ${resourceFilter === f.key ? `rgba(${rgb}, 0.5)` : 'rgba(255,255,255,0.08)'}`,
+                                  background: resourceFilter === f.key ? `rgba(${rgb}, 0.15)` : 'rgba(255,255,255,0.03)',
+                                  color: resourceFilter === f.key ? color : '#64748B',
+                                }}
                               >
                                 {f.label}
                               </button>
@@ -667,20 +632,20 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                           </div>
 
                           {/* DND Context for Resources List per Group */}
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                          <div className="flex flex-col gap-6">
                             {groupedResources.length === 0 ? (
-                              <p style={{ color: '#475569', textAlign: 'center', padding: 20, fontSize: 13 }}>ما فيش نتائج</p>
+                              <p className="text-slate-600 text-center py-5 text-sm">ما فيش نتائج</p>
                             ) : (
                               groupedResources.map(group => (
                                 <div key={group.id}>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                                  <div className="flex items-center gap-2.5 mb-4">
                                     <div style={{ width: 6, height: 6, borderRadius: '50%', background: color, boxShadow: `0 0 8px ${color}` }} />
-                                    <h4 style={{ color: '#CBD5E1', fontSize: 13, fontWeight: 700, margin: 0 }}>{group.title}</h4>
-                                    <div style={{ flex: 1, height: 1, background: `rgba(${rgb}, 0.2)` }} />
+                                    <h4 className="text-slate-300 text-sm font-bold m-0">{group.title}</h4>
+                                    <div className="flex-1 h-[1px]" style={{ background: `rgba(${rgb}, 0.2)` }} />
                                   </div>
                                   <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e, group.resources)}>
                                     <SortableContext items={group.resources.map(r => r.id)} strategy={verticalListSortingStrategy}>
-                                      <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                                      <div className="flex flex-col gap-0">
                                         {group.resources.map(r => (
                                           <SortableResourceItem key={r.id} resource={r} rgb={rgb} color={color} onRemoveCustom={(id) => removeCustomResource(phase.id, id)} />
                                         ))}
@@ -694,10 +659,10 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
 
                           {/* Reset order button */}
                           {hasCustomOrder && resourceFilter === 'all' && (
-                            <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: 12, marginBottom: 24 }}>
+                            <div className="flex justify-start mt-3 mb-6">
                               <button
                                 onClick={() => resetResourceOrder(phase.id)}
-                                style={{ background: 'transparent', border: `1px solid rgba(248,113,113,0.3)`, color: '#F87171', fontSize: 12, padding: '6px 14px', borderRadius: 8, fontFamily: "'Cairo', sans-serif", cursor: 'pointer', fontWeight: 600 }}
+                                className="bg-transparent text-red-400 text-xs px-[14px] py-[6px] rounded-lg font-semibold cursor-pointer" style={{ border: '1px solid rgba(248,113,113,0.3)' }}
                               >
                                 ↺ استعادة الترتيب الأصلي
                               </button>
@@ -705,21 +670,21 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                           )}
 
                           {/* ── Custom / Personal Resources Add ── */}
-                          <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                              <p style={{ color: '#64748B', fontSize: 12, fontWeight: 700, letterSpacing: 1 }}>📌 إدارة مصادرك الشخصية</p>
-                              <button onClick={() => setShowAddForm(!showAddForm)} style={{ padding: '5px 12px', borderRadius: 8, border: `1px solid rgba(${rgb}, 0.3)`, background: showAddForm ? `rgba(${rgb}, 0.15)` : 'rgba(255,255,255,0.03)', color: color, fontSize: 12, fontWeight: 700, fontFamily: "'Cairo', sans-serif", cursor: 'pointer', transition: 'all 0.2s' }}>
+                          <div className="mt-6 pt-6" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                            <div className="flex items-center justify-between mb-3">
+                              <p className="text-slate-500 text-xs font-bold tracking-[1px]">📌 إدارة مصادرك الشخصية</p>
+                              <button onClick={() => setShowAddForm(!showAddForm)} className="text-xs font-bold cursor-pointer transition-all px-3 py-[5px] rounded-lg" style={{ border: `1px solid rgba(${rgb}, 0.3)`, background: showAddForm ? `rgba(${rgb}, 0.15)` : 'rgba(255,255,255,0.03)', color: color }}>
                                 {showAddForm ? '✕ إلغاء' : '➕ أضف مصدر'}
                               </button>
                             </div>
 
                             {/* Add form */}
                             {showAddForm && (
-                              <div className="animate-slide-down" style={{ padding: '16px', borderRadius: 12, border: `1px solid rgba(${rgb}, 0.25)`, background: `rgba(${rgb}, 0.04)`, marginBottom: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                              <div className="animate-slide-down p-4 rounded-xl mb-3 flex flex-col gap-2.5" style={{ border: `1px solid rgba(${rgb}, 0.25)`, background: `rgba(${rgb}, 0.04)` }}>
                                 {[{ val: newResName, set: setNewResName, ph: 'اسم المصدر *', required: true }, { val: newResUrl,  set: setNewResUrl,  ph: 'رابط URL (اختياري)', required: false }, { val: newResNote, set: setNewResNote, ph: 'ملاحظة (اختياري)', required: false }].map(({ val, set, ph }) => (
-                                  <input key={ph} type="text" value={val} placeholder={ph} onChange={e => set(e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: `1px solid rgba(${rgb}, 0.25)`, background: 'rgba(255,255,255,0.04)', color: '#F1F5F9', fontSize: 13, fontFamily: "'Cairo', sans-serif", outline: 'none', boxSizing: 'border-box' }} />
+                                  <input key={ph} type="text" value={val} placeholder={ph} onChange={e => set(e.target.value)} className="w-full p-[10px_12px] rounded-lg text-sm text-slate-200 outline-none box-border" style={{ border: `1px solid rgba(${rgb}, 0.25)`, background: 'rgba(255,255,255,0.04)' }} />
                                 ))}
-                                <button onClick={handleAddResource} disabled={!newResName.trim()} style={{ padding: '10px', borderRadius: 8, border: 'none', background: newResName.trim() ? `linear-gradient(135deg, ${color}, ${color}99)` : 'rgba(255,255,255,0.06)', color: newResName.trim() ? '#000' : '#475569', fontWeight: 700, fontFamily: "'Cairo', sans-serif", cursor: newResName.trim() ? 'pointer' : 'not-allowed', fontSize: 13 }}>حفظ المصدر</button>
+                                <button onClick={handleAddResource} disabled={!newResName.trim()} className="p-[10px] rounded-lg border-none text-sm font-bold" style={{ background: newResName.trim() ? `linear-gradient(135deg, ${color}, ${color}99)` : 'rgba(255,255,255,0.06)', color: newResName.trim() ? '#000' : '#475569', cursor: newResName.trim() ? 'pointer' : 'not-allowed' }}>حفظ المصدر</button>
                               </div>
                             )}
                           </div>
@@ -734,20 +699,11 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
               {/* TASKS TAB */}
               {activeTab === 'tasks' && (
                 <div>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: 16,
-                    padding: '10px 14px',
-                    borderRadius: 10,
-                    background: `rgba(${rgb}, 0.08)`,
-                    border: `1px solid rgba(${rgb}, 0.2)`,
-                  }}>
+                  <div className="flex items-center justify-between mb-4 p-[10px_14px] rounded-xl" style={{ background: `rgba(${rgb}, 0.08)`, border: `1px solid rgba(${rgb}, 0.2)` }}>
                     <span style={{ color: color, fontSize: 13, fontWeight: 700 }}>
                       {doneTasks}/{totalTasks} خلصت
                     </span>
-                    <div style={{ display: 'flex', gap: 6 }}>
+                    <div className="flex gap-[6px]">
                       {phase.tasks.map(t => (
                         <div key={t.id} style={{
                           width: 8,
@@ -761,49 +717,35 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <div className="flex flex-col gap-2.5">
                     {phase.tasks.map(task => {
                       const done = !!checkedTasks[task.id];
                       return (
                         <div
                           key={task.id}
+                          className="p-[14px_16px] rounded-xl flex items-start gap-3 transition-all"
                           style={{
-                            padding: '14px 16px',
-                            borderRadius: 12,
                             border: `1px solid ${done ? `rgba(${rgb}, 0.25)` : 'rgba(255,255,255,0.07)'}`,
                             background: done ? `rgba(${rgb}, 0.06)` : 'rgba(255,255,255,0.02)',
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                            gap: 12,
-                            transition: 'all 0.2s',
                           }}
                         >
                           {/* Task checkbox */}
                           <div
+                            className="w-6 h-6 rounded shrink-0 flex items-center justify-center cursor-pointer transition-all mt-[1px]"
                             style={{
-                              width: 24,
-                              height: 24,
-                              borderRadius: 7,
                               border: done ? `2px solid ${color}` : '2px solid rgba(255,255,255,0.12)',
                               background: done ? `rgba(${rgb}, 0.2)` : 'transparent',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              cursor: 'pointer',
-                              flexShrink: 0,
-                              transition: 'all 0.25s',
                               boxShadow: done ? `0 0 8px rgba(${rgb}, 0.4)` : 'none',
-                              marginTop: 1,
                             }}
                             onClick={() => toggleTask(task.id)}
                           >
                             {done && <span className="animate-checkbox" style={{ color, fontSize: 13 }}>✓</span>}
                           </div>
 
-                          <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                              <span style={{ fontSize: 16 }}>{taskTypeIcon(task.type)}</span>
-                              <span style={{ color: '#475569', fontSize: 11, textTransform: 'uppercase', letterSpacing: 1 }}>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-base">{taskTypeIcon(task.type)}</span>
+                              <span className="text-slate-600 text-[11px] uppercase tracking-[1px]">
                                 {task.type === 'build' ? 'Build' : task.type === 'deploy' ? 'Deploy' : 'Read'}
                               </span>
                             </div>
@@ -824,18 +766,11 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                               href={task.link}
                               target="_blank"
                               rel="noopener noreferrer"
+                              className="shrink-0 text-[11px] font-bold no-underline px-3 py-[5px] rounded-lg"
                               style={{
-                                padding: '5px 12px',
-                                borderRadius: 8,
                                 border: `1px solid rgba(${rgb}, 0.3)`,
                                 background: `rgba(${rgb}, 0.1)`,
                                 color: color,
-                                fontSize: 11,
-                                fontWeight: 700,
-                                textDecoration: 'none',
-                                fontFamily: "'Cairo', sans-serif",
-                                whiteSpace: 'nowrap',
-                                flexShrink: 0,
                               }}
                             >
                               افتح ↗
