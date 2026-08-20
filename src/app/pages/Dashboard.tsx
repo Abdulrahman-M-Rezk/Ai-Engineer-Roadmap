@@ -6,6 +6,7 @@ import { PhaseCard } from '../components/PhaseCard';
 import { SearchModal } from '../components/SearchModal';
 import { BottomNav } from '../components/BottomNav';
 import { DailyTracker } from '../components/DailyTracker';
+import { getTodayLocal } from '../utils/dates';
 
 /* ── Motivational quotes ── */
 const QUOTES = [
@@ -36,14 +37,6 @@ const REFERENCES = [
   { name: 'Moataz Elmesmary — Data Science Roadmap', url: 'https://github.com/Moataz-Elmesmary/Data-Science-Roadmap', desc: '4.2k ⭐ — أشمل Roadmap عربي للـ Data Science' },
   { name: 'Mariam Ahmed — IEEE ManCSC 2025', url: 'https://github.com/Mariam-Ahmed15/Data-Science-Roadmap-IEEEManCSC-2025', desc: 'Roadmap منظم بالأسابيع — مثالي للمبتدئين' },
   ];
-
-function getTodayLocal(): string {
-  const now = new Date();
-  const yyyy = now.getFullYear();
-  const mm = String(now.getMonth() + 1).padStart(2, '0');
-  const dd = String(now.getDate()).padStart(2, '0');
-  return `${yyyy}-${mm}-${dd}`;
-}
 
 function SyncDot({ status }: { status: 'synced' | 'syncing' | 'error' }) {
   const colors: Record<string, string> = { synced: '#34D399', syncing: '#FBBF24', error: '#F87171' };
@@ -106,13 +99,12 @@ function ReferencesModal({ onClose }: { onClose: () => void }) {
 }
 
 export default function Dashboard() {
-  const { isAuthenticated, username, email, checkedTopics, setIsSearchOpen, resetPassword, logout, syncStatus, dailyTasks } = useApp();
+  const { username, email, checkedTopics, setIsSearchOpen, resetPassword, logout, syncStatus, dailyTasks } = useApp();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [showReferences, setShowReferences] = useState(false);
-  const [greetingDone, setGreetingDone] = useState(false);
   const [activeTab, setActiveTab] = useState<'roadmap' | 'daily'>('roadmap');
-  const quote = useMemo(() => QUOTES[Math.floor(Math.random() * QUOTES.length)], []);
-  const dailyQuote = useMemo(() => DAILY_QUOTES[Math.floor(Math.random() * DAILY_QUOTES.length)], []);
+  const [quote] = useState(() => QUOTES[Math.floor(Math.random() * QUOTES.length)]);
+  const [dailyQuote] = useState(() => DAILY_QUOTES[Math.floor(Math.random() * DAILY_QUOTES.length)]);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);

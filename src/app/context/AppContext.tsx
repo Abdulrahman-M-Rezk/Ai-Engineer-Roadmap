@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
-import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
+import { doc, setDoc, onSnapshot } from 'firebase/firestore';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -239,60 +239,39 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   /* ── Toggles ── */
   const toggleTopic = useCallback((id: string) => {
-    setCheckedTopics(prev => {
-      const next = { ...prev, [id]: !prev[id] };
-      rTopics.current = next;
-      save();
-      return next;
-    });
+    setCheckedTopics(prev => ({ ...prev, [id]: !prev[id] }));
+    save();
   }, [save]);
 
   const toggleTask = useCallback((id: string) => {
-    setCheckedTasks(prev => {
-      const next = { ...prev, [id]: !prev[id] };
-      rTasks.current = next;
-      save();
-      return next;
-    });
+    setCheckedTasks(prev => ({ ...prev, [id]: !prev[id] }));
+    save();
   }, [save]);
 
   /* ── Custom Resources ── */
   const addCustomResource = useCallback((phaseId: string, resource: { name: string; url: string; note: string }) => {
     const newRes: CustomResource = { ...resource, id: `cr-${Date.now()}` };
-    setCustomResources(prev => {
-      const next = { ...prev, [phaseId]: [...(prev[phaseId] || []), newRes] };
-      rCustom.current = next;
-      save();
-      return next;
-    });
+    setCustomResources(prev => ({ ...prev, [phaseId]: [...(prev[phaseId] || []), newRes] }));
+    save();
   }, [save]);
 
   const removeCustomResource = useCallback((phaseId: string, resourceId: string) => {
-    setCustomResources(prev => {
-      const next = { ...prev, [phaseId]: (prev[phaseId] || []).filter(r => r.id !== resourceId) };
-      rCustom.current = next;
-      save();
-      return next;
-    });
+    setCustomResources(prev => ({ ...prev, [phaseId]: (prev[phaseId] || []).filter(r => r.id !== resourceId) }));
+    save();
   }, [save]);
 
   const updateResourceOrder = useCallback((phaseId: string, newOrder: string[]) => {
-    setResourceOrder(prev => {
-      const next = { ...prev, [phaseId]: newOrder };
-      rOrder.current = next;
-      save();
-      return next;
-    });
+    setResourceOrder(prev => ({ ...prev, [phaseId]: newOrder }));
+    save();
   }, [save]);
 
   const resetResourceOrder = useCallback((phaseId: string) => {
     setResourceOrder(prev => {
       const next = { ...prev };
       delete next[phaseId];
-      rOrder.current = next;
-      save();
       return next;
     });
+    save();
   }, [save]);
 
   const updateTopicDetails = useCallback((topicId: string, details: Partial<TopicDetails>) => {
@@ -304,34 +283,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   /* ── Daily Tasks ── */
   const addDailyTask = useCallback((date: string, text: string, priority: 'high' | 'medium' | 'low' = 'medium') => {
     const newTask: DailyTask = { id: `dt-${Date.now()}`, text, completed: false, priority };
-    setDailyTasks(prev => {
-      const next = { ...prev, [date]: [...(prev[date] || []), newTask] };
-      rDailyTasks.current = next;
-      save();
-      return next;
-    });
+    setDailyTasks(prev => ({ ...prev, [date]: [...(prev[date] || []), newTask] }));
+    save();
   }, [save]);
 
   const toggleDailyTask = useCallback((date: string, taskId: string) => {
-    setDailyTasks(prev => {
-      const tasks = (prev[date] || []).map(t =>
+    setDailyTasks(prev => ({
+      ...prev,
+      [date]: (prev[date] || []).map(t =>
         t.id === taskId ? { ...t, completed: !t.completed } : t
-      );
-      const next = { ...prev, [date]: tasks };
-      rDailyTasks.current = next;
-      save();
-      return next;
-    });
+      ),
+    }));
+    save();
   }, [save]);
 
   const deleteDailyTask = useCallback((date: string, taskId: string) => {
-    setDailyTasks(prev => {
-      const tasks = (prev[date] || []).filter(t => t.id !== taskId);
-      const next = { ...prev, [date]: tasks };
-      rDailyTasks.current = next;
-      save();
-      return next;
-    });
+    setDailyTasks(prev => ({
+      ...prev,
+      [date]: (prev[date] || []).filter(t => t.id !== taskId),
+    }));
+    save();
   }, [save]);
 
   return (

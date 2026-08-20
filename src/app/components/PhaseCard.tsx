@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import confetti from 'canvas-confetti';
 import * as Accordion from '@radix-ui/react-accordion';
-import { GripVertical, Copy, Check, Edit3, ChevronDown } from 'lucide-react';
+import { GripVertical, Copy, Check, Edit3 } from 'lucide-react';
 import {
   DndContext,
   closestCenter,

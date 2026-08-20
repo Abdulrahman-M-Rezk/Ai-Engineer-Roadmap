@@ -74,7 +74,7 @@ const TOPICS_MAP: Record<string, MockResult> = {
   },
 };
 
-function findMockResult(query: string): MockResult {
+export function findMockResult(query: string): MockResult {
   const lower = query.toLowerCase();
   for (const key of Object.keys(TOPICS_MAP)) {
     if (lower.includes(key)) return TOPICS_MAP[key];
@@ -89,10 +89,17 @@ export function SearchModal() {
   const [result, setResult] = useState<MockResult | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
+  const [wasOpen, setWasOpen] = useState(false);
+  if (wasOpen !== isSearchOpen) {
+    setWasOpen(isSearchOpen);
     if (isSearchOpen) {
       setQuery('');
       setResult(null);
+    }
+  }
+
+  useEffect(() => {
+    if (isSearchOpen) {
       setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isSearchOpen]);

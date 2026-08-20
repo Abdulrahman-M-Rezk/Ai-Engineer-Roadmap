@@ -1,14 +1,7 @@
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import type { DailyTask } from '../context/AppContext';
-
-function getTodayLocal(): string {
-  const now = new Date();
-  const yyyy = now.getFullYear();
-  const mm = String(now.getMonth() + 1).padStart(2, '0');
-  const dd = String(now.getDate()).padStart(2, '0');
-  return `${yyyy}-${mm}-${dd}`;
-}
+import { getTodayLocal } from '../utils/dates';
 
 const PRIORITY_STYLES: Record<DailyTask['priority'], { bg: string; border: string; badgeBg: string; badgeText: string; label: string }> = {
   high:   { bg: 'rgba(239,68,68,0.10)',  border: 'rgba(239,68,68,0.30)',  badgeBg: 'rgba(239,68,68,0.20)',  badgeText: '#F87171', label: 'عالية 🔴' },
@@ -33,7 +26,7 @@ export function DailyTracker() {
 
   const openGoogleCalendar = (text: string) => {
     const dateStr = selectedDate.replace(/-/g, '');
-    const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(text)}&dates=${dateStr}T090000Z/${dateStr}T100000Z`;
+    const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(text)}&dates=${dateStr}T09:00:00/${dateStr}T10:00:00`;
     window.open(url, '_blank');
   };
 
@@ -41,7 +34,7 @@ export function DailyTracker() {
     <div dir="ltr" className="w-full mx-auto flex flex-col gap-6">
       {/* Date Selection */}
       <div>
-        <label className="text-slate-350 text-sm mr-2">Select a date:</label>
+        <label className="text-slate-400 text-sm mr-2">Select a date:</label>
         <input
           type="date"
           value={selectedDate}
@@ -132,7 +125,7 @@ export function DailyTracker() {
                   title="أضف للتقويم"
                   className="bg-transparent border-none cursor-pointer text-[13px] text-slate-400 px-1.5 py-1 rounded-md whitespace-nowrap shrink-0 hover:text-emerald-400 transition-colors"
                 >
-                  📅 Add to My Calender
+                  📅 Add to My Calendar
                 </button>
 
                 {/* Delete button */}

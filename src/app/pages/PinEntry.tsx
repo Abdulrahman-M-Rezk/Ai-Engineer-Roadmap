@@ -22,8 +22,6 @@ export default function PinEntry() {
 
   useEffect(() => {
     emailRef.current?.focus();
-    setError('');
-    setResetSent(false);
   }, [mode]);
 
   const triggerShake = () => { setShake(true); setTimeout(() => setShake(false), 600); };
