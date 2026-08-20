@@ -4,6 +4,28 @@ import { useApp } from '../context/AppContext';
 
 type AuthMode = 'login' | 'signup' | 'recovery';
 
+const RECENT_EMAILS_KEY = 'ai-roadmap-recent-emails';
+
+function getRecentEmails(): string[] {
+  try {
+    const raw = localStorage.getItem(RECENT_EMAILS_KEY);
+    const list: unknown = raw ? JSON.parse(raw) : [];
+    return Array.isArray(list) ? list.filter((e): e is string => typeof e === 'string') : [];
+  } catch {
+    return [];
+  }
+}
+
+function rememberEmail(email: string) {
+  try {
+    const list = getRecentEmails().filter(e => e.toLowerCase() !== email.toLowerCase());
+    list.unshift(email);
+    localStorage.setItem(RECENT_EMAILS_KEY, JSON.stringify(list.slice(0, 5)));
+  } catch {
+    /* storage unavailable — ignore */
+  }
+}
+
 export default function PinEntry() {
   const [mode, setMode] = useState<AuthMode>('login');
   const [email, setEmail] = useState('');
@@ -17,8 +39,14 @@ export default function PinEntry() {
   const [resetSent, setResetSent] = useState(false);
 
   const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
   const { isAuthenticated, login, signup, resetPassword } = useApp();
   const navigate = useNavigate();
+
+  const [showEmailSuggestions, setShowEmailSuggestions] = useState(false);
+  const emailSuggestions = getRecentEmails().filter(
+    e => !email.trim() || e.toLowerCase().includes(email.trim().toLowerCase())
+  );
 
   useEffect(() => {
     emailRef.current?.focus();
@@ -58,6 +86,7 @@ export default function PinEntry() {
     setLoading(false);
 
     if (res.success) {
+      rememberEmail(email.trim());
       setSuccess(true);
       setTimeout(() => navigate('/dashboard'), 600);
     } else {
@@ -118,18 +147,46 @@ export default function PinEntry() {
           <>
             <div className="flex flex-col gap-4">
               {/* Email */}
-              <input
-                ref={emailRef}
-                type="email"
-                dir="ltr"
-                placeholder="البريد الإلكتروني"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                onKeyDown={e => { if (e.key === 'Enter') handleSubmit(); }}
-                className="w-full px-5 py-4 rounded-xl bg-[#0D1525]/90 border-2 border-white/10 text-white text-lg outline-none transition-all text-left"
-                onFocus={e => { e.target.style.border = '2px solid #00D4FF'; }}
-                onBlur={e => { e.target.style.border = '2px solid rgba(255,255,255,0.08)'; }}
-              />
+              <div className="relative">
+                <input
+                  ref={emailRef}
+                  type="email"
+                  dir="ltr"
+                  autoComplete="email"
+                  placeholder="البريد الإلكتروني"
+                  value={email}
+                  onChange={e => { setEmail(e.target.value); setShowEmailSuggestions(true); }}
+                  onKeyDown={e => { if (e.key === 'Enter') handleSubmit(); }}
+                  onFocus={e => { e.target.style.border = '2px solid #00D4FF'; setShowEmailSuggestions(true); }}
+                  onBlur={e => {
+                    e.target.style.border = '2px solid rgba(255,255,255,0.08)';
+                    setTimeout(() => setShowEmailSuggestions(false), 150);
+                  }}
+                  className="w-full px-5 py-4 rounded-xl bg-[#0D1525]/90 border-2 border-white/10 text-white text-lg outline-none transition-all text-left"
+                />
+                {showEmailSuggestions && emailSuggestions.length > 0 && (
+                  <div className="absolute top-full left-0 right-0 mt-2 rounded-xl overflow-hidden text-left" style={{ border: '1px solid rgba(0,212,255,0.2)', background: 'rgba(13,21,37,0.98)', boxShadow: '0 12px 32px rgba(0,0,0,0.6)', zIndex: 30 }}>
+                    <div className="px-4 py-2 text-[11px] text-slate-500 font-semibold">بريد مستخدم سابقاً</div>
+                    {emailSuggestions.map(em => (
+                      <button
+                        key={em}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setEmail(em);
+                          setShowEmailSuggestions(false);
+                          setTimeout(() => passwordRef.current?.focus(), 0);
+                        }}
+                        className="w-full px-4 py-3 text-left text-slate-300 text-base cursor-pointer transition-colors"
+                        style={{ background: 'transparent', border: 'none', borderTop: '1px solid rgba(255,255,255,0.05)' }}
+                        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,212,255,0.08)'; e.currentTarget.style.color = '#00D4FF'; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#CBD5E1'; }}
+                      >
+                        ✉️ {em}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               {/* Display name (signup only) */}
               {mode === 'signup' && (
@@ -148,8 +205,10 @@ export default function PinEntry() {
               {/* Password (hidden in recovery mode) */}
               {mode !== 'recovery' && (
                 <input
+                  ref={passwordRef}
                   type="password"
                   dir="ltr"
+                  autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
                   placeholder={mode === 'signup' ? 'كلمة المرور (6 أحرف على الأقل)' : 'كلمة المرور'}
                   value={password}
                   onChange={e => setPassword(e.target.value)}
