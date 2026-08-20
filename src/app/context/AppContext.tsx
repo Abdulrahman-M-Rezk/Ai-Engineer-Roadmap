@@ -17,6 +17,13 @@ export type TopicDetails = {
   note?: string;
 };
 
+export interface DailyTask {
+  id: string;
+  text: string;
+  completed: boolean;
+  priority: 'high' | 'medium' | 'low';
+}
+
 interface AppContextType {
   isAuthenticated: boolean;
   username: string;
@@ -42,6 +49,10 @@ interface AppContextType {
   setNewPin: (newPin: string, recoveryCode: string) => Promise<{ success: boolean; error?: string }>;
   topicDetails: Record<string, TopicDetails>;
   updateTopicDetails: (topicId: string, details: Partial<TopicDetails>) => void;
+  dailyTasks: Record<string, DailyTask[]>;
+  addDailyTask: (date: string, text: string, priority?: 'high' | 'medium' | 'low') => void;
+  toggleDailyTask: (date: string, taskId: string) => void;
+  deleteDailyTask: (date: string, taskId: string) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -55,6 +66,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [customResources, setCustomResources]    = useState<Record<string, CustomResource[]>>({});
   const [resourceOrder, setResourceOrder]        = useState<Record<string, string[]>>({});
   const [topicDetails, setTopicDetails]          = useState<Record<string, TopicDetails>>({});
+  const [dailyTasks, setDailyTasks]              = useState<Record<string, DailyTask[]>>({});
   const [syncStatus, setSyncStatus]              = useState<'synced' | 'syncing' | 'error'>('synced');
   const [isSearchOpen, setIsSearchOpen]          = useState(false);
   const [activePhase, setActivePhase]            = useState<string | null>('phase-1');
@@ -66,12 +78,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const rCustom      = useRef<Record<string, CustomResource[]>>({});
   const rOrder       = useRef<Record<string, string[]>>({});
   const rTopicDetails = useRef<Record<string, TopicDetails>>({});
+  const rDailyTasks   = useRef<Record<string, DailyTask[]>>({});
 
   useEffect(() => { rTopics.current = checkedTopics; }, [checkedTopics]);
   useEffect(() => { rTasks.current  = checkedTasks;  }, [checkedTasks]);
   useEffect(() => { rCustom.current = customResources; }, [customResources]);
   useEffect(() => { rOrder.current = resourceOrder; }, [resourceOrder]);
   useEffect(() => { rTopicDetails.current = topicDetails; }, [topicDetails]);
+  useEffect(() => { rDailyTasks.current = dailyTasks; }, [dailyTasks]);
 
   /* ── Firestore listener ── */
   const attachListener = useCallback((pUsername: string) => {
@@ -87,6 +101,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           setCustomResources(d.customResources || {});
           setResourceOrder(d.resourceOrder || {});
           setTopicDetails(d.topicDetails || {});
+          setDailyTasks(d.dailyTasks || {});
         }
         setSyncStatus('synced');
       },
@@ -109,6 +124,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             customResources: rCustom.current,
             resourceOrder: rOrder.current,
             topicDetails: rTopicDetails.current,
+            dailyTasks: rDailyTasks.current,
             updatedAt: Date.now(),
           },
           { merge: true }
@@ -154,6 +170,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       setCustomResources(d.customResources || {});
       setResourceOrder(d.resourceOrder || {});
       setTopicDetails(d.topicDetails || {});
+      setDailyTasks(d.dailyTasks || {});
       
       localStorage.setItem('ai-roadmap-username', enteredUsername);
       localStorage.setItem('ai-roadmap-pin', enteredPin);
@@ -193,6 +210,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         customResources: {}, 
         resourceOrder: {},
         topicDetails: {},
+        dailyTasks: {},
         createdAt: Date.now() 
       });
 
@@ -333,6 +351,42 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     save(username);
   }, [save, username]);
 
+  /* ── Daily Tasks ── */
+  const addDailyTask = useCallback((date: string, text: string, priority: 'high' | 'medium' | 'low' = 'medium') => {
+    const u = localStorage.getItem('ai-roadmap-username') || username;
+    const newTask: DailyTask = { id: `dt-${Date.now()}`, text, completed: false, priority };
+    setDailyTasks(prev => {
+      const next = { ...prev, [date]: [...(prev[date] || []), newTask] };
+      rDailyTasks.current = next;
+      save(u);
+      return next;
+    });
+  }, [username, save]);
+
+  const toggleDailyTask = useCallback((date: string, taskId: string) => {
+    const u = localStorage.getItem('ai-roadmap-username') || username;
+    setDailyTasks(prev => {
+      const tasks = (prev[date] || []).map(t =>
+        t.id === taskId ? { ...t, completed: !t.completed } : t
+      );
+      const next = { ...prev, [date]: tasks };
+      rDailyTasks.current = next;
+      save(u);
+      return next;
+    });
+  }, [username, save]);
+
+  const deleteDailyTask = useCallback((date: string, taskId: string) => {
+    const u = localStorage.getItem('ai-roadmap-username') || username;
+    setDailyTasks(prev => {
+      const tasks = (prev[date] || []).filter(t => t.id !== taskId);
+      const next = { ...prev, [date]: tasks };
+      rDailyTasks.current = next;
+      save(u);
+      return next;
+    });
+  }, [username, save]);
+
   return (
     <AppContext.Provider value={{
       isAuthenticated, username, pin, login, signup, recoverPin, setNewPin,
@@ -341,7 +395,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       activePhase, setActivePhase,
       customResources, resourceOrder, addCustomResource, removeCustomResource,
       updateResourceOrder, resetResourceOrder,
-      topicDetails, updateTopicDetails
+      topicDetails, updateTopicDetails,
+      dailyTasks, addDailyTask, toggleDailyTask, deleteDailyTask
     }}>
       {children}
     </AppContext.Provider>

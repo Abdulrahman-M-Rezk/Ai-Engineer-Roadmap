@@ -87,7 +87,7 @@ function SortableResourceItem({ resource, rgb, color, onRemoveCustom }: { resour
       
       <div className="flex-1">
         <a href={resource.url || '#'} target="_blank" rel="noopener noreferrer" className="no-underline">
-           <p style={{ color: resource.isCustom ? color : '#CBD5E1', fontSize: 13, fontWeight: 600, marginBottom: resource.isCustom && !resource.desc ? 0 : 6 }}>
+           <p style={{ color: resource.isCustom ? color : '#CBD5E1', fontSize: 16, fontWeight: 600, marginBottom: resource.isCustom && !resource.desc ? 0 : 6, lineHeight: 1.6 }}>
               {resource.isCustom ? `📌 ${resource.name}` : resource.name}
            </p>
         </a>
@@ -108,7 +108,7 @@ function SortableResourceItem({ resource, rgb, color, onRemoveCustom }: { resour
         
         {resource.desc && (
            <div className="mt-2 p-[8px_12px] rounded-[4px_8px_8px_4px]" style={{ background: 'rgba(56, 189, 248, 0.1)', borderLeft: '3px solid #38BDF8' }}>
-             <p className="text-sky-100 text-[11.5px] leading-relaxed m-0">{resource.desc}</p>
+             <p className="text-sky-100 text-sm leading-relaxed m-0">{resource.desc}</p>
            </div>
         )}
         
@@ -530,8 +530,9 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                                   <span style={{
                                     color: checked ? '#475569' : '#CBD5E1',
                                     textDecoration: checked ? 'line-through' : 'none',
-                                    fontSize: 13,
+                                    fontSize: 16,
                                     fontWeight: checked ? 400 : 600,
+                                    lineHeight: 1.6,
                                     transition: 'all 0.2s',
                                   }}>
                                     {topic.nameAr}
@@ -548,7 +549,7 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                                   </button>
                                 </div>
 
-                                <span className="text-slate-700 text-[11px]">{topic.nameEn}</span>
+                                <span className="text-slate-500 text-xs mr-2">{topic.nameEn}</span>
                               </div>
                               
                               {/* Inline Details Panel */}
@@ -751,10 +752,10 @@ export function PhaseCard({ phase, isLast, phaseIndex }: PhaseCardProps) {
                             </div>
                             <p style={{
                               color: done ? '#475569' : '#CBD5E1',
-                              fontSize: 13,
+                              fontSize: 16,
                               fontWeight: 600,
                               textDecoration: done ? 'line-through' : 'none',
-                              lineHeight: 1.6,
+                              lineHeight: 1.8,
                               transition: 'all 0.2s',
                             }}>
                               {task.textAr}
