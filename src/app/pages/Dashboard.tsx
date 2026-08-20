@@ -106,11 +106,8 @@ function ReferencesModal({ onClose }: { onClose: () => void }) {
 }
 
 export default function Dashboard() {
-  const { isAuthenticated, username, checkedTopics, setIsSearchOpen, pin, setNewPin, syncStatus, dailyTasks } = useApp();
+  const { isAuthenticated, username, email, checkedTopics, setIsSearchOpen, resetPassword, logout, syncStatus, dailyTasks } = useApp();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [showPinChange, setShowPinChange] = useState(false);
-  const [newPinInput, setNewPinInput] = useState('');
-  const [recoveryCodeInput, setRecoveryCodeInput] = useState('');
   const [showReferences, setShowReferences] = useState(false);
   const [greetingDone, setGreetingDone] = useState(false);
   const [activeTab, setActiveTab] = useState<'roadmap' | 'daily'>('roadmap');
@@ -132,25 +129,15 @@ export default function Dashboard() {
   const todayCompleted = todayTasks.filter(t => t.completed).length;
   const dailyPct = todayTasks.length > 0 ? Math.round((todayCompleted / todayTasks.length) * 100) : 0;
 
-  const handlePinChange = async () => {
-    if (newPinInput.length !== 4 || !/^\d{4}$/.test(newPinInput)) {
-      alert('❌ أدخل 4 أرقام صحيحة للـ PIN الجديد');
-      return;
-    }
-    if (!recoveryCodeInput.trim() || recoveryCodeInput.length !== 6) {
-      alert('❌ يرجى إدخال كود الاسترجاع (6 رموز)');
-      return;
-    }
+  const handleResetPassword = async () => {
+    const res = await resetPassword(email);
+    alert(res.success
+      ? '✅ تم إرسال رابط تغيير كلمة المرور إلى بريدك الإلكتروني'
+      : `❌ ${res.error}`);
+  };
 
-    const res = await setNewPin(newPinInput, recoveryCodeInput.trim());
-    if (res.success) {
-      setShowPinChange(false);
-      setNewPinInput('');
-      setRecoveryCodeInput('');
-      alert('✅ تم تغيير الرقم السري بنجاح');
-    } else {
-      alert(`❌ ${res.error}`);
-    }
+  const handleLogout = async () => {
+    await logout();
   };
 
   return (
@@ -391,9 +378,9 @@ export default function Dashboard() {
         {/* ── FOOTER ── */}
         <footer className="w-full mt-8 pt-5 flex items-center justify-between flex-wrap gap-2.5" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
           <p className="text-slate-700 text-xs">
-            🔑 PIN: <code className="text-cyan-400/50 tracking-[2px]">{pin}</code> ·{' '}
-            <button onClick={() => setShowPinChange(!showPinChange)} className="bg-none border-none text-slate-600 text-xs cursor-pointer underline px-[4px]">
-              تغيير PIN
+            👤 <code className="text-cyan-400/50 tracking-[1px]" dir="ltr">{email}</code> ·{' '}
+            <button onClick={handleResetPassword} className="bg-none border-none text-slate-600 text-xs cursor-pointer underline px-[4px]">
+              تغيير كلمة المرور
             </button>
           </p>
           <div className="flex gap-3 items-center">
@@ -406,35 +393,16 @@ export default function Dashboard() {
             >
               📚 مصادر الـ Roadmap
             </button>
+            <button onClick={handleLogout} className="bg-none text-slate-500 text-xs cursor-pointer px-3 py-1 rounded-lg transition-all"
+              style={{ border: '1px solid rgba(248,113,113,0.25)' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = '#F87171'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = '#64748B'; }}
+            >
+              تسجيل خروج
+            </button>
             <p className="text-slate-800 text-[11px]">AI Engineer Roadmap © 2026</p>
           </div>
         </footer>
-
-        {/* PIN change form */}
-        {showPinChange && (
-          <div className="animate-slide-down glass-card fixed w-[90%] max-w-[360px] p-6 rounded-2xl z-[100] flex flex-col gap-3" style={{
-            bottom: isMobile ? 90 : 20, left: '50%', transform: 'translateX(-50%)',
-            border: '1px solid rgba(0,212,255,0.3)', boxShadow: '0 8px 40px rgba(0,0,0,0.5)',
-          }}>
-            <p className="text-slate-400 text-sm font-bold m-0">تغيير الـ PIN:</p>
-            
-            <input type="text" maxLength={6}
-              placeholder="كود الاسترجاع (6 رموز)" value={recoveryCodeInput}
-              onChange={e => setRecoveryCodeInput(e.target.value)}
-              className="p-[10px_14px] rounded-xl border border-purple-400/30 bg-white/5 text-slate-200 text-sm outline-none tracking-[2px] text-center" />
-              
-            <input type="password" inputMode="numeric" maxLength={4}
-              placeholder="PIN جديد (4 أرقام)" value={newPinInput}
-              onChange={e => setNewPinInput(e.target.value.replace(/\D/g, '').slice(0, 4))}
-              onKeyDown={e => e.key === 'Enter' && handlePinChange()}
-              className="p-[10px_14px] rounded-xl border border-cyan-400/30 bg-white/5 text-slate-200 text-base outline-none tracking-[4px] text-center" />
-              
-            <div className="flex gap-2.5 mt-1">
-              <button onClick={handlePinChange} className="flex-1 p-[10px_16px] rounded-xl border-none bg-gradient-to-r from-cyan-400 to-cyan-600 text-black font-bold text-sm cursor-pointer">تغيير</button>
-              <button onClick={() => { setShowPinChange(false); setRecoveryCodeInput(''); setNewPinInput(''); }} className="flex-1 p-[10px_12px] rounded-xl border border-white/10 bg-transparent text-slate-500 text-sm cursor-pointer">إلغاء</button>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Floating search button */}

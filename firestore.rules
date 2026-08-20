@@ -1,10 +1,8 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /progress/{docId} {
-      // Temporary rule: allow if doc has valid structure
-      // Will be updated in M4 to use Firebase Auth
-      allow read, write: if request.resource.data.keys().hasAll(['pin', 'checked', 'createdAt']);
+    match /progress/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
     }
   }
 }
