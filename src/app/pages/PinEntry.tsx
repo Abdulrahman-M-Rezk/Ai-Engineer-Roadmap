@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import { useApp } from '../context/AppContext';
 
 type AuthMode = 'login' | 'signup' | 'recovery';
@@ -17,12 +17,16 @@ export default function PinEntry() {
   const [resetSent, setResetSent] = useState(false);
 
   const emailRef = useRef<HTMLInputElement>(null);
-  const { login, signup, resetPassword } = useApp();
+  const { isAuthenticated, login, signup, resetPassword } = useApp();
   const navigate = useNavigate();
 
   useEffect(() => {
     emailRef.current?.focus();
   }, [mode]);
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const triggerShake = () => { setShake(true); setTimeout(() => setShake(false), 600); };
 
