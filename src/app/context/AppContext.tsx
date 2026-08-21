@@ -73,10 +73,22 @@ const AUTH_ERRORS: Record<string, string> = {
   'auth/too-many-requests': 'محاولات كثيرة — حاول بعد قليل',
   'auth/network-request-failed': 'خطأ في الاتصال بالشبكة',
   'auth/missing-password': 'أدخل كلمة المرور',
+  'auth/api-key-not-valid': 'مفتاح Firebase API غير صالح أو محجوب — تحقق من قيود المفتاح في Google Cloud (يجب السماح بـ localhost)',
+  'auth/invalid-api-key': 'مفتاح Firebase API غير صالح أو محجوب — تحقق من قيود المفتاح في Google Cloud (يجب السماح بـ localhost)',
+  'auth/unauthorized-domain': 'هذا النطاق غير مسموح به — أضفه في Firebase Auth → Authorized domains',
+  'auth/operation-not-allowed': 'تسجيل الدخول بالبريد/كلمة المرور غير مفعّل — فعّله في Firebase → Authentication → Sign-in method',
+  'auth/internal-error': 'خطأ داخلي في Firebase — حاول مرة أخرى',
 };
 
 function authError(code?: string): string {
-  return (code && AUTH_ERRORS[code]) || 'حدث خطأ في الاتصال';
+  if (code) {
+    console.error(`Firebase Auth error: ${code}`);
+    if (code.startsWith('auth/requests-from-referer-') || code === 'auth/request-blocked') {
+      return 'مفتاح Firebase API يحجب هذا النطاق — أضف localhost أو نطاقك في قيود المفتاح (Website restrictions) في Google Cloud';
+    }
+    return AUTH_ERRORS[code] || 'حدث خطأ في الاتصال';
+  }
+  return 'حدث خطأ في الاتصال';
 }
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
